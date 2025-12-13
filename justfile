@@ -14,6 +14,9 @@ build-aurora-nvidia:
 	bluebuild generate ./recipes/aurora-nvidia.yml -o Containerfile
 	bluebuild build ./recipes/aurora-nvidia.yml
 
+kinoite-nvidia-build-iso:
+	bluebuild generate-iso --iso-name kinoite-nvidia.iso recipe recipes/kinoite-nvidia.yml
+
 kinoite-nvidia-iso:
 	bluebuild generate-iso --iso-name kinoite-nvidia.iso image ghcr.io/purkkis/kinoite-nvidia:daily
 
