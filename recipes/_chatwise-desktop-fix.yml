@@ -1,0 +1,6 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+modules:
+  - type: script
+    snippets:
+      - test -f /usr/share/applications/ChatWise.desktop && sed -i 's|^Exec=.*|Exec=env WEBKIT_DISABLE_COMPOSITING_MODE=1 GDK_BACKEND="x11" chatwise %u|' /usr/share/applications/ChatWise.desktop || true

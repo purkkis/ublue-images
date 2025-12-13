@@ -1,0 +1,22 @@
+docker_tag := "v2025.05.20"
+
+# Default Fedora version
+fedora_version := "42"
+
+build version:
+	@echo "Building for Fedora " {{version}}
+	docker build --platform linux/amd64 --build-arg FEDORA_VERSION={{version}} -t dropbox-build . --progress=plain
+	rm -rf build
+	mkdir -p build
+	@id=$(docker create dropbox-build); \
+	docker cp $id:/dropbox/nautilus-dropbox/build/fedora/pool/. build/; \
+	cp build/nautilus-dropbox-20*.x86_64.rpm ../dnf/dropbox-{{docker_tag}}-f{{version}}.rpm
+
+clean:
+	docker builder prune -f
+	docker image rm dropbox-build:latest
+
+# Build for multiple Fedora versions
+build-all:
+	just build 42
+	just build 43

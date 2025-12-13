@@ -1,0 +1,51 @@
+name: bluebuild
+on:
+  schedule:
+    - cron: "30 6 * * *" # 06:30 UTC
+  workflow_dispatch: # allow manually triggering builds
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  bluebuild:
+    name: Build Custom Image
+    runs-on: ubuntu-latest # buildjet-2vcpu-ubuntu-2204
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    strategy:
+      fail-fast: false # stop GH from cancelling all matrix builds if one fails
+      matrix:
+        recipe:
+          # - aurora-nvidia.yml
+          # - aurora.yml
+          - kinoite-nvidia.yml
+          - kinoite.yml
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Download Chatwise rpm
+        run: |
+          curl -sL \
+            https://api.github.com/repos/egoist/chatwise-releases/releases/latest | \
+            jq -r '.assets[] | select(.name | endswith("x86_64.rpm")) | .browser_download_url' | \
+            wget -i - -O files/dnf/chatwise.rpm
+      - name: Download DBeaver rpm
+        run: |
+          curl -sL \
+            https://api.github.com/repos/dbeaver/dbeaver/releases/latest | \
+            jq -r '.assets[] | select(.name | endswith("x86_64.rpm")) | .browser_download_url' | \
+            wget -i - -O files/dnf/dbeaver.rpm
+      - name: Build Custom Image
+        uses: blue-build/github-action@v1
+        with:
+          recipe: ${{ matrix.recipe }}
+          cosign_private_key: ${{ secrets.SIGNING_SECRET }}
+          registry_token: ${{ github.token }}
+          pr_event_number: ${{ github.event.number }}
+          skip_checkout: true
+
+          # enabled by default, disable if your image is small and you want faster builds
+          maximize_build_space: true

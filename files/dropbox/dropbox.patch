@@ -1,0 +1,36 @@
+diff --git a/build_packages.sh b/build_packages.sh
+index 304ed95..dd0958a 100755
+--- a/build_packages.sh
++++ b/build_packages.sh
+@@ -4,18 +4,6 @@ set -euxo pipefail
+ 
+ rm -rf build
+ 
+-# Build deb packages.
+-for DISTRO in ubuntu debian debian_i386; do
+-    docker build -t nautilus-dropbox/$DISTRO -f Dockerfile.$DISTRO .
+-    docker run -u "$(id -u):$(id -g)" -v `pwd`:/src nautilus-dropbox/$DISTRO ./generate-deb.sh
+-done
+-
+ # Build fedora rpm.
+ docker build -t nautilus-dropbox/fedora -f Dockerfile.fedora .
+ docker run -u "$(id -u):$(id -g)" -v `pwd`:/src nautilus-dropbox/fedora ./generate-rpm.sh
+-
+-# Build the source tgz.
+-make dropbox dist
+-mkdir -p build/packages
+-cp dropbox build/packages/dropbox.py
+-cp nautilus-dropbox-*.tar.bz2 build/packages/
+diff --git a/configure.ac b/configure.ac
+index cf2a445..76a6b08 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -92,7 +92,7 @@ fi
+ AC_MSG_RESULT([${NAUTILUS_EXTENSION_DIR}])
+ AC_SUBST(NAUTILUS_EXTENSION_DIR)
+ 
+-NAUTILUS_VERSION=`$PKG_CONFIG --modversion libnautilus-extension`
++NAUTILUS_VERSION=`$PKG_CONFIG --modversion libnautilus-extension-4`
+ if test -n "$NAUTILUS_VERSION"; then
+     NAUTILUS_VERSION_MAJOR=`echo -n $NAUTILUS_VERSION | cut -d . -f 1`
+     NAUTILUS_VERSION_MINOR=`echo -n $NAUTILUS_VERSION | cut -d . -f 2`

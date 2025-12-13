@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+name: kinoite-nvidia
+description: Fedora Kinoite Nvidia
+base-image: ghcr.io/ublue-os/kinoite-main
+image-version: 42
+alt-tags:
+  - daily
+platforms:
+  - linux/amd64
+modules:
+  - type: akmods
+    base: main
+    install: []
+    nvidia-driver: nvidia-open
+  - from-file: _common-brew.yml
+  - from-file: _kinoite-dnf.yml
+  - from-file: _common-flatpaks.yml
+  - from-file: _kinoite-fonts.yaml
+  - from-file: _kinoite-docker.yml
+  - from-file: _boot_to_windows.yml
+  - type: signing # this sets up the proper policy & signing files for signed images to work fully

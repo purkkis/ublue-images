@@ -1,0 +1,31 @@
+name: Build and Upload ISOs
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-upload-isos:
+    name: Build and upload ISOs to B2
+    runs-on: buildjet-2vcpu-ubuntu-2204
+    permissions:
+      contents: read
+    env:
+      B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+      B2_BUCKET_NAME: ${{ secrets.B2_BUCKET_NAME }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Install bluebuild
+        run: |
+          bash <(curl -s https://raw.githubusercontent.com/blue-build/cli/main/install.sh)
+
+      - name: Run ISO build script
+        run: |
+          chmod +x ./build-isos.sh
+          ./build-isos.sh

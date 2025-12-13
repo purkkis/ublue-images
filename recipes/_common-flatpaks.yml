@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+modules:
+  - type: default-flatpaks
+    configurations:
+      - scope: system
+        notify: false
+        install:
+          - app.devsuite.Ptyxis
+          - com.discordapp.Discord
+          - com.github.tchx84.Flatseal
+          - com.ranfdev.DistroShelf
+          - io.github.cboxdoerfer.FSearch
+          - io.missioncenter.MissionCenter
+          - io.podman_desktop.PodmanDesktop
+          - it.mijorus.gearlever
+          - net.nokyan.Resources
+          - org.fedoraproject.MediaWriter
+          - org.fkoehler.KTailctl
+          - org.gnome.Boxes
+          - org.gnome.Calculator
+          - org.kde.gwenview
+          - org.kde.okular
+          - org.libreoffice.LibreOffice
+          - org.mozilla.Thunderbird
+          - org.qbittorrent.qBittorrent
