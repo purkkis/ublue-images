@@ -1,6 +1,6 @@
-# Custom Fedora Atomic Images (ublue-kinoite)
+# Custom Fedora Atomic Images (ublue-images)
 
-[![bluebuild build badge](https://github.com/purkkis/ublue-kinoite/actions/workflows/build.yml/badge.svg)](https://github.com/purkkis/ublue-kinoite/actions/workflows/build.yml)
+[![bluebuild build badge](https://github.com/purkkis/ublue-images/actions/workflows/build.yml/badge.svg)](https://github.com/purkkis/ublue-images/actions/workflows/build.yml)
 
 This repository builds custom Fedora Atomic desktop images using [BlueBuild](https://blue-build.org/) recipes.
 

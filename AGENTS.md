@@ -1,4 +1,4 @@
-# Agent Handbook (ublue-kinoite)
+# Agent Handbook (ublue-images)
 
 ## What this repo is
 
@@ -79,7 +79,6 @@ Hooks enforced:
 - `files/usr_share_applications/`: `.desktop` files copied into the image
 - `files/dropbox/`: Docker-based builder for Dropbox/nautilus-dropbox RPMs
 - `.github/workflows/`: CI pipelines for building images and (manual) ISO publishing
-- `docs/`: operational docs (e.g. remotes sync, automated ISO builds)
 
 ## BlueBuild recipe + module patterns
 
@@ -158,7 +157,7 @@ If updating Dropbox:
   - Matrix builds currently include only:
     - `kinoite-nvidia.yml`
     - `kinoite.yml`
-    (Aurora entries are present but commented out.)
+      (Aurora entries are present but commented out.)
   - Downloads Chatwise RPM before running BlueBuild.
 
 ### ISO build workflow
@@ -174,13 +173,8 @@ If updating Dropbox:
 - **ISO generation targets/scripts only cover Kinoite variants right now**:
   - `justfile` provides `kinoite-iso` and `kinoite-nvidia-iso` only.
   - `build-isos.sh` has Aurora ISO calls commented out.
-- **Docs vs script mismatch**: `docs/automated-iso-builds.md` states `build-isos.sh` uses `sudo`, but `build-isos.sh` currently invokes `bluebuild` directly.
 - **Image naming mismatch across files**:
   - ISO generation uses `ghcr.io/purkkis/kinoite(:daily)` and `ghcr.io/purkkis/kinoite-nvidia(:daily)`.
-  - `README.md` installation examples reference `ghcr.io/purkkis/ublue-kinoite:latest`.
-  Keep these aligned when changing publish targets/tags.
+  - `README.md` installation examples reference `ghcr.io/purkkis/kinoite`.
+    Keep these aligned when changing publish targets/tags.
 - **boot-to-windows behavior**: `/usr/bin/boot-to-windows` calls `efibootmgr`, `kdialog`, and `sudo`, and the `.desktop` entry uses `pkexec` (`files/usr_bin/boot-to-windows:4-14`, `files/usr_share_applications/boot-to-windows.desktop:9`). Ensure required binaries/polkit expectations are satisfied by the base image.
-
-## Git remotes
-
-Operational notes for syncing GitHub/GitLab remotes are in `docs/syncing-remotes.md`.
