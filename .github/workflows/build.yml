@@ -10,7 +10,7 @@ concurrency:
 jobs:
   bluebuild:
     name: Build Custom Image
-    runs-on: ubuntu-latest # buildjet-2vcpu-ubuntu-2204
+    runs-on: buildjet-2vcpu-ubuntu-2204
     permissions:
       contents: read
       packages: write
@@ -46,6 +46,3 @@ jobs:
           registry_token: ${{ github.token }}
           pr_event_number: ${{ github.event.number }}
           skip_checkout: true
-
-          # enabled by default, disable if your image is small and you want faster builds
-          maximize_build_space: true
