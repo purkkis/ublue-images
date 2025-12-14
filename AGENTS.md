@@ -8,6 +8,10 @@ This repository builds custom Fedora Atomic desktop images using **BlueBuild** r
 - Custom artifacts (DNF repo files, vendored RPMs, copied system files) live in `files/`.
 - GitHub Actions builds/publishes images via `blue-build/github-action@v1` (`.github/workflows/build.yml`).
 
+## YAML files
+
+List ordering in YAML files: keep list items in alphabetical order. If a list item is a URL, sort by the name of the downloaded file (not by the leading `https://...`).
+
 ## Quick commands (authoritative)
 
 Commands below are **observed in `justfile` / scripts**.
@@ -28,10 +32,11 @@ What the `just build-*` tasks do (`justfile:1-15`):
 
 ### Generate ISOs
 
-Observed `just` targets (`justfile:17-21`):
+Observed `just` targets (`justfile:17-24`):
 
 - `just kinoite-iso` (uses image `ghcr.io/purkkis/kinoite:daily`)
 - `just kinoite-nvidia-iso` (uses image `ghcr.io/purkkis/kinoite-nvidia:daily`)
+- `just kinoite-nvidia-build-iso` (builds ISO from recipe `recipes/kinoite-nvidia.yml`)
 
 ### Build + upload ISOs to Backblaze B2
 
@@ -112,6 +117,7 @@ Common module types used in this repo:
 - `recipes/_kinoite-dnf.yml`
   - Adds `.repo` files from `files/dnf/` and installs packages.
   - Installs `chatwise.rpm` from `files/dnf/chatwise.rpm` (`recipes/_kinoite-dnf.yml:23`).
+  - Installs `dbeaver.rpm` from `files/dnf/dbeaver.rpm` (`recipes/_kinoite-dnf.yml:26`).
   - Installs a Fedora-version-specific Dropbox RPM (`dropbox-v2025.05.20-f42.rpm`) (`recipes/_kinoite-dnf.yml:27`).
   - Enables `tailscaled.service` (`recipes/_kinoite-dnf.yml:51-54`).
 
@@ -130,12 +136,12 @@ Common module types used in this repo:
 
 ## Vendored artifacts (keep in sync)
 
-### Chatwise RPM
+### Chatwise & DBeaver RPMs
 
-- The recipes install `chatwise.rpm` from `files/dnf/chatwise.rpm`.
-- CI downloads the latest RPM into `files/dnf/chatwise.rpm` before building (`.github/workflows/build.yml:29-35`).
+- The recipes install `chatwise.rpm` and `dbeaver.rpm` from `files/dnf/`.
+- CI downloads the latest RPMs into `files/dnf/` before building (`.github/workflows/build.yml:29-40`).
 
-Local builds: ensure `files/dnf/chatwise.rpm` exists (CI populates it; local builds won’t unless you provide it).
+Local builds: ensure these RPMs exist in `files/dnf/` (CI populates them; local builds won’t unless you provide them).
 
 ### Dropbox RPMs
 
@@ -154,11 +160,13 @@ If updating Dropbox:
 
 - `.github/workflows/build.yml`
   - Scheduled nightly (`cron: "30 6 * * *"`) and manual dispatch.
+  - Runs on `ubicloud-standard-4` (not `ubuntu-latest`).
   - Matrix builds currently include only:
     - `kinoite-nvidia.yml`
     - `kinoite.yml`
       (Aurora entries are present but commented out.)
-  - Downloads Chatwise RPM before running BlueBuild.
+  - Downloads Chatwise and DBeaver RPMs before running BlueBuild.
+  - Uses `actions/checkout@v6`.
 
 ### ISO build workflow
 

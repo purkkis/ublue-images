@@ -37,6 +37,7 @@ modules:
         - gparted
         - gtk4-devel
         - gtk4-layer-shell-devel
+        - hplip-gui
         - libadwaita-devel
         - papirus-icon-theme
         - podman
