@@ -12,13 +12,6 @@ This repository builds custom Fedora Atomic desktop images using [BlueBuild](htt
 - **Image**: `ghcr.io/purkkis/kinoite`
 - **NVIDIA Variant**: `ghcr.io/purkkis/kinoite-nvidia`
 
-### Aurora (KDE Plasma - Aurora DX Fork)
-
-_Note: Aurora images can be built locally but are currently disabled in CI._
-
-- **Image**: `ghcr.io/purkkis/aurora`
-- **NVIDIA Variant**: `ghcr.io/purkkis/aurora-nvidia`
-
 ## Installation
 
 The recommended way to install these images is to generate an ISO and perform a fresh installation.
@@ -47,9 +40,6 @@ just build-kinoite
 
 # Build Kinoite (NVIDIA)
 just build-kinoite-nvidia
-
-# Build Aurora
-just build-aurora
 ```
 
 ### Generate ISOs

@@ -48,5 +48,3 @@ build_and_upload() {
 
 build_and_upload "kinoite.iso" "ghcr.io/purkkis/kinoite:daily"
 build_and_upload "kinoite-nvidia.iso" "ghcr.io/purkkis/kinoite-nvidia:daily"
-# build_and_upload "aurora.iso" "ghcr.io/purkkis/ublue-os-dx:daily"
-# build_and_upload "aurora-nvidia.iso" "ghcr.io/purkkis/ublue-os-dx-nvidia:daily"
