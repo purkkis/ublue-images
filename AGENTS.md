@@ -1,4 +1,4 @@
-# Agent Handbook (ublue-images)
+# Agents.md
 
 ## What this repo is
 
