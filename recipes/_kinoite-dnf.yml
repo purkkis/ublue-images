@@ -10,7 +10,7 @@ modules:
         - cursor.repo
         - google-chrome.repo
         - tailscale.repo
-        - sublime-text.repo # waiting Sublime repo fix: https://github.com/sublimehq/sublime_text/issues/6669
+        # - sublime-text.repo # waiting Sublime repo fix: https://github.com/sublimehq/sublime_text/issues/6669
         - vscode.repo
         - windsurf.repo
     install:
@@ -25,7 +25,7 @@ modules:
         - cursor
         - dbeaver.rpm
         - distrobox
-        - dropbox-v2025.05.20-f42.rpm
+        - dropbox-v2025.05.20-f43.rpm
         - firefox
         - g++
         - gnome-system-monitor
@@ -44,8 +44,8 @@ modules:
         - https://proton.me/download/bridge/protonmail-bridge-3.21.2-1.x86_64.rpm # package: protonmail-bridge
         - python3-gpg
         - steam
-        - sublime-merge
-        - sublime-text
+        # - sublime-merge
+        # - sublime-text
         - tailscale
         - windsurf
         - zsh
