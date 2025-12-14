@@ -9,7 +9,7 @@ concurrency:
 jobs:
   build-and-upload-isos:
     name: Build and upload ISOs to B2
-    runs-on: buildjet-2vcpu-ubuntu-2204
+    runs-on: ubicloud-standard-2
     permissions:
       contents: read
     env:
