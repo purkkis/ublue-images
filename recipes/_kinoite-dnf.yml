@@ -28,6 +28,7 @@ modules:
         - dropbox-v2025.05.20-f42.rpm
         - firefox
         - g++
+        - gnome-common
         - gnome-system-monitor
         - google-chrome-stable
         - google-noto-emoji-color-fonts
