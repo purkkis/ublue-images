@@ -9,7 +9,7 @@ concurrency:
 jobs:
   build-and-upload-isos:
     name: Build and upload ISOs to B2
-    runs-on: ubicloud-standard-2
+    runs-on: ubicloud-standard-4
     permissions:
       contents: read
     env:
