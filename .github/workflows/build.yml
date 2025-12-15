@@ -45,3 +45,4 @@ jobs:
           pr_event_number: ${{ github.event.number }}
           skip_checkout: true
           maximize_build_space: false
+          use_cache: true
