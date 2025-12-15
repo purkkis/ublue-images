@@ -1,0 +1,22 @@
+name: Prune Packages
+on:
+  schedule:
+    - cron: "0 0 * * *" # 00:00 UTC
+  workflow_dispatch: # allow manually triggering builds
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  delete-package-versions:
+    name: Delete old packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: snok/container-retention-policy@v3.0.1
+        with:
+          account: user
+          token: ${{ secrets.PAT }}
+          image-tags: "!daily"
+          image-names: "*"
+          cut-off: 1s
+          dry-run: false
