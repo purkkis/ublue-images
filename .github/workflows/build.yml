@@ -55,7 +55,7 @@ jobs:
           pr_event_number: ${{ github.event.number }}
           skip_checkout: true
           maximize_build_space: false
-          use_cache: false
+          use_cache: true
           build_opts: --quiet
 
   delete-package-versions:
@@ -69,7 +69,7 @@ jobs:
         with:
           account: user
           token: ${{ secrets.PAT }}
-          image-tags: "!daily"
+          image-tags: "!daily !daily-cache" # don't delete "daily" or "daily-cache" tags
           image-names: "*"
           cut-off: 1s
           dry-run: false
