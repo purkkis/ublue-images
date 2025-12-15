@@ -9,14 +9,12 @@ from pydantic import BaseModel, Field, HttpUrl
 
 
 class PinnedRpm(BaseModel):
-    name: str
     url: HttpUrl
     filename: str
     cache_key: str
 
 
 class LatestRpm(BaseModel):
-    name: str
     github_owner: str
     github_repo: str
     filename: str
@@ -174,7 +172,7 @@ def cmd_cache_info(args: argparse.Namespace) -> int:
         release = _github_latest_release(item.github_owner, item.github_repo)
         tag = release.get("tag_name", "")
         paths.append(str(dnf_dir / item.filename))
-        cache_keys.append(f"{item.name}-{tag}")
+        cache_keys.append(f"{item.github_repo}-{tag}")
 
     lines = [
         "paths<<EOF",
