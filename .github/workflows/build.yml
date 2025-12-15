@@ -56,7 +56,6 @@ jobs:
           skip_checkout: true
           maximize_build_space: false
           use_cache: true
-          build_opts: --quiet
 
   delete-package-versions:
     name: Delete old packages
