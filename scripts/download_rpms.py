@@ -178,7 +178,7 @@ def cmd_cache_info(args: argparse.Namespace) -> int:
         "paths<<EOF",
         *paths,
         "EOF",
-        f"key=rpms-${{{{ runner.os }}}}-{'-'.join(cache_keys)}",
+        f"key=rpms-{'-'.join(cache_keys)}",
     ]
     _print_outputs(lines, args.github_output)
     return 0
