@@ -18,5 +18,5 @@ jobs:
           token: ${{ secrets.PAT }}
           image-tags: "!daily"
           image-names: "*"
-          cut-off: 1d
+          cut-off: 1s
           dry-run: false
