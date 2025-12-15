@@ -24,18 +24,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
       - name: Download Chatwise rpm
         run: |
           curl -sL \
             https://api.github.com/repos/egoist/chatwise-releases/releases/latest | \
             jq -r '.assets[] | select(.name | endswith("x86_64.rpm")) | .browser_download_url' | \
             wget -i - -O files/dnf/chatwise.rpm
+
       - name: Download DBeaver rpm
         run: |
           curl -sL \
             https://api.github.com/repos/dbeaver/dbeaver/releases/latest | \
             jq -r '.assets[] | select(.name | endswith("x86_64.rpm")) | .browser_download_url' | \
             wget -i - -O files/dnf/dbeaver.rpm
+
       - name: Build Custom Image
         uses: blue-build/github-action@v1
         with:
@@ -46,3 +49,18 @@ jobs:
           skip_checkout: true
           maximize_build_space: false
           use_cache: true
+
+  delete-package-versions:
+    name: Delete old packages
+    runs-on: ubuntu-latest
+    steps:
+      - run: sleep 5 # sleep a few seconds to make sure the build is a few seconds old
+
+      - uses: snok/container-retention-policy@v3.0.1
+        with:
+          account: user
+          token: ${{ secrets.PAT }}
+          image-tags: "!daily"
+          image-names: "*"
+          cut-off: 1s
+          dry-run: false
