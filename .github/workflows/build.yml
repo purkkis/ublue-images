@@ -65,11 +65,13 @@ jobs:
     steps:
       - run: sleep 5 # sleep a few seconds to make sure the build is a few seconds old
 
+      # Delete all untagged images that are over 1 second old
       - uses: snok/container-retention-policy@v3.0.1
         with:
           account: user
           token: ${{ secrets.PAT }}
-          image-tags: "!daily !daily-cache" # don't delete "daily" or "daily-cache" tags
+          # image-tags: "!daily !daily-cache" # don't delete "daily" or "daily-cache" tags
+          tag-selection: untagged
           image-names: "*"
           cut-off: 1s
           dry-run: false
