@@ -19,4 +19,4 @@ jobs:
           image-tags: "!daily"
           image-names: "*"
           cut-off: 1d
-          dry-run: true
+          dry-run: false
