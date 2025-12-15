@@ -55,7 +55,7 @@ jobs:
           pr_event_number: ${{ github.event.number }}
           skip_checkout: true
           maximize_build_space: false
-          use_cache: true
+          use_cache: false
 
   delete-package-versions:
     name: Delete old packages
@@ -69,7 +69,7 @@ jobs:
         with:
           account: user
           token: ${{ secrets.PAT }}
-          # image-tags: "!daily !daily-cache" # don't delete "daily" or "daily-cache" tags
+          # image-tags: "!daily" # !daily-cache; don't delete "daily" or "daily-cache" tags
           tag-selection: untagged
           image-names: "*"
           cut-off: 1s
