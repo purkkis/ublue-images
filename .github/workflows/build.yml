@@ -52,6 +52,7 @@ jobs:
 
   delete-package-versions:
     name: Delete old packages
+    needs: bluebuild
     runs-on: ubuntu-latest
     steps:
       - run: sleep 5 # sleep a few seconds to make sure the build is a few seconds old
