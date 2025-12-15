@@ -1,4 +1,4 @@
-# Agents.md
+# AGENTS.md
 
 ## What this repo is
 
@@ -6,171 +6,112 @@ This repository builds custom Fedora Atomic desktop images using **BlueBuild** r
 
 - BlueBuild recipes live in `recipes/`.
 - Custom artifacts (DNF repo files, vendored RPMs, copied system files) live in `files/`.
-- GitHub Actions builds/publishes images via `blue-build/github-action@v1` (`.github/workflows/build.yml`).
+- GitHub Actions builds/publishes images via `blue-build/github-action@v1`.
 
-## YAML files
-
-List ordering in YAML files: keep list items in alphabetical order. If a list item is a URL, sort by the name of the downloaded file (not by the leading `https://...`).
-
-## Quick commands (authoritative)
-
-Commands below are **observed in `justfile` / scripts**.
+## Quick commands
 
 ### Build images locally
 
 Requires `bluebuild` and `just`.
 
-- Kinoite: `just build-kinoite`
-- Kinoite (NVIDIA): `just build-kinoite-nvidia`
-
-What the `just build-*` tasks do (`justfile:1-15`):
-
-- `bluebuild generate ./recipes/<recipe>.yml -o Containerfile`
-- `bluebuild build ./recipes/<recipe>.yml`
+- `just build-kinoite`
+- `just build-kinoite-nvidia`
 
 ### Generate ISOs
 
-Observed `just` targets (`justfile:17-24`):
+- `just kinoite-iso`
+- `just kinoite-nvidia-iso`
 
-- `just kinoite-iso` (uses image `ghcr.io/purkkis/kinoite:daily`)
-- `just kinoite-nvidia-iso` (uses image `ghcr.io/purkkis/kinoite-nvidia:daily`)
-- `just kinoite-nvidia-build-iso` (builds ISO from recipe `recipes/kinoite-nvidia.yml`)
+### Download RPMs
 
-### Build + upload ISOs to Backblaze B2
+- `uv run scripts/download_rpms.py download` - Download all RPMs from `scripts/rpms.json`
+- `uv run scripts/download_rpms.py cache-info` - Generate cache info for CI
 
-- `./build-isos.sh`
+### Build Dropbox RPMs
 
-`build-isos.sh` requires (`build-isos.sh:8-33`):
+- `./build-dropbox.sh <fedora_version> [fedora_version ...]` - e.g., `./build-dropbox.sh 42 43`
 
-- `bluebuild`
-- `aws` CLI
-- env vars: `B2_ENDPOINT`, `B2_BUCKET_NAME`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` (see `.env.example`)
+### Formatting
 
-It currently builds/uploads only (`build-isos.sh:49-52`):
+- `prek run --all-files` - Run all pre-commit hooks (trailing whitespace, EOF, YAML/JSON validity, LF endings, ruff)
 
-- `kinoite.iso` from `ghcr.io/purkkis/kinoite:daily`
-- `kinoite-nvidia.iso` from `ghcr.io/purkkis/kinoite-nvidia:daily`
+## Python environment
 
-### Build vendored Dropbox RPMs
+Uses **uv** for dependency management. Python >=3.11.
 
-- `./build-dropbox.sh <fedora_version> [fedora_version ...]` (e.g. `./build-dropbox.sh 42 43`) (`build-dropbox.sh:22-26`)
-
-This runs `just build <version>` inside `files/dropbox/` (`build-dropbox.sh:34-40`).
-
-### Formatting checks
-
-- `prek run --all-files` (`.pre-commit-config.yaml:1-12`)
-
-Hooks enforced:
-
-- trailing whitespace
-- EOF newline
-- YAML validity
-- LF line endings (`mixed-line-ending --fix=lf`)
-
-`files/dropbox/dropbox.patch` is excluded (`.pre-commit-config.yaml:3`).
+- Run scripts with `uv run <command>` - it handles virtual environments automatically
 
 ## Repository layout
 
-- `recipes/`: BlueBuild recipes and shared module fragments
-  - `kinoite.yml`, `kinoite-nvidia.yml`
-  - shared fragments: `_*.yml` / `_*.yaml`
-- `files/dnf/`: DNF `.repo` files and vendored RPMs referenced by the recipes
-- `files/usr_bin/`: scripts copied into the image (via `recipes/_boot_to_windows.yml`)
-- `files/usr_share_applications/`: `.desktop` files copied into the image
-- `files/dropbox/`: Docker-based builder for Dropbox/nautilus-dropbox RPMs
-- `.github/workflows/`: CI pipelines for building images and (manual) ISO publishing
+- `recipes/`: BlueBuild recipes (`kinoite.yml`, `kinoite-nvidia.yml`) and shared fragments (`_*.yml`)
+- `scripts/`: Python scripts (`download_rpms.py`) and config (`rpms.json`)
+- `files/dnf/`: DNF `.repo` files and vendored RPMs
+- `files/dropbox/`: Docker-based Dropbox RPM builder
+- `.github/workflows/`: CI pipelines
 
-## BlueBuild recipe + module patterns
+## BlueBuild recipe patterns
 
 ### Schemas
 
-All recipe/module YAMLs include YAML language server schema headers:
+All YAMLs include schema headers:
 
-- Recipes (`recipes/*.yml` like `recipes/kinoite.yml:1-2`):
-  - `# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json`
-- Module fragments (`recipes/_*.yml` like `recipes/_kinoite-dnf.yml:1-2`):
-  - `# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json`
+- Recipes: `# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json`
+- Module fragments: `# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json`
 
 ### Composition
 
-Recipes primarily compose shared fragments via `from-file` (`recipes/kinoite.yml:12-17`).
+Recipes compose shared fragments via `from-file`:
 
-Common module types used in this repo:
+- `_common-brew.yml` - Homebrew setup
+- `_kinoite-dnf.yml` - DNF repos and packages
+- `_common-flatpaks.yml` - System Flatpaks
+- `_kinoite-fonts.yaml` - Font packages
+- `_kinoite-docker.yml` - Docker CE
+- `_boot_to_windows.yml` - Boot-to-Windows utility
+- `_chatwise-desktop-fix.yml` - Desktop file fix script
 
-- `dnf` (repos + packages)
-- `default-flatpaks`
-- `fonts`
-- `brew`
-- `files`
-- `systemd`
-- `script`
-- `akmods` (Kinoite NVIDIA recipe)
-- `signing` (last module in each recipe)
+NVIDIA variant adds `akmods` module with `nvidia-open` driver.
 
-### Notable modules
+### YAML conventions
 
-- `recipes/_kinoite-dnf.yml`
-  - Adds `.repo` files from `files/dnf/` and installs packages.
-  - Installs `chatwise.rpm` from `files/dnf/chatwise.rpm` (`recipes/_kinoite-dnf.yml:23`).
-  - Installs `dbeaver.rpm` from `files/dnf/dbeaver.rpm` (`recipes/_kinoite-dnf.yml:26`).
-  - Installs a Fedora-version-specific Dropbox RPM (`dropbox-v2025.05.20-f42.rpm`) (`recipes/_kinoite-dnf.yml:27`).
-  - Enables `tailscaled.service` (`recipes/_kinoite-dnf.yml:51-54`).
+- Keep list items in **alphabetical order**
+- For URLs, sort by filename not the URL itself
 
-- `recipes/_chatwise-desktop-fix.yml`
-  - `script` snippet that edits `/usr/share/applications/ChatWise.desktop` if present (`recipes/_chatwise-desktop-fix.yml:4-6`).
+## RPM management
 
-- `recipes/_kinoite-docker.yml`
-  - Adds Docker CE repo via URL and installs Docker packages; enables `docker.service` (`recipes/_kinoite-docker.yml:4-18`).
+RPMs are managed via `scripts/rpms.json` and `scripts/download_rpms.py`.
 
-- `recipes/_boot_to_windows.yml`
-  - Copies `files/usr_bin/*` → `/usr/bin` and `files/usr_share_applications/*` → `/usr/share/applications` (`recipes/_boot_to_windows.yml:4-9`).
+### Two types of RPMs
 
-## Vendored artifacts (keep in sync)
+1. **Pinned**: Fixed URLs with explicit cache keys
+   - Format: `{"url": "...", "filename": "...", "cache_key": "..."}`
+   - Example: Positron, ProtonMail Bridge
 
-### Chatwise & DBeaver RPMs
+2. **Latest**: Auto-fetch from GitHub releases
+   - Format: `{"github_owner": "...", "github_repo": "...", "filename": "..."}`
+   - Example: Chatwise, DBeaver
+   - Queries GitHub API for latest x86_64 RPM asset
 
-- The recipes install `chatwise.rpm` and `dbeaver.rpm` from `files/dnf/`.
-- CI downloads the latest RPMs into `files/dnf/` before building (`.github/workflows/build.yml:29-40`).
+### Adding a new RPM
 
-Local builds: ensure these RPMs exist in `files/dnf/` (CI populates them; local builds won’t unless you provide them).
+1. Add entry to `scripts/rpms.json` (pinned or latest format)
+2. Run `uv run scripts/download_rpms.py download`
+3. Reference by filename in a DNF module (e.g., `recipes/_kinoite-dnf.yml`)
 
 ### Dropbox RPMs
 
-- Dropbox RPMs live in `files/dnf/dropbox-v2025.05.20-f{41,42,43}.rpm`.
-- The version tag is also set in `files/dropbox/justfile` as `docker_tag := "v2025.05.20"` (`files/dropbox/justfile:1`).
+- Built using Docker container that compiles from source with patches
+- Version tag in `files/dropbox/justfile` as `docker_tag`
+- Must match filenames in `recipes/_kinoite-dnf.yml`
 
-If updating Dropbox:
+## CI caching
 
-- Update `files/dropbox/justfile` (`docker_tag`), rebuild RPMs (via `./build-dropbox.sh ...` or `files/dropbox/justfile`), and update the referenced RPM filenames in the relevant DNF module(s):
-  - `recipes/_kinoite-dnf.yml` uses `...-f42.rpm`
+- RPM cache key includes all versions (pinned cache keys + GitHub release tags)
+- To invalidate pinned RPM cache: update both URL and `cache_key` in `rpms.json`
+- Latest RPMs auto-invalidate when new GitHub release detected
 
-## CI (GitHub Actions)
+## Important gotchas
 
-### Image builds
-
-- `.github/workflows/build.yml`
-  - Scheduled nightly (`cron: "30 6 * * *"`) and manual dispatch.
-  - Runs on `ubicloud-standard-4` (not `ubuntu-latest`).
-  - Matrix builds currently include only:
-    - `kinoite-nvidia.yml`
-    - `kinoite.yml`
-  - Downloads Chatwise and DBeaver RPMs before running BlueBuild.
-  - Uses `actions/checkout@v6`.
-
-### ISO build workflow
-
-- `.github/workflows/build-iso.yml`
-  - Manual dispatch only.
-  - Installs BlueBuild using the upstream install script and runs `./build-isos.sh`.
-  - Uses secrets for Backblaze B2 S3-compatible upload (`B2_ENDPOINT`, `B2_BUCKET_NAME`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`).
-
-## Operational gotchas (observed)
-
-- **ISO generation targets/scripts only cover Kinoite variants right now**:
-  - `justfile` provides `kinoite-iso` and `kinoite-nvidia-iso` only.
-- **Image naming mismatch across files**:
-  - ISO generation uses `ghcr.io/purkkis/kinoite(:daily)` and `ghcr.io/purkkis/kinoite-nvidia(:daily)`.
-  - `README.md` installation examples reference `ghcr.io/purkkis/kinoite`.
-    Keep these aligned when changing publish targets/tags.
-- **boot-to-windows behavior**: `/usr/bin/boot-to-windows` calls `efibootmgr`, `kdialog`, and `sudo`, and the `.desktop` entry uses `pkexec` (`files/usr_bin/boot-to-windows:4-14`, `files/usr_share_applications/boot-to-windows.desktop:9`). Ensure required binaries/polkit expectations are satisfied by the base image.
+- **Fedora version updates**: Update `image-version` in both recipes, Dropbox RPM reference in `_kinoite-dnf.yml`, and build new Dropbox RPM
+- **RPM download skips existing files**: Script won't re-download if file exists with non-zero size
+- **ISO scripts only cover Kinoite variants**: No other desktop environments in `justfile`
