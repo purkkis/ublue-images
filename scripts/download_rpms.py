@@ -177,7 +177,9 @@ def cmd_cache_info(args: argparse.Namespace) -> int:
         cache_keys.append(f"{item.name}-{tag}")
 
     lines = [
-        f"paths={os.linesep.join(paths)}",
+        "paths<<EOF",
+        *paths,
+        "EOF",
         f"key=rpms-${{{{ runner.os }}}}-{'-'.join(cache_keys)}",
     ]
     _print_outputs(lines, args.github_output)
