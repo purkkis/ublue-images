@@ -55,7 +55,8 @@ jobs:
           pr_event_number: ${{ github.event.number }}
           skip_checkout: true
           maximize_build_space: false
-          use_cache: true
+          use_cache: false
+          build_opts: --quiet
 
   delete-package-versions:
     name: Delete old packages
