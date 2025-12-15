@@ -62,15 +62,11 @@ jobs:
     needs: bluebuild
     runs-on: ubuntu-latest
     steps:
-      - run: sleep 5 # sleep a few seconds to make sure the build is a few seconds old
-
-      # Delete all untagged images that are over 1 second old
+      # Delete all packages older than 3 days
       - uses: snok/container-retention-policy@v3.0.1
         with:
           account: user
           token: ${{ secrets.PAT }}
-          # image-tags: "!daily" # !daily-cache; don't delete "daily" or "daily-cache" tags
-          tag-selection: untagged
           image-names: "*"
-          cut-off: 1s
+          cut-off: 3d
           dry-run: false
