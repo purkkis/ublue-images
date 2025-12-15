@@ -1,0 +1,30 @@
+{
+  "pinned": [
+    {
+      "name": "positron",
+      "url": "https://cdn.posit.co/positron/releases/rpm/x86_64/Positron-2025.12.1-4-x64.rpm",
+      "filename": "positron.rpm",
+      "cache_key": "positron-2025.12.1-4"
+    },
+    {
+      "name": "protonmail-bridge",
+      "url": "https://proton.me/download/bridge/protonmail-bridge-3.21.2-1.x86_64.rpm",
+      "filename": "protonmail-bridge.rpm",
+      "cache_key": "protonmail-bridge-3.21.2-1"
+    }
+  ],
+  "latest": [
+    {
+      "name": "chatwise",
+      "github_owner": "egoist",
+      "github_repo": "chatwise-releases",
+      "filename": "chatwise.rpm"
+    },
+    {
+      "name": "dbeaver",
+      "github_owner": "dbeaver",
+      "github_repo": "dbeaver",
+      "filename": "dbeaver.rpm"
+    }
+  ]
+}

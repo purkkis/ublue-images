@@ -24,18 +24,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Download Chatwise rpm
-        run: |
-          curl -sL \
-            https://api.github.com/repos/egoist/chatwise-releases/releases/latest | \
-            jq -r '.assets[] | select(.name | endswith("x86_64.rpm")) | .browser_download_url' | \
-            wget -i - -O files/dnf/chatwise.rpm
-      - name: Download DBeaver rpm
-        run: |
-          curl -sL \
-            https://api.github.com/repos/dbeaver/dbeaver/releases/latest | \
-            jq -r '.assets[] | select(.name | endswith("x86_64.rpm")) | .browser_download_url' | \
-            wget -i - -O files/dnf/dbeaver.rpm
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Get RPM cache info
+        id: rpm-cache-info
+        run: uv run scripts/download_rpms.py cache-info
+
+      - name: Cache RPMs
+        id: cache-rpms
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.rpm-cache-info.outputs.paths }}
+          key: ${{ steps.rpm-cache-info.outputs.key }}
+
+      - name: Download RPMs
+        run: uv run scripts/download_rpms.py download
+
       - name: Build Custom Image
         uses: blue-build/github-action@v1
         with:
@@ -45,3 +51,4 @@ jobs:
           pr_event_number: ${{ github.event.number }}
           skip_checkout: true
           maximize_build_space: false
+          use_cache: true

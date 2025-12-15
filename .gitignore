@@ -8,3 +8,4 @@ cosign.private
 files/dropbox/build
 files/dnf/chatwise.rpm
 files/dnf/dbeaver.rpm
+tmp
