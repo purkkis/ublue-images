@@ -10,3 +10,5 @@ modules:
         - Terminus
         - JetBrainsMono
         - Monaspace
+      google-fonts:
+        - Google Sans Code

@@ -34,8 +34,8 @@ fi
 
 upload_iso() {
     local iso_name="$1"
-    aws --endpoint-url="https://$B2_ENDPOINT" s3 cp "$iso_name" "s3://$B2_BUCKET_NAME/bluebuild/$iso_name"
-    aws --endpoint-url="https://$B2_ENDPOINT" s3 cp "$iso_name-CHECKSUM" "s3://$B2_BUCKET_NAME/bluebuild/$iso_name-CHECKSUM"
+    aws --endpoint-url="https://$B2_ENDPOINT" s3 cp --no-progress "$iso_name" "s3://$B2_BUCKET_NAME/bluebuild/$iso_name"
+    aws --endpoint-url="https://$B2_ENDPOINT" s3 cp --no-progress "$iso_name-CHECKSUM" "s3://$B2_BUCKET_NAME/bluebuild/$iso_name-CHECKSUM"
 }
 
 build_and_upload() {
@@ -48,5 +48,3 @@ build_and_upload() {
 
 build_and_upload "kinoite.iso" "ghcr.io/purkkis/kinoite:daily"
 build_and_upload "kinoite-nvidia.iso" "ghcr.io/purkkis/kinoite-nvidia:daily"
-# build_and_upload "aurora.iso" "ghcr.io/purkkis/ublue-os-dx:daily"
-# build_and_upload "aurora-nvidia.iso" "ghcr.io/purkkis/ublue-os-dx-nvidia:daily"

@@ -20,14 +20,12 @@ modules:
         - antigravity
         - blueprint-compiler
         - brave-browser
-        - chatwise.rpm
         - code
         - cursor
-        - dbeaver.rpm
         - distrobox
-        - dropbox-v2025.05.20-f43.rpm
         - firefox
         - g++
+        - gnome-common
         - gnome-system-monitor
         - google-chrome-stable
         - google-noto-emoji-color-fonts
@@ -41,8 +39,6 @@ modules:
         - libadwaita-devel
         - papirus-icon-theme
         - podman
-        - https://cdn.posit.co/positron/releases/rpm/x86_64/Positron-2025.12.1-4-x64.rpm # package: positron
-        - https://proton.me/download/bridge/protonmail-bridge-3.21.2-1.x86_64.rpm # package: protonmail-bridge
         - python3-gpg
         - steam
         # - sublime-merge
@@ -50,7 +46,16 @@ modules:
         - tailscale
         - windsurf
         - zsh
-  - from-file: _chatwise-desktop-fix.yml
+  - type: dnf
+    install:
+      packages:
+        - chatwise.rpm
+        - dbeaver.rpm
+        - dropbox-v2025.05.20-f42.rpm
+        - opencode.rpm
+        - https://cdn.posit.co/positron/releases/rpm/x86_64/Positron-2025.12.1-4-x64.rpm # package: positron
+        - https://proton.me/download/bridge/protonmail-bridge-3.21.2-1.x86_64.rpm # package: protonmail-bridge
+  - from-file: _desktop-file-fixes.yml
   - type: systemd
     system:
       enabled:
