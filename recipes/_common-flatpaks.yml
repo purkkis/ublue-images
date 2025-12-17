@@ -21,6 +21,7 @@ modules:
           - org.gnome.Calculator
           - org.kde.gwenview
           - org.kde.okular
+          - org.keepassxc.KeePassXC
           - org.libreoffice.LibreOffice
           - org.mozilla.Thunderbird
           - org.qbittorrent.qBittorrent
