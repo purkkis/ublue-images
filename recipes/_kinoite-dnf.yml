@@ -1,6 +1,7 @@
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
 modules:
+  # RPMs from package repos:
   - type: dnf
     repos:
       files:
@@ -46,12 +47,14 @@ modules:
         - tailscale
         - windsurf
         - zsh
+  # Manually downloaded RPMs:
   - type: dnf
     install:
       packages:
         - chatwise.rpm
         - dbeaver.rpm
         - dropbox-v2025.05.20-f43.rpm
+        - https://github.com/bitwarden/clients/releases/download/desktop-v2025.12.0/Bitwarden-2025.12.0-x86_64.rpm
         - opencode.rpm
         - https://cdn.posit.co/positron/releases/rpm/x86_64/Positron-2025.12.1-4-x64.rpm # package: positron
         - https://proton.me/download/bridge/protonmail-bridge-3.21.2-1.x86_64.rpm # package: protonmail-bridge
