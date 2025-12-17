@@ -6,9 +6,3 @@ modules:
       # Fix desktop files for Electron apps
       - test -f /usr/share/applications/ChatWise.desktop && sed -i 's|^Exec=.*|Exec=env WEBKIT_DISABLE_COMPOSITING_MODE=1 GDK_BACKEND="x11" chatwise %u|' /usr/share/applications/ChatWise.desktop || true
       - test -f /usr/share/applications/OpenCode.desktop && sed -i 's|^Exec=.*|Exec=env WEBKIT_DISABLE_COMPOSITING_MODE=1 GDK_BACKEND="x11" OpenCode|' /usr/share/applications/OpenCode.desktop || true
-
-      # Fix 1password and 1password-cli chmod issue:
-      # '1Password-BrowserSupport' must be owned by 'root:onepassword'.
-      # 'op' must be owned by 'root:onepassword-cli'.
-      - chown root:onepassword /usr/lib/opt/1Password/1Password-BrowserSupport
-      - chown root:onepassword-cli /usr/bin/op
