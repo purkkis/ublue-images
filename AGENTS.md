@@ -78,6 +78,7 @@ Hooks enforced:
 - `files/dnf/`: DNF `.repo` files and vendored RPMs referenced by the recipes
 - `files/usr_bin/`: scripts copied into the image (via `recipes/_boot_to_windows.yml`)
 - `files/usr_share_applications/`: `.desktop` files copied into the image
+- `files/usr_lib_sysusers_d/`: sysusers configuration files for user/group creation
 - `files/dropbox/`: Docker-based builder for Dropbox/nautilus-dropbox RPMs
 - `.github/workflows/`: CI pipelines for building images and (manual) ISO publishing
 
@@ -126,6 +127,10 @@ Common module types used in this repo:
   - Contains script snippets that fix desktop files for Electron apps and fix 1Password permissions:
     - Adds `WEBKIT_DISABLE_COMPOSITING_MODE=1 GDK_BACKEND="x11"` environment variables to ChatWise and OpenCode desktop entries (`recipes/_scripts.yml:7-8`).
     - Fixes ownership issues with 1Password binaries (`recipes/_scripts.yml:13-14`).
+
+- `recipes/_sysusers.yml`
+  - Copies sysusers configuration files from `files/usr_lib_sysusers_d/` to `/usr/lib/sysusers.d/` in the image.
+  - Runs `systemd-sysusers` to create system users/groups.
 
 ## Vendored artifacts (keep in sync)
 
@@ -176,3 +181,15 @@ If updating Dropbox:
   - `README.md` installation examples reference `ghcr.io/purkkis/kinoite`.
     Keep these aligned when changing publish targets/tags.
 - **boot-to-windows behavior**: `/usr/bin/boot-to-windows` calls `efibootmgr`, `kdialog`, and `sudo`, and the `.desktop` entry uses `pkexec` (`files/usr_bin/boot-to-windows:4-14`, `files/usr_share_applications/boot-to-windows.desktop:9`). Ensure required binaries/polkit expectations are satisfied by the base image.
+- **1Password groups**: Uses sysusers to create `onepassword` (1500) and `onepassword-cli` (1600) groups via `files/usr_lib_sysusers_d/` configuration files.
+
+## System Users and Groups
+
+The custom images create system users and groups using systemd-sysusers:
+
+- `onepassword` group (ID 1500) - for 1Password application access
+- `onepassword-cli` group (ID 1600) - for 1Password CLI access
+
+These are defined in `files/usr_lib_sysusers_d/` and applied via the `_sysusers.yml` module which:
+1. Copies the sysusers configuration files to `/usr/lib/sysusers.d/`
+2. Runs `systemd-sysusers` to create the users/groups during image build
