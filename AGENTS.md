@@ -23,14 +23,14 @@ Requires `bluebuild` and `just`.
 - Kinoite: `just build-kinoite`
 - Kinoite (NVIDIA): `just build-kinoite-nvidia`
 
-What the `just build-*` tasks do (`justfile:1-15`):
+What the `just build-*` tasks do (`justfile:1-7`):
 
 - `bluebuild generate ./recipes/<recipe>.yml -o Containerfile`
 - `bluebuild build ./recipes/<recipe>.yml`
 
 ### Generate ISOs
 
-Observed `just` targets (`justfile:17-24`):
+Observed `just` targets (`justfile:9-16`):
 
 - `just kinoite-iso` (uses image `ghcr.io/purkkis/kinoite:daily`)
 - `just kinoite-nvidia-iso` (uses image `ghcr.io/purkkis/kinoite-nvidia:daily`)
@@ -112,23 +112,20 @@ Common module types used in this repo:
 
 - `recipes/_kinoite-dnf.yml`
   - Adds `.repo` files from `files/dnf/` and installs packages.
-  - Installs `chatwise.rpm` from `files/dnf/chatwise.rpm` (`recipes/_kinoite-dnf.yml:52`).
-  - Installs `dbeaver.rpm` from `files/dnf/dbeaver.rpm` (`recipes/_kinoite-dnf.yml:53`).
-  - Installs a Fedora-version-specific Dropbox RPM (`dropbox-v2025.05.20-f42.rpm`) (`recipes/_kinoite-dnf.yml:54`).
-  - Installs `opencode.rpm` from `files/dnf/opencode.rpm` (`recipes/_kinoite-dnf.yml:55`).
-  - Installs Positron and Protonmail Bridge via direct URLs (`recipes/_kinoite-dnf.yml:56-57`).
-  - Enables `tailscaled.service` (`recipes/_kinoite-dnf.yml:59-62`).
-
-- `recipes/_desktop-file-fixes.yml`
-  - `script` snippets that edit desktop files to fix Electron app issues:
-    - `/usr/share/applications/ChatWise.desktop` - adds `WEBKIT_DISABLE_COMPOSITING_MODE=1 GDK_BACKEND="x11"` (`recipes/_desktop-file-fixes.yml:6`).
-    - `/usr/share/applications/OpenCode.desktop` - adds same environment variables (`recipes/_desktop-file-fixes.yml:7`).
-
-- `recipes/_kinoite-docker.yml`
-  - Adds Docker CE repo via URL and installs Docker packages; enables `docker.service` (`recipes/_kinoite-docker.yml:4-18`).
+  - Installs `chatwise.rpm` from `files/dnf/chatwise.rpm` (`recipes/_kinoite-dnf.yml:54`).
+  - Installs `dbeaver.rpm` from `files/dnf/dbeaver.rpm` (`recipes/_kinoite-dnf.yml:55`).
+  - Installs a Fedora-version-specific Dropbox RPM (`dropbox-v2025.05.20-f43.rpm`) (`recipes/_kinoite-dnf.yml:56`).
+  - Installs `opencode.rpm` from `files/dnf/opencode.rpm` (`recipes/_kinoite-dnf.yml:58`).
+  - Installs Positron and Protonmail Bridge via direct URLs (`recipes/_kinoite-dnf.yml:59-60`).
+  - Enables `tailscaled.service` (`recipes/_kinoite-dnf.yml:63-66`).
 
 - `recipes/_boot_to_windows.yml`
   - Copies `files/usr_bin/*` → `/usr/bin` and `files/usr_share_applications/*` → `/usr/share/applications` (`recipes/_boot_to_windows.yml:4-9`).
+
+- `recipes/_scripts.yml`
+  - Contains script snippets that fix desktop files for Electron apps and fix 1Password permissions:
+    - Adds `WEBKIT_DISABLE_COMPOSITING_MODE=1 GDK_BACKEND="x11"` environment variables to ChatWise and OpenCode desktop entries (`recipes/_scripts.yml:7-8`).
+    - Fixes ownership issues with 1Password binaries (`recipes/_scripts.yml:13-14`).
 
 ## Vendored artifacts (keep in sync)
 
@@ -137,7 +134,7 @@ Common module types used in this repo:
 - The recipes install `chatwise.rpm`, `dbeaver.rpm`, and `opencode.rpm` from `files/dnf/`.
 - CI downloads the latest RPMs into `files/dnf/` before building (`.github/workflows/build.yml:28-47`).
 
-Local builds: ensure these RPMs exist in `files/dnf/` (CI populates them; local builds won’t unless you provide them).
+Local builds: ensure these RPMs exist in `files/dnf/` (CI populates them; local builds won't unless you provide them).
 
 ### Dropbox RPMs
 
@@ -147,7 +144,7 @@ Local builds: ensure these RPMs exist in `files/dnf/` (CI populates them; local 
 If updating Dropbox:
 
 - Update `files/dropbox/justfile` (`docker_tag`), rebuild RPMs (via `./build-dropbox.sh ...` or `files/dropbox/justfile`), and update the referenced RPM filenames in the relevant DNF module(s):
-  - `recipes/_kinoite-dnf.yml` uses `...-f42.rpm` (`recipes/_kinoite-dnf.yml:54`)
+  - `recipes/_kinoite-dnf.yml` uses `...-f43.rpm` (`recipes/_kinoite-dnf.yml:56`)
 
 ## CI (GitHub Actions)
 
