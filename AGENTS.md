@@ -20,8 +20,8 @@ Commands below are **observed in `justfile` / scripts**.
 
 Requires `bluebuild` and `just`.
 
-- Kinoite: `just build-kinoite`
-- Kinoite (NVIDIA): `just build-kinoite-nvidia`
+- Kinoite: `just build-image-kinoite`
+- Kinoite (NVIDIA): `just build-image-kinoite-nvidia`
 
 What the `just build-*` tasks do (`justfile:1-7`):
 
@@ -32,9 +32,9 @@ What the `just build-*` tasks do (`justfile:1-7`):
 
 Observed `just` targets (`justfile:9-16`):
 
-- `just kinoite-iso` (uses image `ghcr.io/purkkis/kinoite:daily`)
-- `just kinoite-nvidia-iso` (uses image `ghcr.io/purkkis/kinoite-nvidia:daily`)
-- `just kinoite-nvidia-build-iso` (builds ISO from recipe `recipes/kinoite-nvidia.yml`)
+- `just build-iso-kinoite-from-ghcr-image` (uses image `ghcr.io/purkkis/kinoite:daily`)
+- `just build-iso-kinoite-nvidia-from-ghcr-image` (uses image `ghcr.io/purkkis/kinoite-nvidia:daily`)
+- `just build-iso-kinoite-nvidia-from-recipe` (builds ISO from recipe `recipes/kinoite-nvidia.yml`)
 
 ### Build + upload ISOs to Backblaze B2
 
@@ -157,7 +157,7 @@ If updating Dropbox:
 
 - `.github/workflows/build.yml`
   - Scheduled nightly (`cron: "30 6 * * *"`) and manual dispatch.
-  - Runs on `ubicloud-standard-4` (not `ubuntu-latest`).
+  - Runs on `ubicloud-standard-8` (not `ubuntu-latest`).
   - Matrix builds currently include only:
     - `kinoite-nvidia.yml`
     - `kinoite.yml`
@@ -168,14 +168,14 @@ If updating Dropbox:
 
 - `.github/workflows/build-iso.yml`
   - Runs weekly (Monday 01:00 UTC) and manual dispatch.
-  - Runs on `ubicloud-standard-4`.
+  - Runs on `ubicloud-standard-8`.
   - Installs BlueBuild using the upstream install script and runs `./build-isos.sh`.
   - Uses secrets for Backblaze B2 S3-compatible upload (`B2_ENDPOINT`, `B2_BUCKET_NAME`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`).
 
 ## Operational gotchas (observed)
 
 - **ISO generation targets/scripts only cover Kinoite variants right now**:
-  - `justfile` provides `kinoite-iso` and `kinoite-nvidia-iso` only.
+  - `justfile` provides `build-iso-kinoite-from-ghcr-image`, `build-iso-kinoite-nvidia-from-ghcr-image`, and `build-iso-kinoite-nvidia-from-recipe` only.
 - **Image naming mismatch across files**:
   - ISO generation uses `ghcr.io/purkkis/kinoite(:daily)` and `ghcr.io/purkkis/kinoite-nvidia(:daily)`.
   - `README.md` installation examples reference `ghcr.io/purkkis/kinoite`.
@@ -191,5 +191,6 @@ The custom images create system users and groups using systemd-sysusers:
 - `onepassword-cli` group (ID 1600) - for 1Password CLI access
 
 These are defined in `files/usr_lib_sysusers_d/` and applied via the `_sysusers.yml` module which:
+
 1. Copies the sysusers configuration files to `/usr/lib/sysusers.d/`
 2. Runs `systemd-sysusers` to create the users/groups during image build
