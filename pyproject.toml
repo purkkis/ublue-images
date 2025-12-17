@@ -6,12 +6,19 @@ readme = "README.md"
 requires-python = ">=3.12,<4.0"
 authors = [{ name = "Joona Purkamo", email = "joona@purkamo.me" }]
 dependencies = [
+  "boto3>=1.42.11",
+  "loguru>=0.7.3",
   "pydantic>=2.12.5",
   "requests>=2.32.5",
 ]
 
 [project.scripts]
 ublue-images = "ublue_images:main"
+
+[dependency-groups]
+dev = [
+  "datamodel-code-generator>=0.43.1",
+]
 
 [build-system]
 requires = ["uv_build>=0.9.18,<0.10.0"]

@@ -14,3 +14,10 @@ kinoite-nvidia-iso:
 
 kinoite-iso:
 	bluebuild generate-iso --iso-name kinoite.iso image ghcr.io/purkkis/kinoite:daily
+
+github-release-download:
+	wget -O /tmp/github.json https://api.github.com/repos/sst/opencode/releases/latest
+	uv run datamodel-codegen \
+		--input /tmp/github.json \
+		--input-file-type json \
+		--output src/ublue_images/models/github.py
