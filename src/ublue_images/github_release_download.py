@@ -1,6 +1,7 @@
 import tempfile
 from typing import Optional
 
+import awswrangler as wr
 import requests
 from loguru import logger
 from pydantic import BaseModel
@@ -55,12 +56,13 @@ class GitHubReleaseDownloader:
             str: The path to the downloaded file
         """
         try:
-            with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+            with tempfile.NamedTemporaryFile() as tmp_file:
                 logger.info(f"Downloading {file}...")
                 response = requests.get(url)
                 response.raise_for_status()
                 tmp_file.write(response.content)
                 tmp_file_path = tmp_file.name
+                wr.s3.upload(local_file=tmp_file_path, path=f"s3://bluebuild-files/{file}")
             self.download_cache[file] = tmp_file_path
         except requests.RequestException as e:
             logger.error(f"Error downloading file from {url}: {e}")

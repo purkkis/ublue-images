@@ -3,10 +3,10 @@ name = "ublue-images"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12,<4.0"
+requires-python = ">=3.11,<4.0"
 authors = [{ name = "Joona Purkamo", email = "joona@purkamo.me" }]
 dependencies = [
-  "boto3>=1.42.11",
+  "awswrangler>=3.14.0",
   "loguru>=0.7.3",
   "pydantic>=2.12.5",
   "requests>=2.32.5",
