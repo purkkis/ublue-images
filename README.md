@@ -19,9 +19,9 @@ The recommended way to install these images is to generate an ISO and perform a 
 1. **Generate the ISO** (see [Local Build](#local-build--development) below):
 
    ```bash
-   just kinoite-iso
+   just build-iso-kinoite-from-ghcr-image
    # or
-   just kinoite-nvidia-iso
+   just build-iso-kinoite-nvidia-from-ghcr-image
    ```
 
 2. **Flash the ISO** to a USB drive (using e.g. [Fedora Media Writer](https://docs.fedoraproject.org/en-US/fedora/latest/preparing-boot-media/#_fedora_media_writer)).
@@ -36,10 +36,10 @@ This repository uses `just` for convenient local commands.
 
 ```bash
 # Build Kinoite
-just build-kinoite
+just build-image-kinoite
 
 # Build Kinoite (NVIDIA)
-just build-kinoite-nvidia
+just build-image-kinoite-nvidia
 ```
 
 ### Generate ISOs
@@ -47,8 +47,8 @@ just build-kinoite-nvidia
 Requires `bluebuild` installed locally.
 
 ```bash
-just kinoite-iso
-just kinoite-nvidia-iso
+just build-iso-kinoite-from-ghcr-image
+just build-iso-kinoite-nvidia-from-ghcr-image
 ```
 
 ## Verification
@@ -57,4 +57,18 @@ Images are signed with Sigstore's cosign.
 
 ```bash
 cosign verify --key cosign.pub ghcr.io/purkkis/kinoite
+```
+
+## 1Password Groups
+
+The `1password` and `1password-cli` packages contain files that need to be owned by certain groups:
+
+- `/usr/lib/opt/1Password/1Password-BrowserSupport` (owned by `onepassword` group)
+- `/usr/bin/op` (owned by `onepassword-cli` group)
+
+The GIDs for these groups are pinned in `sysusers.d` config files. It's likely that we are required to modify the above groups' (that are automatically created by the 1Password RPMs) GIDs to match the pinned GIDs on live host system. This needs to be done only once after the initial installation.
+
+```bash
+sudo groupmod -g 1500 onepassword
+sudo groupmod -g 1600 onepassword-cli
 ```

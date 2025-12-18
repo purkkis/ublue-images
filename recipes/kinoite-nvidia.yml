@@ -14,6 +14,7 @@ modules:
     install: []
     nvidia-driver: nvidia-open
   - from-file: _common-brew.yml
+  - from-file: _sysusers.yml
   - from-file: _kinoite-dnf.yml
   - from-file: _common-flatpaks.yml
   - from-file: _kinoite-fonts.yaml

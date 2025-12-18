@@ -20,21 +20,21 @@ Commands below are **observed in `justfile` / scripts**.
 
 Requires `bluebuild` and `just`.
 
-- Kinoite: `just build-kinoite`
-- Kinoite (NVIDIA): `just build-kinoite-nvidia`
+- Kinoite: `just build-image-kinoite`
+- Kinoite (NVIDIA): `just build-image-kinoite-nvidia`
 
-What the `just build-*` tasks do (`justfile:1-15`):
+What the `just build-*` tasks do (`justfile:1-7`):
 
 - `bluebuild generate ./recipes/<recipe>.yml -o Containerfile`
 - `bluebuild build ./recipes/<recipe>.yml`
 
 ### Generate ISOs
 
-Observed `just` targets (`justfile:17-24`):
+Observed `just` targets (`justfile:9-16`):
 
-- `just kinoite-iso` (uses image `ghcr.io/purkkis/kinoite:daily`)
-- `just kinoite-nvidia-iso` (uses image `ghcr.io/purkkis/kinoite-nvidia:daily`)
-- `just kinoite-nvidia-build-iso` (builds ISO from recipe `recipes/kinoite-nvidia.yml`)
+- `just build-iso-kinoite-from-ghcr-image` (uses image `ghcr.io/purkkis/kinoite:daily`)
+- `just build-iso-kinoite-nvidia-from-ghcr-image` (uses image `ghcr.io/purkkis/kinoite-nvidia:daily`)
+- `just build-iso-kinoite-nvidia-from-recipe` (builds ISO from recipe `recipes/kinoite-nvidia.yml`)
 
 ### Build + upload ISOs to Backblaze B2
 
@@ -78,6 +78,7 @@ Hooks enforced:
 - `files/dnf/`: DNF `.repo` files and vendored RPMs referenced by the recipes
 - `files/usr_bin/`: scripts copied into the image (via `recipes/_boot_to_windows.yml`)
 - `files/usr_share_applications/`: `.desktop` files copied into the image
+- `files/usr_lib_sysusers_d/`: sysusers configuration files for user/group creation
 - `files/dropbox/`: Docker-based builder for Dropbox/nautilus-dropbox RPMs
 - `.github/workflows/`: CI pipelines for building images and (manual) ISO publishing
 
@@ -112,23 +113,24 @@ Common module types used in this repo:
 
 - `recipes/_kinoite-dnf.yml`
   - Adds `.repo` files from `files/dnf/` and installs packages.
-  - Installs `chatwise.rpm` from `files/dnf/chatwise.rpm` (`recipes/_kinoite-dnf.yml:52`).
-  - Installs `dbeaver.rpm` from `files/dnf/dbeaver.rpm` (`recipes/_kinoite-dnf.yml:53`).
-  - Installs a Fedora-version-specific Dropbox RPM (`dropbox-v2025.05.20-f42.rpm`) (`recipes/_kinoite-dnf.yml:54`).
-  - Installs `opencode.rpm` from `files/dnf/opencode.rpm` (`recipes/_kinoite-dnf.yml:55`).
-  - Installs Positron and Protonmail Bridge via direct URLs (`recipes/_kinoite-dnf.yml:56-57`).
-  - Enables `tailscaled.service` (`recipes/_kinoite-dnf.yml:59-62`).
-
-- `recipes/_desktop-file-fixes.yml`
-  - `script` snippets that edit desktop files to fix Electron app issues:
-    - `/usr/share/applications/ChatWise.desktop` - adds `WEBKIT_DISABLE_COMPOSITING_MODE=1 GDK_BACKEND="x11"` (`recipes/_desktop-file-fixes.yml:6`).
-    - `/usr/share/applications/OpenCode.desktop` - adds same environment variables (`recipes/_desktop-file-fixes.yml:7`).
-
-- `recipes/_kinoite-docker.yml`
-  - Adds Docker CE repo via URL and installs Docker packages; enables `docker.service` (`recipes/_kinoite-docker.yml:4-18`).
+  - Installs `chatwise.rpm` from `files/dnf/chatwise.rpm` (`recipes/_kinoite-dnf.yml:54`).
+  - Installs `dbeaver.rpm` from `files/dnf/dbeaver.rpm` (`recipes/_kinoite-dnf.yml:55`).
+  - Installs a Fedora-version-specific Dropbox RPM (`dropbox-v2025.05.20-f43.rpm`) (`recipes/_kinoite-dnf.yml:56`).
+  - Installs `opencode.rpm` from `files/dnf/opencode.rpm` (`recipes/_kinoite-dnf.yml:58`).
+  - Installs Positron and Protonmail Bridge via direct URLs (`recipes/_kinoite-dnf.yml:59-60`).
+  - Enables `tailscaled.service` (`recipes/_kinoite-dnf.yml:63-66`).
 
 - `recipes/_boot_to_windows.yml`
   - Copies `files/usr_bin/*` → `/usr/bin` and `files/usr_share_applications/*` → `/usr/share/applications` (`recipes/_boot_to_windows.yml:4-9`).
+
+- `recipes/_scripts.yml`
+  - Contains script snippets that fix desktop files for Electron apps and fix 1Password permissions:
+    - Adds `WEBKIT_DISABLE_COMPOSITING_MODE=1 GDK_BACKEND="x11"` environment variables to ChatWise and OpenCode desktop entries (`recipes/_scripts.yml:7-8`).
+    - Fixes ownership issues with 1Password binaries (`recipes/_scripts.yml:13-14`).
+
+- `recipes/_sysusers.yml`
+  - Copies sysusers configuration files from `files/usr_lib_sysusers_d/` to `/usr/lib/sysusers.d/` in the image.
+  - Runs `systemd-sysusers` to create system users/groups.
 
 ## Vendored artifacts (keep in sync)
 
@@ -137,7 +139,7 @@ Common module types used in this repo:
 - The recipes install `chatwise.rpm`, `dbeaver.rpm`, and `opencode.rpm` from `files/dnf/`.
 - CI downloads the latest RPMs into `files/dnf/` before building (`.github/workflows/build.yml:28-47`).
 
-Local builds: ensure these RPMs exist in `files/dnf/` (CI populates them; local builds won’t unless you provide them).
+Local builds: ensure these RPMs exist in `files/dnf/` (CI populates them; local builds won't unless you provide them).
 
 ### Dropbox RPMs
 
@@ -147,7 +149,7 @@ Local builds: ensure these RPMs exist in `files/dnf/` (CI populates them; local 
 If updating Dropbox:
 
 - Update `files/dropbox/justfile` (`docker_tag`), rebuild RPMs (via `./build-dropbox.sh ...` or `files/dropbox/justfile`), and update the referenced RPM filenames in the relevant DNF module(s):
-  - `recipes/_kinoite-dnf.yml` uses `...-f42.rpm` (`recipes/_kinoite-dnf.yml:54`)
+  - `recipes/_kinoite-dnf.yml` uses `...-f43.rpm` (`recipes/_kinoite-dnf.yml:56`)
 
 ## CI (GitHub Actions)
 
@@ -155,7 +157,7 @@ If updating Dropbox:
 
 - `.github/workflows/build.yml`
   - Scheduled nightly (`cron: "30 6 * * *"`) and manual dispatch.
-  - Runs on `ubicloud-standard-4` (not `ubuntu-latest`).
+  - Runs on `ubicloud-standard-8` (not `ubuntu-latest`).
   - Matrix builds currently include only:
     - `kinoite-nvidia.yml`
     - `kinoite.yml`
@@ -166,16 +168,29 @@ If updating Dropbox:
 
 - `.github/workflows/build-iso.yml`
   - Runs weekly (Monday 01:00 UTC) and manual dispatch.
-  - Runs on `ubicloud-standard-4`.
+  - Runs on `ubicloud-standard-8`.
   - Installs BlueBuild using the upstream install script and runs `./build-isos.sh`.
   - Uses secrets for Backblaze B2 S3-compatible upload (`B2_ENDPOINT`, `B2_BUCKET_NAME`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`).
 
 ## Operational gotchas (observed)
 
 - **ISO generation targets/scripts only cover Kinoite variants right now**:
-  - `justfile` provides `kinoite-iso` and `kinoite-nvidia-iso` only.
+  - `justfile` provides `build-iso-kinoite-from-ghcr-image`, `build-iso-kinoite-nvidia-from-ghcr-image`, and `build-iso-kinoite-nvidia-from-recipe` only.
 - **Image naming mismatch across files**:
   - ISO generation uses `ghcr.io/purkkis/kinoite(:daily)` and `ghcr.io/purkkis/kinoite-nvidia(:daily)`.
   - `README.md` installation examples reference `ghcr.io/purkkis/kinoite`.
     Keep these aligned when changing publish targets/tags.
 - **boot-to-windows behavior**: `/usr/bin/boot-to-windows` calls `efibootmgr`, `kdialog`, and `sudo`, and the `.desktop` entry uses `pkexec` (`files/usr_bin/boot-to-windows:4-14`, `files/usr_share_applications/boot-to-windows.desktop:9`). Ensure required binaries/polkit expectations are satisfied by the base image.
+- **1Password groups**: Uses sysusers to create `onepassword` (1500) and `onepassword-cli` (1600) groups via `files/usr_lib_sysusers_d/` configuration files.
+
+## System Users and Groups
+
+The custom images create system users and groups using systemd-sysusers:
+
+- `onepassword` group (ID 1500) - for 1Password application access
+- `onepassword-cli` group (ID 1600) - for 1Password CLI access
+
+These are defined in `files/usr_lib_sysusers_d/` and applied via the `_sysusers.yml` module which:
+
+1. Copies the sysusers configuration files to `/usr/lib/sysusers.d/`
+2. Runs `systemd-sysusers` to create the users/groups during image build
