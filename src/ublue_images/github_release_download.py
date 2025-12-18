@@ -1,12 +1,27 @@
+import os
 import tempfile
+from pathlib import Path
 from typing import Optional
 
 import awswrangler as wr
 import requests
+from dotenv import load_dotenv
+from joblib import Memory, expires_after
 from loguru import logger
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from ublue_images.models.github import Model
+
+load_dotenv()
+
+MEMORY = Memory(Path("./tmp"), verbose=0)
+B2_BUCKET = os.getenv("B2_BUCKET_NAME")
+B2_ENDPOINT = os.getenv("B2_ENDPOINT")
+
+if not B2_ENDPOINT:
+    raise ValueError("B2_ENDPOINT not set!")
+
+os.environ["AWS_ENDPOINT_URL"] = B2_ENDPOINT
 
 
 class File(BaseModel):
@@ -15,11 +30,14 @@ class File(BaseModel):
 
 
 class DownloadFiles(BaseModel):
-    files: list[File]
+    files: list[File] = Field(default_factory=list)
 
 
 class GitHubReleaseDownloader:
-    download_cache: dict[str, str] = {}
+    download_cache: DownloadFiles
+
+    def __init__(self):
+        self.download_cache = DownloadFiles()
 
     @staticmethod
     def get_latest_release(repo: str) -> Optional[Model]:
@@ -45,6 +63,14 @@ class GitHubReleaseDownloader:
             logger.error(f"Error extracting RPM download URL: {e}")
             return None
 
+    @staticmethod
+    @MEMORY.cache(cache_validation_callback=expires_after(days=1))
+    def _download(url: str, file: str):
+        logger.info(f"Downloading {file}...")
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.content
+
     def download_file_to_tmp_dir(self, url: str, file: str):
         """
         Downloads a file into a tmp directory, and returns the file path
@@ -57,13 +83,12 @@ class GitHubReleaseDownloader:
         """
         try:
             with tempfile.NamedTemporaryFile() as tmp_file:
-                logger.info(f"Downloading {file}...")
-                response = requests.get(url)
-                response.raise_for_status()
-                tmp_file.write(response.content)
+                content = self._download(url, file)
+                tmp_file.write(content)
                 tmp_file_path = tmp_file.name
-                wr.s3.upload(local_file=tmp_file_path, path=f"s3://bluebuild-files/{file}")
-            self.download_cache[file] = tmp_file_path
+                s3_path = f"s3://{B2_BUCKET}/bluebuild-files/{file}"
+                wr.s3.upload(local_file=tmp_file_path, path=s3_path)
+            self.download_cache.files.append(File(name=file, url=s3_path))
         except requests.RequestException as e:
             logger.error(f"Error downloading file from {url}: {e}")
             raise

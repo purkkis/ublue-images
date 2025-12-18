@@ -7,8 +7,10 @@ requires-python = ">=3.11,<4.0"
 authors = [{ name = "Joona Purkamo", email = "joona@purkamo.me" }]
 dependencies = [
   "awswrangler>=3.14.0",
+  "joblib>=1.5.3",
   "loguru>=0.7.3",
   "pydantic>=2.12.5",
+  "python-dotenv>=1.2.1",
   "requests>=2.32.5",
 ]
 
