@@ -46,6 +46,13 @@ jobs:
             jq -r '.assets[] | select(.name | endswith("x86_64.rpm")) | .browser_download_url' | \
             wget -nv -i - -O files/dnf/opencode.rpm
 
+      - name: Download WinBoat RPM
+        run: |
+          curl -sL \
+            https://api.github.com/repos/TibixDev/winboat/releases/latest | \
+            jq -r '.assets[] | select(.name | endswith("x86_64.rpm")) | .browser_download_url' | \
+            wget -nv -i - -O files/dnf/winboat.rpm
+
       - name: Build Custom Image
         uses: blue-build/github-action@v1
         with:
