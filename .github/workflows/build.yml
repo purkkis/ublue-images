@@ -10,7 +10,7 @@ concurrency:
 jobs:
   bluebuild:
     name: Build Custom Image
-    runs-on: ubicloud-standard-8
+    runs-on: ubicloud-standard-4
     permissions:
       contents: read
       packages: write
