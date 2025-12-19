@@ -12,6 +12,7 @@ modules:
         - google-chrome.repo
         - tailscale.repo
         # - sublime-text.repo # waiting Sublime repo fix: https://github.com/sublimehq/sublime_text/issues/6669
+        - vivaldi.repo
         - vscode.repo
         - windsurf.repo
     install:
@@ -45,6 +46,7 @@ modules:
         # - sublime-merge
         # - sublime-text
         - tailscale
+        - vivaldi-stable
         - windsurf
         - zsh
   # Manually downloaded RPMs:
