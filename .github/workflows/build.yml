@@ -75,5 +75,5 @@ jobs:
           account: user
           token: ${{ secrets.PAT }}
           image-names: "*"
-          cut-off: 3d
+          cut-off: 1d
           dry-run: false
