@@ -69,7 +69,7 @@ jobs:
     needs: bluebuild
     runs-on: ubuntu-latest
     steps:
-      # Delete all packages older than 3 days
+      # Delete all packages older than 1 day
       - uses: snok/container-retention-policy@v3.0.1
         with:
           account: user
