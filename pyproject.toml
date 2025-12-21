@@ -28,7 +28,7 @@ build-backend = "uv_build"
 
 [tool.ruff]
 indent-width = 4
-line-length = 120
+line-length = 100
 
 [tool.ruff.lint]
 fixable = ["ALL"]
