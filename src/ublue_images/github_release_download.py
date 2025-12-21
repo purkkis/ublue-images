@@ -1,9 +1,10 @@
 import json
 import os
-import tempfile
+
+# import tempfile
 from pathlib import Path
 
-import awswrangler as wr
+# import awswrangler as wr
 import requests
 from dotenv import load_dotenv
 from joblib import Memory, expires_after
@@ -15,13 +16,13 @@ from ublue_images.models.github import GithubReleases
 load_dotenv()
 
 MEMORY = Memory(Path("./tmp"), verbose=0)
-B2_BUCKET = os.getenv("B2_BUCKET_NAME")
-B2_ENDPOINT = os.getenv("B2_ENDPOINT")
-
-if not B2_ENDPOINT:
-    raise ValueError("B2_ENDPOINT not set!")
-
-os.environ["AWS_ENDPOINT_URL"] = B2_ENDPOINT
+# B2_BUCKET = os.getenv("B2_BUCKET_NAME")
+# B2_ENDPOINT = os.getenv("B2_ENDPOINT")
+#
+# if not B2_ENDPOINT:
+#     raise ValueError("B2_ENDPOINT not set!")
+#
+# os.environ["AWS_ENDPOINT_URL"] = B2_ENDPOINT
 
 
 class File(BaseModel):
@@ -85,32 +86,32 @@ class GitHubReleaseDownloader:
         response.raise_for_status()
         return response.content
 
-    def download_file_to_tmp_dir(self, file_config: File):
-        """
-        Downloads a file into a tmp directory, and returns the file path
-
-        Args:
-            url (str): The URL of the file to download
-
-        Returns:
-            str: The path to the downloaded file
-        """
-        try:
-            with tempfile.NamedTemporaryFile() as tmp_file:
-                content = self._download(file_config.url, file_config.name)
-                tmp_file.write(content)
-                tmp_file_path = tmp_file.name
-                s3_path = f"s3://{B2_BUCKET}/bluebuild-files/{file_config.name}"
-                wr.s3.upload(local_file=tmp_file_path, path=s3_path)
-            self.download_cache.files.append(
-                File(name=file_config.name, url=s3_path, version=file_config.version)
-            )
-        except requests.RequestException as e:
-            logger.error(f"Error downloading file from {file_config.url}: {e}")
-            raise e
-        except Exception as e:
-            logger.error(f"Error creating temporary file for {file_config.url}: {e}")
-            raise e
+    # def download_file_to_tmp_dir(self, file_config: File):
+    #     """
+    #     Downloads a file into a tmp directory, and returns the file path
+    #
+    #     Args:
+    #         url (str): The URL of the file to download
+    #
+    #     Returns:
+    #         str: The path to the downloaded file
+    #     """
+    #     try:
+    #         with tempfile.NamedTemporaryFile() as tmp_file:
+    #             content = self._download(file_config.url, file_config.name)
+    #             tmp_file.write(content)
+    #             tmp_file_path = tmp_file.name
+    #             s3_path = f"s3://{B2_BUCKET}/bluebuild-files/{file_config.name}"
+    #             wr.s3.upload(local_file=tmp_file_path, path=s3_path)
+    #         self.download_cache.files.append(
+    #             File(name=file_config.name, url=s3_path, version=file_config.version)
+    #         )
+    #     except requests.RequestException as e:
+    #         logger.error(f"Error downloading file from {file_config.url}: {e}")
+    #         raise e
+    #     except Exception as e:
+    #         logger.error(f"Error creating temporary file for {file_config.url}: {e}")
+    #         raise e
 
     def download_files(self, config: DownloadFiles):
         for file_config in config.files:
