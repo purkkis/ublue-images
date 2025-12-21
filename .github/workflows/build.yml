@@ -47,12 +47,12 @@ jobs:
             rpm-cache-
 
       # Cache the tagged releases based on tags.json hash.
-      # If the tags.json hasn't changed, we restore the files/dnf/rpms folder from cache.
+      # If the tags.json hasn't changed, we restore the files/dnf/tags folder from cache.
       - name: Cache tagged releases
         id: tag-cache
         uses: actions/cache@v5
         with:
-          path: files/dnf/rpms
+          path: files/dnf/tags
           key: tag-cache-${{ hashFiles('src/ublue_images/tags.json') }}
           restore-keys: |
             tag-cache-
