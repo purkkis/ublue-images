@@ -53,15 +53,15 @@ modules:
   - type: dnf
     install:
       packages:
-        - chatwise.rpm
-        - dbeaver.rpm
         - dropbox-v2025.05.20-f43.rpm
         - rpms/bitwarden.rpm
-        - opencode.rpm
         - rpms/positron.rpm
         - rpms/protonmail-bridge.rpm
         - rpms/proton-pass.rpm
-        - winboat.rpm
+        - tags/chatwise.rpm
+        - tags/dbeaver.rpm
+        - tags/opencode.rpm
+        - tags/winboat.rpm
   - from-file: _scripts.yml
   - type: systemd
     system:

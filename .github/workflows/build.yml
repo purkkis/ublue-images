@@ -30,6 +30,13 @@ jobs:
         with:
           enable-cache: true
 
+      # Update the tags.json file with up-to-date tags from GitHub releases
+      - name: Update tags
+        run: |
+          uv run src/ublue_images/tags.py --refresh
+
+      # Cache the downloaded RPMs based on files.json hash.
+      # If the files.json hasn't changed, we restore the files/dnf/rpms folder from cache.
       - name: Cache hardcoded RPMs
         id: rpm-cache
         uses: actions/cache@v5
@@ -39,38 +46,26 @@ jobs:
           restore-keys: |
             rpm-cache-
 
+      # Cache the tagged releases based on tags.json hash.
+      # If the tags.json hasn't changed, we restore the files/dnf/rpms folder from cache.
+      - name: Cache tagged releases
+        id: tag-cache
+        uses: actions/cache@v5
+        with:
+          path: files/dnf/rpms
+          key: tag-cache-${{ hashFiles('src/ublue_images/tags.json') }}
+          restore-keys: |
+            tag-cache-
+
       - name: Download hardcoded RPMs
         if: steps.rpm-cache.outputs.cache-hit != 'true'
         run: |
-          uv run src/ublue_images/github_release_download.py
+          uv run src/ublue_images/rpms.py
 
-      - name: Download ChatWise RPM
+      - name: Download tagged releases
+        if: steps.tag-cache.outputs.cache-hit != 'true'
         run: |
-          curl -sL \
-            https://api.github.com/repos/egoist/chatwise-releases/releases/latest | \
-            jq -r '.assets[] | select(.name | endswith("x86_64.rpm")) | .browser_download_url' | \
-            wget -nv -i - -O files/dnf/chatwise.rpm
-
-      - name: Download DBeaver RPM
-        run: |
-          curl -sL \
-            https://api.github.com/repos/dbeaver/dbeaver/releases/latest | \
-            jq -r '.assets[] | select(.name | endswith("x86_64.rpm")) | .browser_download_url' | \
-            wget -nv -i - -O files/dnf/dbeaver.rpm
-
-      - name: Download OpenCode RPM
-        run: |
-          curl -sL \
-            https://api.github.com/repos/sst/opencode/releases/latest | \
-            jq -r '.assets[] | select(.name | endswith("x86_64.rpm")) | .browser_download_url' | \
-            wget -nv -i - -O files/dnf/opencode.rpm
-
-      - name: Download WinBoat RPM
-        run: |
-          curl -sL \
-            https://api.github.com/repos/TibixDev/winboat/releases/latest | \
-            jq -r '.assets[] | select(.name | endswith("x86_64.rpm")) | .browser_download_url' | \
-            wget -nv -i - -O files/dnf/winboat.rpm
+          uv run src/ublue_images/tags.py --download
 
       - name: Build Custom Image
         uses: blue-build/github-action@v1

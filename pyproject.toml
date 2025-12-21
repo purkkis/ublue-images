@@ -14,9 +14,6 @@ dependencies = [
   "requests>=2.32.5",
 ]
 
-[project.scripts]
-ublue-images = "ublue_images:main"
-
 [dependency-groups]
 dev = [
   "datamodel-code-generator>=0.43.1",

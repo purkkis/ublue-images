@@ -1,13 +1,14 @@
-import json
 import os
 
 # import tempfile
 from pathlib import Path
+from typing import TypeVar
 
 # import awswrangler as wr
 import requests
 from dotenv import load_dotenv
-from joblib import Memory, expires_after
+
+# from joblib import Memory, expires_after
 from loguru import logger
 from pydantic import BaseModel, Field
 
@@ -15,7 +16,7 @@ from ublue_images.models.github import GithubReleases
 
 load_dotenv()
 
-MEMORY = Memory(Path("./tmp"), verbose=0)
+# MEMORY = Memory(Path("./tmp"), verbose=0)
 # B2_BUCKET = os.getenv("B2_BUCKET_NAME")
 # B2_ENDPOINT = os.getenv("B2_ENDPOINT")
 #
@@ -25,21 +26,30 @@ MEMORY = Memory(Path("./tmp"), verbose=0)
 # os.environ["AWS_ENDPOINT_URL"] = B2_ENDPOINT
 
 
-class File(BaseModel):
+class ReleaseItem(BaseModel):
     name: str
-    version: str
+    tag: str
     url: str
+    repo: str | None = None
 
 
-class DownloadFiles(BaseModel):
-    files: list[File] = Field(default_factory=list)
+class ReleaseItems(BaseModel):
+    items: list[ReleaseItem] = Field(default_factory=list)
+
+
+T = TypeVar("T", bound=BaseModel)
 
 
 class GitHubReleaseDownloader:
-    download_cache: DownloadFiles
+    download_cache: ReleaseItems
 
     def __init__(self):
-        self.download_cache = DownloadFiles()
+        self.download_cache = ReleaseItems()
+
+    @staticmethod
+    def load_config(path: Path, model: type[T]) -> T:
+        """Load and validate a JSON configuration file."""
+        return model.model_validate_json(path.read_text(encoding="utf-8"))
 
     @staticmethod
     def get_latest_release(repo: str) -> GithubReleases:
@@ -48,7 +58,7 @@ class GitHubReleaseDownloader:
         try:
             response = requests.get(url)
             response.raise_for_status()
-            return GithubReleases.model_validate_json(response.json())
+            return GithubReleases.model_validate(response.json())
         except Exception as e:
             logger.error(f"Error fetching latest release for {repo}: {e}")
             raise e
@@ -66,7 +76,7 @@ class GitHubReleaseDownloader:
             raise e
 
     @staticmethod
-    @MEMORY.cache(cache_validation_callback=expires_after(days=1))
+    # @MEMORY.cache(cache_validation_callback=expires_after(days=1))
     def _download(url: str, file: str):
         """Download a file's content from a URL.
 
@@ -113,13 +123,12 @@ class GitHubReleaseDownloader:
     #         logger.error(f"Error creating temporary file for {file_config.url}: {e}")
     #         raise e
 
-    def download_files(self, config: DownloadFiles):
-        for file_config in config.files:
+    def download_files(self, config: ReleaseItems, output: str = "files/dnf/rpms"):
+        for file_config in config.items:
             # self.download_file_to_tmp_dir(file_config)
-            self.download_file_to_local_dir(file_config)
+            self.download_file_to_local_dir(file_config, output=output)
 
-    def download_file_to_local_dir(self, file_config: File):
-        output = "files/dnf/rpms"
+    def download_file_to_local_dir(self, file_config: ReleaseItem, output: str = "files/dnf/rpms"):
         if not os.path.exists(output):
             logger.info(f"Creating output directory: {output}")
             os.makedirs(output)
@@ -129,16 +138,17 @@ class GitHubReleaseDownloader:
             f.write(content)
             logger.info(f"Wrote {len(content)} bytes for {file_config.name} to {local_path}")
 
+    def latest_tag(self, repo: str) -> str:
+        tag: str = self.get_latest_release(repo).tag_name
+        if not isinstance(tag, str):
+            raise ValueError(f"Expected string tag, got {type(tag)}")
+        if not tag.strip():
+            raise ValueError("Tag is empty or whitespace only")
+        return tag
 
-if __name__ == "__main__":
+
+def rpms():
     ghd = GitHubReleaseDownloader()
-
-    # Example usage
     config_path = Path(__file__).with_name("files.json")
-    files_data = json.loads(config_path.read_text(encoding="utf-8"))
-    download_config = DownloadFiles(
-        files=[File.model_validate(file_item) for file_item in files_data]
-    )
-
+    download_config = ghd.load_config(config_path, ReleaseItems)
     ghd.download_files(download_config)
-    # print(ghd.download_cache)
