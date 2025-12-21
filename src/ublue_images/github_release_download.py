@@ -1,3 +1,4 @@
+import json
 import os
 import tempfile
 from pathlib import Path
@@ -66,6 +67,19 @@ class GitHubReleaseDownloader:
     @staticmethod
     @MEMORY.cache(cache_validation_callback=expires_after(days=1))
     def _download(url: str, file: str):
+        """Download a file's content from a URL.
+
+        Args:
+            url (str): The URL to download from.
+            file (str): A human-readable filename used for logging.
+
+        Returns:
+            bytes: The downloaded file contents.
+
+        Raises:
+            requests.RequestException: If the request fails.
+            requests.HTTPError: If the server returns an HTTP error status.
+        """
         logger.info(f"Downloading {file}...")
         response = requests.get(url)
         response.raise_for_status()
@@ -100,27 +114,30 @@ class GitHubReleaseDownloader:
 
     def download_files(self, config: DownloadFiles):
         for file_config in config.files:
-            self.download_file_to_tmp_dir(file_config)
+            # self.download_file_to_tmp_dir(file_config)
+            self.download_file_to_local_dir(file_config)
+
+    def download_file_to_local_dir(self, file_config: File):
+        output = "files/dnf/rpms"
+        if not os.path.exists(output):
+            logger.info(f"Creating output directory: {output}")
+            os.makedirs(output)
+        local_path = os.path.join(output, file_config.name)
+        content = self._download(file_config.url, file_config.name)
+        with open(local_path, "wb") as f:
+            f.write(content)
+            logger.info(f"Wrote {len(content)} bytes for {file_config.name} to {local_path}")
 
 
 if __name__ == "__main__":
     ghd = GitHubReleaseDownloader()
 
     # Example usage
+    config_path = Path(__file__).with_name("files.json")
+    files_data = json.loads(config_path.read_text(encoding="utf-8"))
     download_config = DownloadFiles(
-        files=[
-            File(
-                name="opencode.rpm",
-                url="https://github.com/sst/opencode/releases/download/v1.0.164/opencode-desktop-linux-x86_64.rpm",
-                version="1.0.164",
-            ),
-            File(
-                name="opencode2.rpm",
-                url="https://github.com/sst/opencode/releases/download/v1.0.164/opencode-desktop-linux-x86_64.rpm",
-                version="1.0.164",
-            ),
-        ]
+        files=[File.model_validate(file_item) for file_item in files_data]
     )
 
     ghd.download_files(download_config)
-    print(ghd.download_cache)
+    # print(ghd.download_cache)
