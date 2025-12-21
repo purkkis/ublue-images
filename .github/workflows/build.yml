@@ -58,12 +58,12 @@ jobs:
             tag-cache-
 
       - name: Download hardcoded RPMs
-        if: steps.rpm-cache.outputs.cache-hit != true
+        if: steps.rpm-cache.outputs.cache-hit != 'true'
         run: |
           uv run src/ublue_images/rpms.py
 
       - name: Download tagged releases
-        if: steps.tag-cache.outputs.cache-hit != true
+        if: steps.tag-cache.outputs.cache-hit != 'true'
         run: |
           uv run src/ublue_images/tags.py --download
 
