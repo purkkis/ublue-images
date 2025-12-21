@@ -57,16 +57,19 @@ jobs:
           restore-keys: |
             tag-cache-
 
+      # Download hardcoded RPMs only if cache is not hit
       - name: Download hardcoded RPMs
         if: steps.rpm-cache.outputs.cache-hit != 'true'
         run: |
           uv run src/ublue_images/rpms.py
 
+      # Download tagged releases only if cache is not hit
       - name: Download tagged releases
         if: steps.tag-cache.outputs.cache-hit != 'true'
         run: |
           uv run src/ublue_images/tags.py --download
 
+      # Build the image
       - name: Build Custom Image
         uses: blue-build/github-action@v1
         with:
