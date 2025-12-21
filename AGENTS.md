@@ -27,6 +27,7 @@ Requires `bluebuild` and `just`:
 - `files/usr_bin/`: Scripts copied to /usr/bin
 - `files/usr_lib_sysusers_d/`: System user/group configs
 - `.github/workflows/`: CI/CD pipelines
+- `src/ublue_images/`: Python scripts for downloading RPMs from GitHub
 
 ## Recipes and Modules
 
@@ -44,7 +45,12 @@ Main recipes compose shared fragments via `from-file`:
 
 ## Vendored Artifacts
 
-- Chatwise/DBeaver/OpenCode RPMs: Downloaded by CI to `files/dnf/` before builds
+Two types of vendored RPMs:
+1. Hardcoded versions in `src/ublue_images/files.json` (e.g., Bitwarden, Positron)
+2. Tagged releases in `src/ublue_images/tags.json` (e.g., ChatWise, DBeaver)
+
+Both downloaded by CI to `files/dnf/rpms/` and `files/dnf/tags/` respectively before builds.
+
 - Dropbox RPMs: Versioned files (`dropbox-v2025.05.20-f{42,43}.rpm`) in `files/dnf/`
 - To update Dropbox: Modify `files/dropbox/justfile` and rebuild with `./build-dropbox.sh`
 
@@ -53,7 +59,8 @@ Main recipes compose shared fragments via `from-file`:
 ### Image Builds (.github/workflows/build.yml)
 - Nightly + manual builds on ubicloud-standard-4
 - Builds both kinoite variants
-- Downloads latest RPMs before BlueBuild
+- Downloads latest RPMs before BlueBuild using Python scripts in `src/ublue_images/`
+- Caches downloaded RPMs based on files.json/tags.json hashes
 - Signs images with cosign
 
 ### ISO Builds (.github/workflows/build-iso.yml)
@@ -78,3 +85,16 @@ Configs in `files/usr_lib_sysusers_d/` applied by `_sysusers.yml`.
 
 - Images signed with Sigstore cosign
 - Only trusted repos and verified packages
+
+## Python Scripts for RPM Management
+
+The `src/ublue_images/` directory contains Python scripts that manage RPM downloads:
+
+- `files.json`: Defines hardcoded RPMs with specific versions
+- `tags.json`: Defines RPMs that should always use the latest GitHub release tag
+- `rpms.py`: Downloads RPMs defined in files.json to `files/dnf/rpms/`
+- `tags.py`:
+  - With `--refresh`: Updates tags.json with latest GitHub release tags
+  - With `--download`: Downloads RPMs defined in tags.json to `files/dnf/tags/`
+
+These scripts are automatically run by the CI workflow before building images.
