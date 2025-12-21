@@ -10,6 +10,7 @@ modules:
           - com.discordapp.Discord
           - com.github.tchx84.Flatseal
           - com.ranfdev.DistroShelf
+          - com.usebruno.Bruno
           - io.github.cboxdoerfer.FSearch
           - io.missioncenter.MissionCenter
           - io.podman_desktop.PodmanDesktop

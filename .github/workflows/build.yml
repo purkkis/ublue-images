@@ -10,7 +10,7 @@ concurrency:
 jobs:
   bluebuild:
     name: Build Custom Image
-    runs-on: ubicloud-standard-8
+    runs-on: ubicloud-standard-4
     permissions:
       contents: read
       packages: write
@@ -46,6 +46,13 @@ jobs:
             jq -r '.assets[] | select(.name | endswith("x86_64.rpm")) | .browser_download_url' | \
             wget -nv -i - -O files/dnf/opencode.rpm
 
+      - name: Download WinBoat RPM
+        run: |
+          curl -sL \
+            https://api.github.com/repos/TibixDev/winboat/releases/latest | \
+            jq -r '.assets[] | select(.name | endswith("x86_64.rpm")) | .browser_download_url' | \
+            wget -nv -i - -O files/dnf/winboat.rpm
+
       - name: Build Custom Image
         uses: blue-build/github-action@v1
         with:
@@ -62,11 +69,11 @@ jobs:
     needs: bluebuild
     runs-on: ubuntu-latest
     steps:
-      # Delete all packages older than 3 days
+      # Delete all packages older than 1 day
       - uses: snok/container-retention-policy@v3.0.1
         with:
           account: user
           token: ${{ secrets.PAT }}
           image-names: "*"
-          cut-off: 3d
+          cut-off: 1d
           dry-run: false
