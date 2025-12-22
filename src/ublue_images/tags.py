@@ -18,6 +18,7 @@ def refresh_tags():
         if latest_tag == t.tag:
             logger.info(f"Tag for {t.repo} is already up to date: {t.tag}")
             continue
+        logger.info(f"New tag for {t.repo}: {latest_tag}, old tag: {t.tag}")
         t.tag = latest_tag
         release_data = ghd.get_latest_release(t.repo)
         t.url = ghd.get_rpm_download_url(release_data)
