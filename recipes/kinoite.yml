@@ -9,6 +9,9 @@ alt-tags:
 platforms:
   - linux/amd64
 modules:
+  - type: dnf
+    repos:
+      nonfree: negativo17
   # - from-file: _common-brew.yml
   - from-file: _sysusers.yml
   - from-file: _kinoite-dnf.yml
