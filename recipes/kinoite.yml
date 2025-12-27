@@ -9,7 +9,7 @@ alt-tags:
 platforms:
   - linux/amd64
 modules:
-  - from-file: _common-brew.yml
+  # - from-file: _common-brew.yml
   - from-file: _sysusers.yml
   - from-file: _kinoite-dnf.yml
   - from-file: _common-flatpaks.yml
