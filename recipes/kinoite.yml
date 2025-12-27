@@ -15,5 +15,4 @@ modules:
   - from-file: _common-flatpaks.yml
   - from-file: _kinoite-fonts.yaml
   - from-file: _kinoite-docker.yml
-  - from-file: _boot_to_windows.yml
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
