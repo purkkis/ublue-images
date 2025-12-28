@@ -1,16 +1,13 @@
 ARG FEDORA_VERSION=42
-ARG FEDORA_TAG=v2025.05.20
 FROM fedora:${FEDORA_VERSION}
 ARG FEDORA_VERSION
-ARG FEDORA_TAG
 
 # install fedora deps
 RUN dnf upgrade --refresh -y && dnf install -y git
 
 # clone nautilus-dropbox
 RUN mkdir /dropbox
-RUN git clone --branch ${FEDORA_TAG} \
-    https://github.com/dropbox/nautilus-dropbox.git \
+RUN git clone https://github.com/purkkis/nautilus-dropbox.git \
     /dropbox/nautilus-dropbox
 
 # install dropbox deps

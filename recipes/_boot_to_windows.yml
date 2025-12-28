@@ -1,9 +1,0 @@
----
-# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
-modules:
-  - type: files
-    files:
-      - source: usr_share_applications
-        destination: /usr/share/applications
-      - source: usr_bin
-        destination: /usr/bin
