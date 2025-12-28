@@ -6,7 +6,13 @@ modules:
       nonfree: rpmfusion
     install:
       packages:
-        - mesa
+        # Linux firmware:
+        - linux-firmware
+        # MESA:
+        - mesa-vulkan-drivers
+        - mesa-dri-drivers
+        - mesa-libGL
+        # ROCm:
         - rocm
         - rocminfo
         - rocm-smi
