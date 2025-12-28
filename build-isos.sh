@@ -46,5 +46,5 @@ build_and_upload() {
     rm "$iso_name" "$iso_name-CHECKSUM"
 }
 
-# build_and_upload "kinoite.iso" "ghcr.io/purkkis/kinoite:daily"
+build_and_upload "kinoite.iso" "ghcr.io/purkkis/kinoite:daily"
 build_and_upload "kinoite-nvidia.iso" "ghcr.io/purkkis/kinoite-nvidia:daily"

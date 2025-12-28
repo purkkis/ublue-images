@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+modules:
+  - type: dnf
+    repos:
+      nonfree: rpmfusion
+    install:
+      packages:
+        - mesa
+        - rocm
+        - rocminfo
+        - rocm-smi
+    replace:
+      - from-repo: rpmfusion
+        packages:
+          - old: mesa-va-drivers
+            new: mesa-va-drivers-freeworld
+          - old: mesa-vdpau-drivers
+            new: mesa-vdpau-drivers-freeworld
+          - old: mesa-va-drivers.i686
+            new: mesa-va-drivers-freeworld.i686
+          - old: mesa-vdpau-drivers.i686
+            new: mesa-vdpau-drivers-freeworld.i686

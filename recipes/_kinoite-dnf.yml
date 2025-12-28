@@ -39,7 +39,6 @@ modules:
         - gtk4-layer-shell-devel
         - hplip-gui
         - libadwaita-devel
-        - os-prober
         - papirus-icon-theme
         - podman
         - python3-gpg
@@ -54,7 +53,7 @@ modules:
   - type: dnf
     install:
       packages:
-        - dropbox-f43.rpm
+        - dropbox-f42.rpm
         - rpms/bitwarden.rpm
         - rpms/positron.rpm
         - rpms/protonmail-bridge.rpm
