@@ -15,3 +15,6 @@ github-release-download:
 		--input-file-type json \
 		--output src/ublue_images/models/github.py \
 		--class-name GithubReleases
+
+update-github-release-tags:
+	uv run src/ublue_images/tags.py --refresh
