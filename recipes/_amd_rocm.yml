@@ -13,6 +13,7 @@ modules:
         - mesa-vulkan-drivers
         - mesa-dri-drivers
         - mesa-libGL
+        # Codecs:
         - mesa-va-drivers-freeworld
         - mesa-vdpau-drivers-freeworld
         # ROCm:
