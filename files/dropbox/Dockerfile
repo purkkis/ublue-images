@@ -18,7 +18,7 @@ RUN /dropbox/nautilus-dropbox/install-rpm-deps.sh
 COPY dropbox.patch /dropbox
 WORKDIR /dropbox/nautilus-dropbox
 RUN git apply /dropbox/dropbox.patch
-RUN sed -i "s/FROM fedora:latest/FROM fedora:${FEDORA_VERSION}/" Dockerfile.fedora
+RUN sed -i "s/FROM fedora:REPLACE_ME/FROM fedora:${FEDORA_VERSION}/" Dockerfile.fedora
 
 # verify
 RUN ls -la /dropbox
