@@ -39,6 +39,7 @@ modules:
         - gtk4-layer-shell-devel
         - hplip-gui
         - libadwaita-devel
+        - os-prober
         - papirus-icon-theme
         - podman
         - python3-gpg
