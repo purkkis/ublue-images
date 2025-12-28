@@ -6,10 +6,10 @@ modules:
       nonfree: rpmfusion
     install:
       packages:
-        # Linux firmware:
+        # Linux firmware (F42: already included in base image):
         - linux-firmware
         - amd-gpu-firmware
-        # MESA:
+        # MESA (F42: already included in base image):
         - mesa-vulkan-drivers
         - mesa-dri-drivers
         - mesa-libGL
@@ -18,7 +18,7 @@ modules:
         - rocminfo
         - rocm-smi
     replace:
-      - from-repo: rpmfusion
+      - from-repo: rpmfusion-free
         packages:
           - old: mesa-va-drivers
             new: mesa-va-drivers-freeworld
