@@ -13,8 +13,8 @@ modules:
     base: main
     install: []
     nvidia-driver: nvidia-open
-  - from-file: _kinoite-dnf.yml
   - from-file: _sysusers.yml
+  - from-file: _kinoite-dnf.yml
   - from-file: _common-flatpaks.yml
   - from-file: _kinoite-fonts.yaml
   - from-file: _kinoite-docker.yml
