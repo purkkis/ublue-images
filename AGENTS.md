@@ -106,22 +106,3 @@ The `src/ublue_images/` directory contains Python scripts that manage RPM downlo
   - With `--download`: Downloads RPMs defined in tags.json to `files/dnf/tags/`
 
 These scripts are automatically run by the CI workflow before building images to ensure the latest software versions.
-
-## Important Gotchas
-
-1. **1Password Groups**: After first installation, users must manually adjust group IDs:
-
-   ```bash
-   sudo groupmod -g 1500 onepassword
-   sudo groupmod -g 1600 onepassword-cli
-   ```
-
-2. **Sublime Text Repositories**: Currently disabled due to upstream issues with the repository
-
-3. **Build Requirements**: Building locally requires significant disk space and the `bluebuild` tool
-
-4. **RPM Caching**: CI uses GitHub Actions caching to avoid re-downloading RPMs unnecessarily
-
-5. **Image Cleanup**: Old container images are automatically deleted after 1 day to save storage
-
-6. **Boot to Windows**: The Windows bootloader option was recently removed from the image
