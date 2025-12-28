@@ -4,7 +4,7 @@
 
 This repository builds custom Fedora Atomic desktop images using **BlueBuild** recipes. These are immutable, atomic operating system images based on Fedora Kinoite (KDE Plasma) with additional software and configuration.
 
-- **Recipes**: `recipes/` (kinoite.yml, kinoite-nvidia.yml, and shared fragments)
+- **Recipes**: `recipes/` (kinoite-nvidia.yml and shared fragments)
 - **Artifacts**: `files/` (DNF repo files, RPMs, scripts, sysusers configs)
 - **Builds**: GitHub Actions via `blue-build/github-action@v1`
 
@@ -16,7 +16,6 @@ List ordering in YAML files: keep list items in alphabetical order. If a list it
 
 Requires `bluebuild` and `just`:
 
-- **Build Kinoite**: `just build-image-kinoite`
 - **Build Kinoite (NVIDIA)**: `just build-image-kinoite-nvidia`
 - **Generate ISOs**:
   - `just build-iso-kinoite-from-ghcr-image`
@@ -32,26 +31,17 @@ Requires `bluebuild` and `just`:
 - `src/ublue_images/`: Python scripts for downloading RPMs from GitHub
 - `files/dropbox/`: Dropbox build files and Dockerfile
 
-## Recipes and Modules
-
-Main recipes compose shared fragments via `from-file`:
-
-- `kinoite.yml` and `kinoite-nvidia.yml` (NVIDIA adds akmods)
-- Common modules: dnf, default-flatpaks, fonts, brew, files, systemd, script, signing
-
-### Key Modules
+## Key Modules
 
 - `_kinoite-dnf.yml`: Installs packages from repos, local RPMs, and URLs; enables tailscaled
 - `_scripts.yml`: Fixes Electron apps and 1Password permissions
 - `_sysusers.yml`: Creates system users/groups via systemd-sysusers
-- `_common-brew.yml`: Installs Homebrew
 - `_common-flatpaks.yml`: Installs common Flatpak applications
-- `_kinoite-docker.yml`: Installs Docker-related packages
-- `_kinoite-fonts.yaml`: Installs additional fonts
 
 ## Vendored Artifacts
 
 Three types of vendored RPMs:
+
 1. **Hardcoded versions**: Defined in `src/ublue_images/files.json` (e.g., Bitwarden, Positron) - downloaded to `files/dnf/rpms/`
 2. **Tagged releases**: Defined in `src/ublue_images/tags.json` (e.g., ChatWise, DBeaver) - downloaded to `files/dnf/tags/`
 3. **Versioned RPMs**: Directly versioned files like `dropbox-v2025.05.20-f{42,43}.rpm` in `files/dnf/`
@@ -65,15 +55,16 @@ Three types of vendored RPMs:
 ## CI/CD
 
 ### Image Builds (.github/workflows/build.yml)
+
 - **Nightly builds**: Run at 06:30 UTC on ubicloud-standard-4 instances
 - **Manual builds**: Can be triggered via GitHub Actions UI
-- **Builds both variants**: Standard Kinoite and NVIDIA-optimized variant
 - **RPM Management**: Automatically downloads latest RPMs before BlueBuild using Python scripts
 - **Caching**: Caches downloaded RPMs based on files.json/tags.json hashes to speed up builds
 - **Cleanup**: Automatically deletes package versions older than 1 day to save space
 - **Signing**: Images are signed with Sigstore cosign for verification
 
 ### ISO Builds (.github/workflows/build-iso.yml)
+
 - **Weekly builds**: Automated ISO generation
 - **Manual builds**: Can be triggered via GitHub Actions UI
 - **Upload**: ISOs are uploaded to Backblaze B2 storage
@@ -82,6 +73,7 @@ Three types of vendored RPMs:
 ## System Users
 
 Creates system groups via systemd-sysusers:
+
 - `onepassword` (ID 1500) for app access to browser integration
 - `onepassword-cli` (ID 1600) for CLI access
 
@@ -91,7 +83,6 @@ Configs in `files/usr_lib_sysusers_d/` applied by `_sysusers.yml`.
 
 1. **Install dependencies**: `bluebuild` CLI, `just` runner, and `uv` for Python package management
 2. **Build images**:
-   - `just build-image-kinoite` for standard variant
    - `just build-image-kinoite-nvidia` for NVIDIA variant
 3. **Generate ISOs**:
    - `just build-iso-kinoite-from-ghcr-image` to build from pre-built image
@@ -119,6 +110,7 @@ These scripts are automatically run by the CI workflow before building images to
 ## Important Gotchas
 
 1. **1Password Groups**: After first installation, users must manually adjust group IDs:
+
    ```bash
    sudo groupmod -g 1500 onepassword
    sudo groupmod -g 1600 onepassword-cli
@@ -132,12 +124,4 @@ These scripts are automatically run by the CI workflow before building images to
 
 5. **Image Cleanup**: Old container images are automatically deleted after 1 day to save storage
 
-## Package Management Approach
-
-This project uses a hybrid approach:
-1. **DNF Repositories**: Standard packages from official repositories
-2. **Vendored RPMs**: Manually downloaded packages that aren't available in repositories
-3. **Flatpaks**: Applications distributed as Flatpaks for sandboxing
-4. **Homebrew**: Additional package manager for user-space applications
-
-This approach provides maximum flexibility while maintaining system stability and security.
+6. **Boot to Windows**: The Windows bootloader option was recently removed from the image
