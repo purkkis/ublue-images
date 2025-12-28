@@ -8,6 +8,7 @@ modules:
       packages:
         # Linux firmware:
         - linux-firmware
+        - amd-gpu-firmware
         # MESA:
         - mesa-vulkan-drivers
         - mesa-dri-drivers
