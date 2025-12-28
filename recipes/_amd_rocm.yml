@@ -13,18 +13,9 @@ modules:
         - mesa-vulkan-drivers
         - mesa-dri-drivers
         - mesa-libGL
+        - mesa-va-drivers-freeworld
+        - mesa-vdpau-drivers-freeworld
         # ROCm:
         - rocm
         - rocminfo
         - rocm-smi
-    replace:
-      - from-repo: rpmfusion-free
-        packages:
-          - old: mesa-va-drivers
-            new: mesa-va-drivers-freeworld
-          - old: mesa-vdpau-drivers
-            new: mesa-vdpau-drivers-freeworld
-          - old: mesa-va-drivers.i686
-            new: mesa-va-drivers-freeworld.i686
-          - old: mesa-vdpau-drivers.i686
-            new: mesa-vdpau-drivers-freeworld.i686
