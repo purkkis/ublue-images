@@ -8,22 +8,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  bluebuild:
-    name: Build Custom Image
-    runs-on: ubicloud-standard-4
+  # Update tags.json, push new commit if there are changes.
+  update-tags:
+    name: Update tags.json
+    runs-on: ubuntu-latest
     permissions:
       contents: write
-      packages: write
-      id-token: write
-    strategy:
-      fail-fast: false # stop GH from cancelling all matrix builds if one fails
-      matrix:
-        recipe:
-          - kinoite.yml
-          - kinoite-nvidia.yml
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          ref: main
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
@@ -40,6 +35,33 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "Update tags.json"
+          file_pattern: src/ublue_images/tags.json
+
+  # Build the images, this checkouts the main branch again in order to get the latest tags.json.
+  bluebuild:
+    name: Build Custom Image
+    needs: update-tags
+    runs-on: ubicloud-standard-4
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    strategy:
+      fail-fast: false # stop GH from cancelling all matrix builds if one fails
+      matrix:
+        recipe:
+          - kinoite.yml
+          - kinoite-nvidia.yml
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
 
       # Cache the downloaded RPMs based on files.json hash.
       # If the files.json hasn't changed, we restore the files/dnf/rpms folder from cache.
@@ -87,6 +109,7 @@ jobs:
           maximize_build_space: false
           use_cache: false
 
+  # Delete old packages.
   delete-package-versions:
     name: Delete old packages
     needs: bluebuild
