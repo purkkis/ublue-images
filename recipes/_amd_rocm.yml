@@ -14,8 +14,11 @@ modules:
         - mesa-dri-drivers
         - mesa-libGL
         # Codecs:
-        - mesa-va-drivers-freeworld
-        - mesa-vdpau-drivers-freeworld
+        - mesa-va-drivers
+        - mesa-vdpau-drivers
+        # RPMFusion codecs:
+        # - mesa-va-drivers-freeworld
+        # - mesa-vdpau-drivers-freeworld
         # ROCm:
         - rocm
         - rocminfo
