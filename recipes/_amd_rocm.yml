@@ -3,7 +3,7 @@
 modules:
   - type: dnf
     repos:
-      nonfree: rpmfusion
+      nonfree: negativo17
     install:
       packages:
         # Linux firmware (F42: already included in base image):
