@@ -1,12 +1,11 @@
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
 modules:
-  # - type: dnf
-  #   repos:
-  #     nonfree: rpmfusion
   - type: dnf
     install:
       packages:
+        # The ublue main kinoite image already has negativo17 multimedia repo enables.
+        # This will install RPMFusion repos the usual way without removing the negativo17 repo.
         - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-%OS_VERSION%.noarch.rpm
         - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-%OS_VERSION%.noarch.rpm
   - type: dnf
@@ -14,19 +13,13 @@ modules:
       packages:
         # Steam
         - steam
-        # Linux firmware (F42: already included in base image):
+        # Linux firmware
         - linux-firmware
         - amd-gpu-firmware
-        # MESA (F42: already included in base image):
+        # MESA
         - mesa-vulkan-drivers
         - mesa-dri-drivers
         - mesa-libGL
-        # Codecs:
-        # - mesa-va-drivers
-        # - mesa-vdpau-drivers
-        # RPMFusion codecs:
-        # - mesa-va-drivers-freeworld
-        # - mesa-vdpau-drivers-freeworld
         # ROCm:
         - rocm
         - rocminfo

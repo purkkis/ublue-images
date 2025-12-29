@@ -55,7 +55,7 @@ modules:
   - type: dnf
     install:
       packages:
-        - dropbox-f42.rpm
+        - dropbox-f43.rpm
         - rpms/bitwarden.rpm
         - rpms/positron.rpm
         - rpms/protonmail-bridge.rpm
