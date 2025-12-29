@@ -12,7 +12,7 @@ jobs:
     name: Build Custom Image
     runs-on: ubicloud-standard-4
     permissions:
-      contents: read
+      contents: write
       packages: write
       id-token: write
     strategy:
@@ -34,6 +34,12 @@ jobs:
       - name: Update tags
         run: |
           uv run src/ublue_images/tags.py --refresh
+
+      # Commit the updated tags.json file if it has changed
+      - name: Commit updated tags.json
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "Update tags.json"
 
       # Cache the downloaded RPMs based on files.json hash.
       # If the files.json hasn't changed, we restore the files/dnf/rpms folder from cache.
