@@ -9,7 +9,7 @@ alt-tags:
 platforms:
   - linux/amd64
 modules:
-  - type: akmods # enables negativo17 repos
+  - type: akmods # from negativo17 repos
     base: main
     install: []
     nvidia-driver: nvidia-open

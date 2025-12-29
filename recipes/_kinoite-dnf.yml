@@ -48,6 +48,9 @@ modules:
         - vivaldi-stable
         - windsurf
         - zsh
+    group-install:
+      packages:
+        - development-tools
   # Manually downloaded RPMs:
   - type: dnf
     install:
