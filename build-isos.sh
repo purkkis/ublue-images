@@ -46,5 +46,11 @@ build_and_upload() {
     rm "$iso_name" "$iso_name-CHECKSUM"
 }
 
-build_and_upload "kinoite.iso" "ghcr.io/purkkis/kinoite:daily"
-build_and_upload "kinoite-nvidia.iso" "ghcr.io/purkkis/kinoite-nvidia:daily"
+# Require ISO name and image as parameters
+if [[ $# -ne 2 ]]; then
+    echo "Usage: $0 <iso_name> <image>"
+    echo "Example: $0 kinoite.iso ghcr.io/purkkis/kinoite:daily"
+    exit 1
+fi
+
+build_and_upload "$1" "$2"

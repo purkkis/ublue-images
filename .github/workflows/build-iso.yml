@@ -10,10 +10,17 @@ concurrency:
 
 jobs:
   build-and-upload-isos:
-    name: Build and upload ISOs to B2
+    name: Build and upload ${{ matrix.iso_name }} to B2
     runs-on: ubicloud-standard-4
     permissions:
       contents: read
+    strategy:
+      matrix:
+        include:
+          - iso_name: kinoite.iso
+            image: ghcr.io/purkkis/kinoite:daily
+          - iso_name: kinoite-nvidia.iso
+            image: ghcr.io/purkkis/kinoite-nvidia:daily
     env:
       B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
       B2_BUCKET_NAME: ${{ secrets.B2_BUCKET_NAME }}
@@ -30,4 +37,4 @@ jobs:
       - name: Run ISO build script
         run: |
           chmod +x ./build-isos.sh
-          ./build-isos.sh
+          ./build-isos.sh "${{ matrix.iso_name }}" "${{ matrix.image }}"
