@@ -11,7 +11,7 @@ modules:
         - cursor.repo
         - google-chrome.repo
         - tailscale.repo
-        - sublime-text.repo # waiting for Sublime's Fedora 43 repo fix: https://github.com/sublimehq/sublime_text/issues/6669
+        # - sublime-text.repo # waiting for Sublime's Fedora 43 repo fix: https://github.com/sublimehq/sublime_text/issues/6669
         - vivaldi.repo
         - vscode.repo
         - windsurf.repo
@@ -42,9 +42,8 @@ modules:
         - papirus-icon-theme
         - podman
         - python3-gpg
-        - steam
-        - sublime-merge
-        - sublime-text
+        # - sublime-merge
+        # - sublime-text
         - tailscale
         - vivaldi-stable
         - windsurf
@@ -62,7 +61,7 @@ modules:
         - tags/dbeaver.rpm
         - tags/opencode.rpm
         - tags/winboat.rpm
-  - from-file: _scripts.yml
+  - from-file: _scripts.yml # fix desktop files etc.
   - type: systemd
     system:
       enabled:

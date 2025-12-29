@@ -3,9 +3,22 @@
 modules:
   - type: dnf
     repos:
-      nonfree: negativo17
+      nonfree: rpmfusion
+  - type: dnf
     install:
       packages:
+        - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-%OS_VERSION%.noarch.rpm
+        - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-%OS_VERSION%.noarch.rpm
+  - type: dnf
+    repos:
+      files:
+        - https://negativo17.org/repos/fedora-steam.repo
+  - type: dnf
+    install:
+      packages:
+        - repo: fedora-steam
+          packages:
+            - steam
         # Linux firmware (F42: already included in base image):
         - linux-firmware
         - amd-gpu-firmware
@@ -14,8 +27,8 @@ modules:
         - mesa-dri-drivers
         - mesa-libGL
         # Codecs:
-        - mesa-va-drivers
-        - mesa-vdpau-drivers
+        # - mesa-va-drivers
+        # - mesa-vdpau-drivers
         # RPMFusion codecs:
         # - mesa-va-drivers-freeworld
         # - mesa-vdpau-drivers-freeworld
@@ -23,3 +36,14 @@ modules:
         - rocm
         - rocminfo
         - rocm-smi
+    replace:
+      - from-repo: rpmfusion-free
+        packages:
+          - old: mesa-va-drivers
+            new: mesa-va-drivers-freeworld
+          - old: mesa-vdpau-drivers
+            new: mesa-vdpau-drivers-freeworld
+          - old: mesa-va-drivers.i686
+            new: mesa-va-drivers-freeworld.i686
+          - old: mesa-vdpau-drivers.i686
+            new: mesa-vdpau-drivers-freeworld.i686

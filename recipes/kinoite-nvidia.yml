@@ -15,6 +15,10 @@ modules:
     nvidia-driver: nvidia-open
   - from-file: _sysusers.yml
   - from-file: _kinoite-dnf.yml
+  - type: dnf
+    install:
+      packages:
+        - steam # from negativo17 repo
   - from-file: _common-flatpaks.yml
   - from-file: _kinoite-fonts.yaml
   - from-file: _kinoite-docker.yml
