@@ -1,4 +1,5 @@
 import os
+import shutil
 
 # import tempfile
 from pathlib import Path
@@ -124,14 +125,18 @@ class GitHubReleaseDownloader:
     #         raise e
 
     def download_files(self, config: ReleaseItems, output: str = "files/dnf/rpms"):
+        logger.info(f"Starting download of {len(config.items)} files to {output}")
+        if os.path.exists(output):
+            logger.info(f"Removing output directory: {output}")
+            shutil.rmtree(output)
+        logger.info(f"Created output directory: {output}")
+        os.makedirs(output)
+
         for file_config in config.items:
             # self.download_file_to_tmp_dir(file_config)
             self.download_file_to_local_dir(file_config, output=output)
 
     def download_file_to_local_dir(self, file_config: ReleaseItem, output: str = "files/dnf/rpms"):
-        if not os.path.exists(output):
-            logger.info(f"Creating output directory: {output}")
-            os.makedirs(output)
         local_path = os.path.join(output, file_config.name)
         content = self._download(file_config.url, file_config.name)
         with open(local_path, "wb") as f:
@@ -148,7 +153,9 @@ class GitHubReleaseDownloader:
 
 
 def rpms():
+    logger.info("Starting RPMs download process")
     ghd = GitHubReleaseDownloader()
     config_path = Path(__file__).with_name("files.json")
     download_config = ghd.load_config(config_path, ReleaseItems)
     ghd.download_files(download_config)
+    logger.info("RPMs download process completed")

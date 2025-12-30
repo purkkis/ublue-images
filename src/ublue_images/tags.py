@@ -7,6 +7,7 @@ from ublue_images.github_release_download import GitHubReleaseDownloader, Releas
 
 
 def refresh_tags():
+    logger.info("Starting tags refresh process")
     ghd = GitHubReleaseDownloader()
     config_path = Path(__file__).with_name("tags.json")
     tags_data = ghd.load_config(config_path, ReleaseItems)
@@ -23,13 +24,16 @@ def refresh_tags():
         release_data = ghd.get_latest_release(t.repo)
         t.url = ghd.get_rpm_download_url(release_data)
     config_path.write_text(tags_data.model_dump_json(indent=2))
+    logger.info("Tags refresh process completed")
 
 
 def download_releases():
+    logger.info("Starting releases download process")
     ghd = GitHubReleaseDownloader()
     config_path = Path(__file__).with_name("tags.json")
     download_config = ghd.load_config(config_path, ReleaseItems)
     ghd.download_files(download_config, output="files/dnf/tags")
+    logger.info("Releases download process completed")
 
 
 if __name__ == "__main__":
@@ -38,7 +42,11 @@ if __name__ == "__main__":
     parser.add_argument("--download", action="store_true", help="Download releases")
     args = parser.parse_args()
 
-    if args.refresh:
-        refresh_tags()
-    elif args.download:
-        download_releases()
+    try:
+        if args.refresh:
+            refresh_tags()
+        elif args.download:
+            download_releases()
+    except Exception:
+        logger.exception("An error occurred during execution")
+        exit(1)
