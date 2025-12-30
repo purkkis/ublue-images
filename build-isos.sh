@@ -41,7 +41,7 @@ upload_iso() {
 build_and_upload() {
     local iso_name="$1"
     local image="$2"
-    "$BLUEBUILD_BIN" generate-iso --iso-name "$iso_name" -B docker image "$image"
+    "$BLUEBUILD_BIN" generate-iso --iso-name "$iso_name" image "$image"
     upload_iso "$iso_name"
     rm "$iso_name" "$iso_name-CHECKSUM"
 }
