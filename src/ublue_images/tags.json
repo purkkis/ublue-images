@@ -20,8 +20,8 @@
     },
     {
       "name": "opencode.rpm",
-      "tag": "v1.0.207",
-      "url": "https://github.com/sst/opencode/releases/download/v1.0.207/opencode-desktop-linux-x86_64.rpm",
+      "tag": "v1.0.209",
+      "url": "https://github.com/sst/opencode/releases/download/v1.0.209/opencode-desktop-linux-x86_64.rpm",
       "repo": "sst/opencode"
     }
   ]
