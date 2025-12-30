@@ -1,152 +1,161 @@
-# Custom Fedora Atomic Images
+# ublue-images (Custom Fedora Atomic Images)
 
-## Overview
+## What this repo is
 
-This repository builds custom Fedora Atomic desktop images using **BlueBuild** recipes. These are immutable, atomic operating system images based on Fedora Kinoite (KDE Plasma) with additional software and configuration.
+This repository builds custom Fedora Atomic desktop images (Fedora Kinoite) using **BlueBuild** recipes.
 
-- **Recipes**: `recipes/` (kinoite-nvidia.yml and shared fragments)
-- **Artifacts**: `files/` (DNF repo files, RPMs, scripts, sysusers configs)
-- **Builds**: GitHub Actions via `blue-build/github-action@v1`
+- **BlueBuild recipes** live in `recipes/`
+- **Vendored artifacts/configs** live in `files/` (DNF repo files, RPMs, sysusers configs)
+- **RPM management scripts** live in `src/ublue_images/` (Python)
+- **CI** builds images + updates release tags via GitHub Actions in `.github/workflows/`
 
-## Code Organization
+## Repository layout (high-signal)
 
 ```
-├── recipes/                 # BlueBuild recipes and shared modules
-├── files/                   # Vendored artifacts and configs
-│   ├── dnf/                 # DNF repos and RPMs
-│   │   ├── *.repo           # Repository configuration files
-│   │   ├── rpms/            # Hardcoded RPM versions (from files.json)
-│   │   ├── tags/            # Tagged release RPMs (from tags.json)
-│   │   └── *.rpm            # Versioned RPMs (e.g., dropbox)
-│   ├── usr_lib_sysusers_d/  # System user/group configurations
-│   └── dropbox/             # Dropbox build files
-├── src/ublue_images/        # Python scripts for RPM management
-├── .github/workflows/       # CI/CD pipelines
-└── *.sh                     # Build scripts
+recipes/                      BlueBuild recipes + shared modules (prefixed with `_`)
+  kinoite.yml                 Base image recipe (image-version: 43)
+  kinoite-nvidia.yml          NVIDIA variant recipe (image-version: 43)
+  _kinoite-dnf.yml            DNF repos + packages + local/tagged RPM installs
+  _common-flatpaks.yml        Flatpaks installed system-wide
+  _sysusers.yml               systemd-sysusers setup (copies sysusers.d files)
+  _scripts.yml                Post-install tweaks (desktop file edits)
+  _amd-rocm.yml               RPMFusion + AMD/ROCm packages (used by kinoite.yml)
+  _kinoite-docker.yml         Docker repo + docker packages + enable docker.service
+  _kinoite-fonts.yaml         Nerd Fonts + Google fonts
+
+files/
+  dnf/                        DNF repo files and RPMs used by recipes
+    *.repo                    Repo configuration consumed by recipes/_kinoite-dnf.yml
+    dropbox-f43.rpm           Locally built RPM (see files/dropbox/)
+    rpms/                     “Hardcoded/managed” RPMs (see src/ublue_images/files.json)
+    tags/                     “Latest GitHub release tag” RPMs (see src/ublue_images/tags.json)
+  usr_lib_sysusers_d/         sysusers.d entries copied into /usr/lib/sysusers.d
+  dropbox/                    Docker-based build context + justfile to produce dropbox RPMs
+
+src/ublue_images/
+  github_release_download.py  GitHub release/tag lookup + download helpers
+  rpms.py                     Download RPMs from src/ublue_images/files.json → files/dnf/rpms/
+  tags.py                     Refresh tags.json and download tagged RPMs → files/dnf/tags/
+  models/github.py            Pydantic model generated via datamodel-codegen
+
+.github/workflows/
+  build.yml                   Nightly image builds + auto-update tags.json
+  build-iso.yml               Weekly ISO builds + upload to B2 (runs build-isos.sh)
 ```
 
-## YAML Files
+## Essential commands
 
-List ordering in YAML files: keep list items in alphabetical order. If a list item is a URL, sort by the name of the downloaded file (not by the leading `https://...`).
+### BlueBuild / images (local)
 
-## Quick Commands
+Commands are defined in the top-level `justfile`:
 
-Requires `bluebuild` and `just`:
+- Build images:
+  - `just build-image-kinoite`
+  - `just build-image-kinoite-nvidia`
 
-- **Build Kinoite (NVIDIA)**: `just build-image-kinoite-nvidia`
-- **Generate ISOs**:
+- Generate ISOs from pre-built images in GHCR:
   - `just build-iso-kinoite-from-ghcr-image`
   - `just build-iso-kinoite-nvidia-from-ghcr-image`
-  - `just build-iso-kinoite-nvidia-from-recipe`
 
-## Repository Structure
+### RPM management (local / CI)
 
-- `.env.example`, `.envrc`: Environment configuration examples
-- `.github/workflows/`: CI/CD pipelines
-- `.pre-commit-config.yaml`: Pre-commit hook configuration
-- `.python-version`: Python version specification
-- `build-dropbox.sh`, `build-isos.sh`: Build scripts
-- `cosign.pub`: Public key for image verification
-- `justfile`: Command definitions for the `just` command runner
-- `pyproject.toml`, `uv.lock`: Python project configuration
-- `recipes/`: BlueBuild recipes and shared modules (prefixed with `_`)
-  - `kinoite.yml`: Base Kinoite image recipe (Fedora 43)
-  - `kinoite-nvidia.yml`: Kinoite image with NVIDIA drivers (Fedora 42)
-- `files/dnf/`: DNF repos and vendored RPMs (chatwise, dbeaver, opencode, dropbox)
-- `files/usr_lib_sysusers_d/`: System user/group configs
-- `src/ublue_images/`: Python scripts for downloading RPMs from GitHub
-- `files/dropbox/`: Dropbox build files and Dockerfile
+- Refresh GitHub release tags in `src/ublue_images/tags.json`:
+  - `uv run src/ublue_images/tags.py --refresh`
+  - (wrapper) `just update-github-release-tags`
 
-## Key Modules
+- Download tagged-release RPMs into `files/dnf/tags/`:
+  - `uv run src/ublue_images/tags.py --download`
 
-- `_amd-rocm.yml`: Enables RPM Fusion repositories (used in kinoite.yml)
-- `_common-flatpaks.yml`: Installs common Flatpak applications
-- `_kinoite-docker.yml`: Installs Docker CE components
-- `_kinoite-dnf.yml`: Installs packages from repos, local RPMs, and URLs; enables tailscaled
-- `_kinoite-fonts.yaml`: Installs Nerd Fonts and Google Fonts
-- `_scripts.yml`: Fixes desktop files for Electron apps
-- `_sysusers.yml`: Creates system users/groups via systemd-sysusers
+- Download “hardcoded” RPMs into `files/dnf/rpms/`:
+  - `uv run src/ublue_images/rpms.py`
 
-## Recipe Differences
+### Dropbox RPM builds
 
-The repository provides two main image recipes:
+- Build dropbox RPMs (expects `just` and `docker`):
+  - `./build-dropbox.sh 42 43`
 
-1. **kinoite.yml** - Base Kinoite image:
-   - Fedora version: 43
-   - AMD GPU support via `_amd-rocm.yml` module
-   - No proprietary drivers included
+Under the hood this runs `files/dropbox/justfile` targets and writes into `files/dnf/dropbox-f<version>.rpm`.
 
-2. **kinoite-nvidia.yml** - NVIDIA-optimized Kinoite image:
-   - Fedora version: 42
-   - NVIDIA driver support via akmods module with `nvidia-open` driver
-   - Includes Steam from negativo17 repository
-   - Uses older Fedora version for better NVIDIA driver compatibility
+### ISO build/upload script
 
-## Vendored Artifacts
+- `./build-isos.sh <iso_name> <image>`
 
-Three types of vendored RPMs:
+This script requires:
+- `bluebuild` available on PATH
+- `aws` CLI available on PATH
+- Env vars: `B2_ENDPOINT`, `B2_BUCKET_NAME`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` (see `.env.example`)
 
-1. **Hardcoded versions**: Defined in `src/ublue_images/files.json` (e.g., Bitwarden, Positron) - downloaded to `files/dnf/rpms/`
-2. **Tagged releases**: Defined in `src/ublue_images/tags.json` (e.g., ChatWise, DBeaver) - downloaded to `files/dnf/tags/`
-3. **Versioned RPMs**: Directly versioned files like `dropbox-f42.rpm` and `dropbox-f43.rpm` in `files/dnf/`
+## CI workflows (what runs where)
 
-### Updating Vendored Artifacts
+### `.github/workflows/build.yml`
 
-- **Hardcoded RPMs**: Update `src/ublue_images/files.json` and run `uv run src/ublue_images/rpms.py`
-- **Tagged releases**: Run `uv run src/ublue_images/tags.py --refresh` to update tags, then `uv run src/ublue_images/tags.py --download` to download
-- **Dropbox RPMs**: Modify `files/dropbox/justfile` and rebuild with `./build-dropbox.sh`
+- Job `update-tags` runs `uv run src/ublue_images/tags.py --refresh` and auto-commits updates to `src/ublue_images/tags.json`.
+- Job `bluebuild` runs on `ubicloud-standard-4` and builds a matrix of recipes:
+  - `kinoite.yml`
+  - `kinoite-nvidia.yml`
+- CI caches `files/dnf/rpms` keyed by `src/ublue_images/files.json` and caches `files/dnf/tags` keyed by `src/ublue_images/tags.json`.
 
-## Build Process
+### `.github/workflows/build-iso.yml`
 
-### Image Builds (.github/workflows/build.yml)
+- Weekly ISO builds on `ubicloud-standard-4`.
+- Installs `bluebuild` in CI (via an install script) and calls `./build-isos.sh`.
 
-- **Nightly builds**: Run at 06:30 UTC on ubicloud-standard-4 instances
-- **Manual builds**: Can be triggered via GitHub Actions UI
-- **RPM Management**: Automatically downloads latest RPMs before BlueBuild using Python scripts
-- **Caching**: Caches downloaded RPMs based on files.json/tags.json hashes to speed up builds
-- **Cleanup**: Automatically deletes package versions older than 1 day to save space
-- **Signing**: Images are signed with Sigstore cosign for verification
+## Code conventions & style
 
-### ISO Builds (.github/workflows/build-iso.yml)
+### Python
 
-- **Weekly builds**: Automated ISO generation
-- **Manual builds**: Can be triggered via GitHub Actions UI
-- **Upload**: ISOs are uploaded to Backblaze B2 storage
-- **Process**: Runs `./build-isos.sh` with required environment variables
+- Python project metadata: `pyproject.toml`
+- Supported Python: `>=3.11,<4.0` (`pyproject.toml:6`)
+- Formatting/linting configuration:
+  - Ruff `line-length = 100` and `indent-width = 4` (`pyproject.toml:25-27`)
 
-## System Users
+There is no dedicated unit test suite in this repository; validation is primarily via pre-commit hooks and CI builds.
 
-Creates system groups via systemd-sysusers:
+### Pre-commit
 
-- `onepassword` (ID 1500) for app access to browser integration
-- `onepassword-cli` (ID 1600) for CLI access
+`.pre-commit-config.yaml` configures:
+- whitespace/yaml/json/toml hygiene
+- `ruff-check` (imports: `--select I --fix`)
+- `ruff-format`
+- `gitleaks`
 
-Configs in `files/usr_lib_sysusers_d/` applied by `_sysusers.yml`.
+## BlueBuild recipe patterns
 
-## Development Workflow
+- Recipes reference shared module fragments via `from-file: _something.yml`.
+- Module lists include a `$schema` header.
+- Lists in recipe YAML are typically kept in alphabetical order (repos, packages, flatpaks). Maintain the existing ordering when editing.
 
-1. **Install dependencies**: `bluebuild` CLI, `just` runner, and `uv` for Python package management
-2. **Build images**:
-   - `just build-image-kinoite-nvidia` for NVIDIA variant
-3. **Generate ISOs**:
-   - `just build-iso-kinoite-from-ghcr-image` to build from pre-built image
-   - `just build-iso-kinoite-nvidia-from-recipe` to build from recipe
+Key behavior in this repo:
+- `recipes/_sysusers.yml` copies `files/usr_lib_sysusers_d/*` into `/usr/lib/sysusers.d` and runs `systemd-sysusers`.
+- `recipes/_scripts.yml` uses `sed -i` snippets to patch `.desktop` Exec lines for certain Electron apps.
+- `recipes/_kinoite-dnf.yml` installs:
+  - packages from repo `.repo` files under `files/dnf/`
+  - local RPMs under `files/dnf/` (e.g. `dropbox-f43.rpm`)
+  - downloaded RPMs under `files/dnf/rpms/` and `files/dnf/tags/`
 
-## Security
+## Vendored RPM workflow (important)
 
-- **Image signing**: All images are signed with Sigstore cosign for verification
-- **Trusted sources**: Only uses trusted repositories and verified packages
-- **Verification**: Users can verify images with `cosign verify --key cosign.pub ghcr.io/purkkis/kinoite`
+There are two automation paths for RPMs:
 
-## Python Scripts for RPM Management
+1. **Hardcoded list**: `src/ublue_images/files.json` → downloaded by `src/ublue_images/rpms.py` into `files/dnf/rpms/`.
+2. **Latest-tag list**: `src/ublue_images/tags.json` → refreshed by `src/ublue_images/tags.py --refresh` and downloaded by `--download` into `files/dnf/tags/`.
 
-The `src/ublue_images/` directory contains Python scripts that manage RPM downloads:
+### Gotcha: download scripts delete output directories
 
-- `files.json`: Defines hardcoded RPMs with specific versions that rarely change
-- `tags.json`: Defines RPMs that should always use the latest GitHub release tag
-- `rpms.py`: Downloads RPMs defined in files.json to `files/dnf/rpms/`
-- `tags.py`:
-  - With `--refresh`: Updates tags.json with latest GitHub release tags
-  - With `--download`: Downloads RPMs defined in tags.json to `files/dnf/tags/`
+`GitHubReleaseDownloader.download_files()` (used by both `rpms.py` and `tags.py --download`) removes and recreates the output directory (`src/ublue_images/github_release_download.py:127-134`).
 
-These scripts are automatically run by the CI workflow before building images to ensure the latest software versions.
+Implications:
+- Running `uv run src/ublue_images/rpms.py` will delete `files/dnf/rpms/` and then repopulate it *only* from `src/ublue_images/files.json`.
+- Running `uv run src/ublue_images/tags.py --download` will delete `files/dnf/tags/` and then repopulate it *only* from `src/ublue_images/tags.json`.
+
+When changing recipes that reference `files/dnf/rpms/*` or `files/dnf/tags/*`, keep the corresponding JSON config in sync so that a regeneration doesn’t remove required RPMs.
+
+## Security / signing
+
+- Images are signed and can be verified with cosign:
+  - `cosign verify --key cosign.pub ghcr.io/purkkis/kinoite`
+
+## Generated code
+
+- `src/ublue_images/models/github.py` is generated (see `justfile` target `github-release-download`).
+- If regenerating, the just target downloads a GitHub API JSON payload and runs `datamodel-codegen` to overwrite that file.
