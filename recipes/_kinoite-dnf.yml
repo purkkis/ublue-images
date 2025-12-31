@@ -56,10 +56,8 @@ modules:
     install:
       packages:
         - dropbox-f43.rpm
-        - rpms/bitwarden.rpm
         - rpms/positron.rpm
         - rpms/protonmail-bridge.rpm
-        - rpms/proton-pass.rpm
         - tags/chatwise.rpm
         - tags/dbeaver.rpm
         - tags/opencode.rpm
