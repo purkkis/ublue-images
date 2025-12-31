@@ -22,6 +22,12 @@ dev = [
 requires = ["uv_build>=0.9.18,<0.10.0"]
 build-backend = "uv_build"
 
+[tool.pyrefly]
+project-includes = [
+  "**/*.py*",
+  "**/*.ipynb",
+]
+
 [tool.ruff]
 indent-width = 4
 line-length = 100
