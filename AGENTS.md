@@ -17,6 +17,7 @@ recipes/                      BlueBuild recipes + shared modules (prefixed with 
   kinoite-nvidia.yml          NVIDIA variant recipe (image-version: 43)
   _kinoite-dnf.yml            DNF repos + packages + local/tagged RPM installs
   _common-flatpaks.yml        Flatpaks installed system-wide
+  _common-brew.yml            Homebrew module configuration (nofile-limits, no auto-upgrade)
   _sysusers.yml               systemd-sysusers setup (copies sysusers.d files)
   _scripts.yml                Post-install tweaks (desktop file edits)
   _amd-rocm.yml               RPMFusion + AMD/ROCm packages (used by kinoite.yml)
@@ -94,6 +95,7 @@ This script requires:
   - `kinoite.yml`
   - `kinoite-nvidia.yml`
 - CI caches `files/dnf/rpms` keyed by `src/ublue_images/files.json` and caches `files/dnf/tags` keyed by `src/ublue_images/tags.json`.
+- Job `delete-package-versions` removes images older than 1 day from the container registry (keeps only latest).
 
 ### `.github/workflows/build-iso.yml`
 
@@ -114,7 +116,9 @@ There is no dedicated unit test suite in this repository; validation is primaril
 ### Pre-commit
 
 `.pre-commit-config.yaml` configures:
+
 - whitespace/yaml/json/toml hygiene
+- `mixed-line-ending` with `--fix=lf` (enforces LF line endings)
 - `ruff-check` (imports: `--select I --fix`)
 - `ruff-format`
 - `gitleaks`
@@ -122,16 +126,19 @@ There is no dedicated unit test suite in this repository; validation is primaril
 ## BlueBuild recipe patterns
 
 - Recipes reference shared module fragments via `from-file: _something.yml`.
-- Module lists include a `$schema` header.
+- Module lists include a `$schema` header (either `recipe-v1.json` for main recipes or `module-list-v1.json` for shared modules).
 - Lists in recipe YAML are typically kept in alphabetical order (repos, packages, flatpaks). Maintain the existing ordering when editing.
+- Recipe module order matters - dependencies must be installed before they're used (e.g., `type: signing` should typically be last).
 
 Key behavior in this repo:
+
 - `recipes/_sysusers.yml` copies `files/usr_lib_sysusers_d/*` into `/usr/lib/sysusers.d` and runs `systemd-sysusers`.
 - `recipes/_scripts.yml` uses `sed -i` snippets to patch `.desktop` Exec lines for certain Electron apps.
 - `recipes/_kinoite-dnf.yml` installs:
   - packages from repo `.repo` files under `files/dnf/`
   - local RPMs under `files/dnf/` (e.g. `dropbox-f43.rpm`)
   - downloaded RPMs under `files/dnf/rpms/` and `files/dnf/tags/`
+- `recipes/kinoite-nvidia.yml` includes `type: akmods` module with `nvidia-driver: nvidia-open` and adds Steam from negativo17 repo.
 
 ## Vendored RPM workflow (important)
 
@@ -140,13 +147,22 @@ There are two automation paths for RPMs:
 1. **Hardcoded list**: `src/ublue_images/files.json` → downloaded by `src/ublue_images/rpms.py` into `files/dnf/rpms/`.
 2. **Latest-tag list**: `src/ublue_images/tags.json` → refreshed by `src/ublue_images/tags.py --refresh` and downloaded by `--download` into `files/dnf/tags/`.
 
+### JSON structure
+
+Both `files.json` and `tags.json` use the same Pydantic model (`ReleaseItems`):
+
+- Each item has: `name` (filename), `tag` (version), `url` (download URL), `enabled` (boolean), and optionally `repo` (for auto-refresh)
+- For `tags.json` items, the `repo` field enables automatic tag refresh via `--refresh` flag
+- Set `enabled: false` to temporarily disable a package without removing its entry
+
 ### Gotcha: download scripts delete output directories
 
 `GitHubReleaseDownloader.download_files()` (used by both `rpms.py` and `tags.py --download`) removes and recreates the output directory (`src/ublue_images/github_release_download.py:127-134`).
 
 Implications:
-- Running `uv run src/ublue_images/rpms.py` will delete `files/dnf/rpms/` and then repopulate it *only* from `src/ublue_images/files.json`.
-- Running `uv run src/ublue_images/tags.py --download` will delete `files/dnf/tags/` and then repopulate it *only* from `src/ublue_images/tags.json`.
+
+- Running `uv run src/ublue_images/rpms.py` will delete `files/dnf/rpms/` and then repopulate it _only_ from `src/ublue_images/files.json`.
+- Running `uv run src/ublue_images/tags.py --download` will delete `files/dnf/tags/` and then repopulate it _only_ from `src/ublue_images/tags.json`.
 
 When changing recipes that reference `files/dnf/rpms/*` or `files/dnf/tags/*`, keep the corresponding JSON config in sync so that a regeneration doesn’t remove required RPMs.
 
