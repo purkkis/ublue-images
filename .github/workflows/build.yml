@@ -1,7 +1,7 @@
 name: bluebuild
 on:
-  schedule:
-    - cron: "30 6 * * *" # 06:30 UTC
+  # schedule:
+  #   - cron: "30 6 * * *" # 06:30 UTC
   workflow_dispatch: # allow manually triggering builds
 concurrency:
   group: ${{ github.workflow }}
