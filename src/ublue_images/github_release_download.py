@@ -32,6 +32,7 @@ class ReleaseItem(BaseModel):
     tag: str
     url: str
     repo: str | None = None
+    enabled: bool = True
 
 
 class ReleaseItems(BaseModel):
@@ -133,7 +134,11 @@ class GitHubReleaseDownloader:
         os.makedirs(output)
 
         for file_config in config.items:
-            # self.download_file_to_tmp_dir(file_config)
+            if not file_config.enabled:
+                logger.info(
+                    f"Skipping download of disabled file: {file_config.name} (tag: {file_config.tag})"
+                )
+                continue
             self.download_file_to_local_dir(file_config, output=output)
 
     def download_file_to_local_dir(self, file_config: ReleaseItem, output: str = "files/dnf/rpms"):

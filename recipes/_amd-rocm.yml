@@ -20,10 +20,10 @@ modules:
         - mesa-vulkan-drivers
         - mesa-dri-drivers
         - mesa-libGL
-        # ROCm:
-        - rocm
-        - rocminfo
-        - rocm-smi
+        # ROCm (large packages)
+        # - rocm
+        # - rocminfo
+        # - rocm-smi
     replace:
       - from-repo: rpmfusion-free
         packages:

@@ -1,14 +1,28 @@
 {
   "items": [
     {
+      "name": "bitwarden.rpm",
+      "tag": "2025.12.0",
+      "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2025.12.0/Bitwarden-2025.12.0-x86_64.rpm",
+      "enabled": false
+    },
+    {
       "name": "positron.rpm",
       "tag": "2025.12.2-5",
-      "url": "https://cdn.posit.co/positron/releases/rpm/x86_64/Positron-2025.12.2-5-x64.rpm"
+      "url": "https://cdn.posit.co/positron/releases/rpm/x86_64/Positron-2025.12.2-5-x64.rpm",
+      "enabled": false
+    },
+    {
+      "name": "proton-pass.rpm",
+      "tag": "1.33.3",
+      "url": "https://proton.me/download/PassDesktop/linux/x64/ProtonPass.rpm",
+      "enabled": false
     },
     {
       "name": "protonmail-bridge.rpm",
       "tag": "3.21.2-1",
-      "url": "https://proton.me/download/bridge/protonmail-bridge-3.21.2-1.x86_64.rpm"
+      "url": "https://proton.me/download/bridge/protonmail-bridge-3.21.2-1.x86_64.rpm",
+      "enabled": true
     }
   ]
 }
