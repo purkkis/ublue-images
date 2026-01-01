@@ -2,7 +2,7 @@ name: Build and Upload ISOs
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 1 * * 1" # Once a week on Monday at 01:00 UTC
+    - cron: "0 1 * * 2" # Once a week on Tuesday at 01:00 UTC
 
 concurrency:
   group: ${{ github.workflow }}
