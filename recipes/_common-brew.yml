@@ -1,0 +1,7 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+modules:
+  - type: brew
+    nofile-limits: true
+    auto-upgrade: false
+    auto-update: false

@@ -10,6 +10,7 @@ platforms:
   - linux/amd64
 modules:
   - from-file: _sysusers.yml
+  - from-file: _common-brew.yml
   - from-file: _amd-rocm.yml # enables rpmfusion repos
   - from-file: _kinoite-dnf.yml
   - from-file: _common-flatpaks.yml
