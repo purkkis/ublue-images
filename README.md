@@ -1,4 +1,4 @@
-# Custom Fedora Atomic Images (ublue-images)
+# ublue-images (Custom Fedora Atomic Images)
 
 [![bluebuild build badge](https://github.com/purkkis/ublue-images/actions/workflows/build.yml/badge.svg)](https://github.com/purkkis/ublue-images/actions/workflows/build.yml)
 
@@ -16,7 +16,7 @@ This repository builds custom Fedora Atomic desktop images using [BlueBuild](htt
 
 The recommended way to install these images is to generate an ISO and perform a fresh installation.
 
-1. **Generate the ISO** (see [Local Build](#local-build--development) below):
+1. **Generate the ISO**:
 
    ```bash
    just build-iso-kinoite-from-ghcr-image
@@ -28,25 +28,14 @@ The recommended way to install these images is to generate an ISO and perform a 
 
 3. **Install** the OS, selecting your computed ISO as the source.
 
-## Local Build & Development
-
-This repository uses `just` for convenient local commands.
-
-### Build Images
+## Local Build Commands
 
 ```bash
-# Build Kinoite
+# Build images
 just build-image-kinoite
-
-# Build Kinoite (NVIDIA)
 just build-image-kinoite-nvidia
-```
 
-### Generate ISOs
-
-Requires `bluebuild` installed locally.
-
-```bash
+# Generate ISOs
 just build-iso-kinoite-from-ghcr-image
 just build-iso-kinoite-nvidia-from-ghcr-image
 ```

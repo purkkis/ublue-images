@@ -1,15 +1,6 @@
-# ublue-images (Custom Fedora Atomic Images)
+# ublue-images (Developer Notes)
 
-## What this repo is
-
-This repository builds custom Fedora Atomic desktop images (Fedora Kinoite) using **BlueBuild** recipes.
-
-- **BlueBuild recipes** live in `recipes/`
-- **Vendored artifacts/configs** live in `files/` (DNF repo files, RPMs, sysusers configs)
-- **RPM management scripts** live in `src/ublue_images/` (Python)
-- **CI** builds images + updates release tags via GitHub Actions in `.github/workflows/`
-
-## Repository layout (high-signal)
+## Repository Layout
 
 ```
 recipes/                      BlueBuild recipes + shared modules (prefixed with `_`)
@@ -28,15 +19,15 @@ files/
   dnf/                        DNF repo files and RPMs used by recipes
     *.repo                    Repo configuration consumed by recipes/_kinoite-dnf.yml
     dropbox-f43.rpm           Locally built RPM (see files/dropbox/)
-    rpms/                     “Hardcoded/managed” RPMs (see src/ublue_images/files.json)
-    tags/                     “Latest GitHub release tag” RPMs (see src/ublue_images/tags.json)
+    rpms/                     "Hardcoded/managed" RPMs (see src/ublue_images/files.json)
+    tags/                     "Latest GitHub release tag" RPMs (see src/ublue_images/tags.json)
   usr_lib_sysusers_d/         sysusers.d entries copied into /usr/lib/sysusers.d
   dropbox/                    Docker-based build context + justfile to produce dropbox RPMs
 
 src/ublue_images/
   github_release_download.py  GitHub release/tag lookup + download helpers
-  rpms.py                     Download RPMs from src/ublue_images/files.json → files/dnf/rpms/
-  tags.py                     Refresh tags.json and download tagged RPMs → files/dnf/tags/
+  rpms.py                     Download RPMs from src/ublue_images/files.json -> files/dnf/rpms/
+  tags.py                     Refresh tags.json and download tagged RPMs -> files/dnf/tags/
   models/github.py            Pydantic model generated via datamodel-codegen
 
 .github/workflows/
@@ -44,134 +35,84 @@ src/ublue_images/
   build-iso.yml               Weekly ISO builds + upload to B2 (runs build-isos.sh)
 ```
 
-## Essential commands
+## Developer Commands
 
-### BlueBuild / images (local)
+```bash
+# RPM management
+just update-github-release-tags  # Refresh tags.json from GitHub
+uv run src/ublue_images/tags.py --download  # Download tagged RPMs
+uv run src/ublue_images/rpms.py  # Download hardcoded RPMs
 
-Commands are defined in the top-level `justfile`:
+# Build dropbox RPMs
+./build-dropbox.sh 42 43
 
-- Build images:
-  - `just build-image-kinoite`
-  - `just build-image-kinoite-nvidia`
+# ISO builds (requires env vars: B2_ENDPOINT, B2_BUCKET_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+./build-isos.sh <iso_name> <image>
+```
 
-- Generate ISOs from pre-built images in GHCR:
-  - `just build-iso-kinoite-from-ghcr-image`
-  - `just build-iso-kinoite-nvidia-from-ghcr-image`
+## CI Workflows
 
-### RPM management (local / CI)
+### build.yml
 
-- Refresh GitHub release tags in `src/ublue_images/tags.json`:
-  - `uv run src/ublue_images/tags.py --refresh`
-  - (wrapper) `just update-github-release-tags`
+- `update-tags`: Refreshes GitHub release tags in tags.json and auto-commits
+- `bluebuild`: Builds kinoite and kinoite-nvidia images on ubicloud-standard-4
+- `delete-package-versions`: Removes images older than 1 day from registry
 
-- Download tagged-release RPMs into `files/dnf/tags/`:
-  - `uv run src/ublue_images/tags.py --download`
+### build-iso.yml
 
-- Download “hardcoded” RPMs into `files/dnf/rpms/`:
-  - `uv run src/ublue_images/rpms.py`
+- Weekly ISO builds on ubicloud-standard-4
+- Installs bluebuild and calls build-isos.sh
 
-### Dropbox RPM builds
-
-- Build dropbox RPMs (expects `just` and `docker`):
-  - `./build-dropbox.sh 42 43`
-
-Under the hood this runs `files/dropbox/justfile` targets and writes into `files/dnf/dropbox-f<version>.rpm`.
-
-### ISO build/upload script
-
-- `./build-isos.sh <iso_name> <image>`
-
-This script requires:
-- `bluebuild` available on PATH
-- `aws` CLI available on PATH
-- Env vars: `B2_ENDPOINT`, `B2_BUCKET_NAME`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` (see `.env.example`)
-
-## CI workflows (what runs where)
-
-### `.github/workflows/build.yml`
-
-- Job `update-tags` runs `uv run src/ublue_images/tags.py --refresh` and auto-commits updates to `src/ublue_images/tags.json`.
-- Job `bluebuild` runs on `ubicloud-standard-4` and builds a matrix of recipes:
-  - `kinoite.yml`
-  - `kinoite-nvidia.yml`
-- CI caches `files/dnf/rpms` keyed by `src/ublue_images/files.json` and caches `files/dnf/tags` keyed by `src/ublue_images/tags.json`.
-- Job `delete-package-versions` removes images older than 1 day from the container registry (keeps only latest).
-
-### `.github/workflows/build-iso.yml`
-
-- Weekly ISO builds on `ubicloud-standard-4`.
-- Installs `bluebuild` in CI (via an install script) and calls `./build-isos.sh`.
-
-## Code conventions & style
+## Code Conventions
 
 ### Python
 
-- Python project metadata: `pyproject.toml`
-- Supported Python: `>=3.11,<4.0` (`pyproject.toml:6`)
-- Formatting/linting configuration:
-  - Ruff `line-length = 100` and `indent-width = 4` (`pyproject.toml:25-27`)
-
-There is no dedicated unit test suite in this repository; validation is primarily via pre-commit hooks and CI builds.
+- Python >=3.11,<4.0
+- Ruff: line-length 100, indent-width 4
 
 ### Pre-commit
 
-`.pre-commit-config.yaml` configures:
-
 - whitespace/yaml/json/toml hygiene
-- `mixed-line-ending` with `--fix=lf` (enforces LF line endings)
-- `ruff-check` (imports: `--select I --fix`)
-- `ruff-format`
-- `gitleaks`
+- mixed-line-ending with --fix=lf
+- ruff-check (imports: --select I --fix)
+- ruff-format
+- gitleaks
 
-## BlueBuild recipe patterns
+## BlueBuild Recipe Patterns
 
-- Recipes reference shared module fragments via `from-file: _something.yml`.
-- Module lists include a `$schema` header (either `recipe-v1.json` for main recipes or `module-list-v1.json` for shared modules).
-- Lists in recipe YAML are typically kept in alphabetical order (repos, packages, flatpaks). Maintain the existing ordering when editing.
-- Recipe module order matters - dependencies must be installed before they're used (e.g., `type: signing` should typically be last).
+- Recipes reference shared modules via `from-file: _something.yml`
+- Module lists include `$schema` header (recipe-v1.json or module-list-v1.json)
+- Lists are kept in alphabetical order
+- Module order matters (dependencies first, `type: signing` last)
 
-Key behavior in this repo:
+### Key Modules
 
-- `recipes/_sysusers.yml` copies `files/usr_lib_sysusers_d/*` into `/usr/lib/sysusers.d` and runs `systemd-sysusers`.
-- `recipes/_scripts.yml` uses `sed -i` snippets to patch `.desktop` Exec lines for certain Electron apps.
-- `recipes/_kinoite-dnf.yml` installs:
-  - packages from repo `.repo` files under `files/dnf/`
-  - local RPMs under `files/dnf/` (e.g. `dropbox-f43.rpm`)
-  - downloaded RPMs under `files/dnf/rpms/` and `files/dnf/tags/`
-- `recipes/kinoite-nvidia.yml` includes `type: akmods` module with `nvidia-driver: nvidia-open` and adds Steam from negativo17 repo.
+- `_sysusers.yml`: Copies `files/usr_lib_sysusers_d/*` to `/usr/lib/sysusers.d` and runs systemd-sysusers
+- `_scripts.yml`: Patches .desktop Exec lines with sed
+- `_kinoite-dnf.yml`: Installs from .repo files, local RPMs, and downloaded RPMs
+- `kinoite-nvidia.yml`: Includes akmods with nvidia-open, adds Steam from negativo17
 
-## Vendored RPM workflow (important)
+## Vendored RPM Workflow
 
-There are two automation paths for RPMs:
+Two automation paths:
 
-1. **Hardcoded list**: `src/ublue_images/files.json` → downloaded by `src/ublue_images/rpms.py` into `files/dnf/rpms/`.
-2. **Latest-tag list**: `src/ublue_images/tags.json` → refreshed by `src/ublue_images/tags.py --refresh` and downloaded by `--download` into `files/dnf/tags/`.
+1. **Hardcoded**: `src/ublue_images/files.json` -> `files/dnf/rpms/`
+2. **Latest-tag**: `src/ublue_images/tags.json` -> `files/dnf/tags/`
 
-### JSON structure
+### JSON Structure
 
-Both `files.json` and `tags.json` use the same Pydantic model (`ReleaseItems`):
+Both use Pydantic model `ReleaseItems` with: name, tag, url, enabled, repo (optional)
 
-- Each item has: `name` (filename), `tag` (version), `url` (download URL), `enabled` (boolean), and optionally `repo` (for auto-refresh)
-- For `tags.json` items, the `repo` field enables automatic tag refresh via `--refresh` flag
-- Set `enabled: false` to temporarily disable a package without removing its entry
+### Gotcha: Download Scripts Delete Directories
 
-### Gotcha: download scripts delete output directories
+`GitHubReleaseDownloader.download_files()` removes and recreates the output directory.
 
-`GitHubReleaseDownloader.download_files()` (used by both `rpms.py` and `tags.py --download`) removes and recreates the output directory (`src/ublue_images/github_release_download.py:127-134`).
+Running:
+- `uv run src/ublue_images/rpms.py` deletes and repopulates `files/dnf/rpms/` from files.json
+- `uv run src/ublue_images/tags.py --download` deletes and repopulates `files/dnf/tags/` from tags.json
 
-Implications:
+When changing recipes that reference these paths, keep the JSON config in sync.
 
-- Running `uv run src/ublue_images/rpms.py` will delete `files/dnf/rpms/` and then repopulate it _only_ from `src/ublue_images/files.json`.
-- Running `uv run src/ublue_images/tags.py --download` will delete `files/dnf/tags/` and then repopulate it _only_ from `src/ublue_images/tags.json`.
+## Generated Code
 
-When changing recipes that reference `files/dnf/rpms/*` or `files/dnf/tags/*`, keep the corresponding JSON config in sync so that a regeneration doesn’t remove required RPMs.
-
-## Security / signing
-
-- Images are signed and can be verified with cosign:
-  - `cosign verify --key cosign.pub ghcr.io/purkkis/kinoite`
-
-## Generated code
-
-- `src/ublue_images/models/github.py` is generated (see `justfile` target `github-release-download`).
-- If regenerating, the just target downloads a GitHub API JSON payload and runs `datamodel-codegen` to overwrite that file.
+- `src/ublue_images/models/github.py` is generated via `just github-release-download`
