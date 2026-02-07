@@ -2,19 +2,12 @@
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
 name: kinoite
 description: Fedora Kinoite
-base-image: ghcr.io/ublue-os/kinoite-main
-image-version: 43
+base-image: ghcr.io/purkkis/kinoite-base
+image-version: latest
 alt-tags:
   - daily
 platforms:
   - linux/amd64
 modules:
-  - from-file: _sysusers.yml
-  - from-file: _common-brew.yml
-  - from-file: _amd-gpu.yml
-  - from-file: _rocm.yml
-  - from-file: _kinoite-fonts.yaml
-  - from-file: _kinoite-docker.yml
-  - from-file: _common-flatpaks.yml
   - from-file: _kinoite-dnf.yml
   - type: signing

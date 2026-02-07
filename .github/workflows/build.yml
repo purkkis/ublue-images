@@ -115,11 +115,24 @@ jobs:
     needs: bluebuild
     runs-on: ubuntu-latest
     steps:
-      # Delete all packages older than 1 day
+      # Delete daily images older than 1 day
       - uses: snok/container-retention-policy@v3.0.1
         with:
           account: user
           token: ${{ secrets.PAT }}
-          image-names: "*"
+          image-names: |
+            kinoite
+            kinoite-nvidia
           cut-off: 1d
+          dry-run: false
+
+      # Delete base images older than 8 days
+      - uses: snok/container-retention-policy@v3.0.1
+        with:
+          account: user
+          token: ${{ secrets.PAT }}
+          image-names: |
+            kinoite-base
+            kinoite-nvidia-base
+          cut-off: 8d
           dry-run: false
