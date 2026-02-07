@@ -7,7 +7,6 @@ modules:
         notify: false
         install:
           - app.devsuite.Ptyxis
-          # - com.discordapp.Discord
           - com.github.tchx84.Flatseal
           - com.ranfdev.DistroShelf
           - com.usebruno.Bruno
@@ -20,6 +19,5 @@ modules:
           - org.fkoehler.KTailctl
           - org.gnome.Boxes
           - org.gnome.Calculator
-          # - org.keepassxc.KeePassXC
           - org.libreoffice.LibreOffice
           - org.qbittorrent.qBittorrent

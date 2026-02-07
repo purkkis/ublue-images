@@ -5,28 +5,28 @@
       "tag": "v0.9.0",
       "url": "https://github.com/TibixDev/winboat/releases/download/v0.9.0/winboat-0.9.0-x86_64.rpm",
       "repo": "TibixDev/winboat",
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "dbeaver.rpm",
-      "tag": "25.3.2",
-      "url": "https://github.com/dbeaver/dbeaver/releases/download/25.3.2/dbeaver-ce-25.3.2-stable.x86_64.rpm",
+      "tag": "25.3.4",
+      "url": "https://github.com/dbeaver/dbeaver/releases/download/25.3.4/dbeaver-ce-25.3.4-stable.x86_64.rpm",
       "repo": "dbeaver/dbeaver",
       "enabled": true
     },
     {
       "name": "chatwise.rpm",
-      "tag": "v0.9.76",
-      "url": "https://github.com/egoist/chatwise-releases/releases/download/v0.9.76/ChatWise-0.9.76-1.x86_64.rpm",
+      "tag": "v0.9.80",
+      "url": "https://github.com/egoist/chatwise-releases/releases/download/v0.9.80/ChatWise-0.9.80-1.x86_64.rpm",
       "repo": "egoist/chatwise-releases",
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "opencode.rpm",
-      "tag": "v1.1.13",
-      "url": "https://github.com/anomalyco/opencode/releases/download/v1.1.13/opencode-desktop-linux-x86_64.rpm",
+      "tag": "v1.1.53",
+      "url": "https://github.com/anomalyco/opencode/releases/download/v1.1.53/opencode-desktop-linux-x86_64.rpm",
       "repo": "sst/opencode",
-      "enabled": true
+      "enabled": false
     }
   ]
 }

@@ -6,30 +6,26 @@ modules:
     repos:
       files:
         - 1password.repo
-        # - antigravity.repo
         - brave-browser.repo
-        # - cursor.repo
-        # - google-chrome.repo
+        - cursor.repo
         - tailscale.repo
-        # - sublime-text.repo # waiting for Sublime's Fedora 43 repo fix: https://github.com/sublimehq/sublime_text/issues/6669
-        # - vivaldi.repo
+        - sublime-text.repo
+        - vivaldi.repo
         - vscode.repo
         - windsurf.repo
     install:
       packages:
         - 1password
         - 1password-cli
-        # - antigravity
         - blueprint-compiler
         - brave-browser
         - code
-        # - cursor
+        - cursor
         - distrobox
         - firefox
         - g++
         - gnome-common
         - gnome-system-monitor
-        # - google-chrome-stable
         - google-noto-emoji-color-fonts
         - google-noto-sans-cjk-fonts
         - google-noto-sans-fonts
@@ -43,12 +39,11 @@ modules:
         - okular
         - papirus-icon-theme
         - podman
-        - python3-gpg
-        # - sublime-merge
-        # - sublime-text
+        - sublime-merge
+        - sublime-text
         - tailscale
         - thunderbird
-        # - vivaldi-stable
+        - vivaldi-stable
         - windsurf
         - zsh
     group-install:
@@ -58,14 +53,8 @@ modules:
   - type: dnf
     install:
       packages:
-        - dropbox-f43.rpm
-        # - rpms/positron.rpm
         - rpms/protonmail-bridge.rpm
-        - tags/chatwise.rpm
         - tags/dbeaver.rpm
-        - tags/opencode.rpm
-        - tags/winboat.rpm
-  - from-file: _scripts.yml # fix desktop files etc.
   - type: systemd
     system:
       enabled:
