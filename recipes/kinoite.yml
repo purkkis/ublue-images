@@ -11,7 +11,8 @@ platforms:
 modules:
   - from-file: _sysusers.yml
   - from-file: _common-brew.yml
-  - from-file: _amd-rocm.yml # enables rpmfusion repos
+  - from-file: _amd-gpu.yml # enables rpmfusion repos, Steam, MESA, firmware
+  - from-file: _rocm.yml # ROCm packages (isolated for layer caching)
   - from-file: _kinoite-dnf.yml
   - from-file: _common-flatpaks.yml
   - from-file: _kinoite-fonts.yaml

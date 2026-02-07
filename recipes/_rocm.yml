@@ -1,0 +1,13 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+# ROCm packages - isolated in a separate file for better layer caching
+# These packages are very large, so keeping them in a separate file prevents
+# redownloading when other recipe files change.
+modules:
+  - type: dnf
+    install:
+      packages:
+        # ROCm (large packages)
+        - rocm
+        - rocminfo
+        - rocm-smi
