@@ -9,22 +9,22 @@
     },
     {
       "name": "dbeaver.rpm",
-      "tag": "25.3.5",
-      "url": "https://github.com/dbeaver/dbeaver/releases/download/25.3.5/dbeaver-ce-25.3.5-linux-x86_64.rpm",
+      "tag": "26.0.0",
+      "url": "https://github.com/dbeaver/dbeaver/releases/download/26.0.0/dbeaver-ce-26.0.0-linux-x86_64.rpm",
       "repo": "dbeaver/dbeaver",
       "enabled": true
     },
     {
       "name": "chatwise.rpm",
-      "tag": "v0.9.80",
-      "url": "https://github.com/egoist/chatwise-releases/releases/download/v0.9.80/ChatWise-0.9.80-1.x86_64.rpm",
+      "tag": "v0.10.4",
+      "url": "https://github.com/egoist/chatwise-releases/releases/download/v0.10.4/ChatWise-0.10.4-1.x86_64.rpm",
       "repo": "egoist/chatwise-releases",
       "enabled": false
     },
     {
       "name": "opencode.rpm",
-      "tag": "v1.2.10",
-      "url": "https://github.com/anomalyco/opencode/releases/download/v1.2.10/opencode-desktop-linux-x86_64.rpm",
+      "tag": "v1.2.15",
+      "url": "https://github.com/anomalyco/opencode/releases/download/v1.2.15/opencode-desktop-linux-x86_64.rpm",
       "repo": "sst/opencode",
       "enabled": false
     }
