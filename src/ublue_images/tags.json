@@ -16,15 +16,15 @@
     },
     {
       "name": "chatwise.rpm",
-      "tag": "v0.10.4",
-      "url": "https://github.com/egoist/chatwise-releases/releases/download/v0.10.4/ChatWise-0.10.4-1.x86_64.rpm",
+      "tag": "v0.10.7",
+      "url": "https://github.com/egoist/chatwise-releases/releases/download/v0.10.7/ChatWise-0.10.7-1.x86_64.rpm",
       "repo": "egoist/chatwise-releases",
       "enabled": false
     },
     {
       "name": "opencode.rpm",
-      "tag": "v1.2.15",
-      "url": "https://github.com/anomalyco/opencode/releases/download/v1.2.15/opencode-desktop-linux-x86_64.rpm",
+      "tag": "v1.2.22",
+      "url": "https://github.com/anomalyco/opencode/releases/download/v1.2.22/opencode-desktop-linux-x86_64.rpm",
       "repo": "sst/opencode",
       "enabled": false
     }
