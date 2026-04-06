@@ -9,8 +9,8 @@
     },
     {
       "name": "dbeaver.rpm",
-      "tag": "26.0.1",
-      "url": "https://github.com/dbeaver/dbeaver/releases/download/26.0.1/dbeaver-ce-26.0.1-linux-x86_64.rpm",
+      "tag": "26.0.2",
+      "url": "https://github.com/dbeaver/dbeaver/releases/download/26.0.2/dbeaver-ce-26.0.2-linux-x86_64.rpm",
       "repo": "dbeaver/dbeaver",
       "enabled": true
     },
@@ -23,8 +23,8 @@
     },
     {
       "name": "opencode.rpm",
-      "tag": "v1.3.6",
-      "url": "https://github.com/anomalyco/opencode/releases/download/v1.3.6/opencode-desktop-linux-x86_64.rpm",
+      "tag": "v1.3.15",
+      "url": "https://github.com/anomalyco/opencode/releases/download/v1.3.15/opencode-desktop-linux-x86_64.rpm",
       "repo": "sst/opencode",
       "enabled": false
     }
