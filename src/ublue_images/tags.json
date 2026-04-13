@@ -23,8 +23,8 @@
     },
     {
       "name": "opencode.rpm",
-      "tag": "v1.3.15",
-      "url": "https://github.com/anomalyco/opencode/releases/download/v1.3.15/opencode-desktop-linux-x86_64.rpm",
+      "tag": "v1.4.3",
+      "url": "https://github.com/anomalyco/opencode/releases/download/v1.4.3/opencode-desktop-linux-x86_64.rpm",
       "repo": "sst/opencode",
       "enabled": false
     }
