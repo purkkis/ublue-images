@@ -182,21 +182,21 @@ wheels = [
 
 [[package]]
 name = "datamodel-code-generator"
-version = "0.56.1"
+version = "0.59.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "argcomplete" },
-    { name = "black" },
+    { name = "black", marker = "sys_platform != 'emscripten'" },
     { name = "genson" },
     { name = "inflect" },
-    { name = "isort" },
+    { name = "isort", marker = "sys_platform != 'emscripten'" },
     { name = "jinja2" },
     { name = "pydantic" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6f/9c/5379be8daf9ff2fbbb9a7efcf68c037b089e5b76f360c4f9ca730916e2ee/datamodel_code_generator-0.56.1.tar.gz", hash = "sha256:697abd90cc4eb2c65f130be79a83a24746c3f2d0e15e6eb9dbf17b96784449be", size = 840372, upload-time = "2026-04-16T17:09:53.537Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e5/5a/cee8c4d30de3e9b561b677d22929d7b3485d7888b0425b9611310826554d/datamodel_code_generator-0.59.1.tar.gz", hash = "sha256:aef5794f58d2e85b7a603862a922985417d6610458a8f927b1660bd0d3955df1", size = 1130871, upload-time = "2026-06-03T18:58:37.367Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f7/cd/4a4a13f55069d88d8405aa325874b04c1b1dbc830f0d66c0e56cbd16aa12/datamodel_code_generator-0.56.1-py3-none-any.whl", hash = "sha256:cb2adc18a301f1a2cfcd56672037218eeaff0573669861c2b371eefe86753874", size = 256845, upload-time = "2026-04-16T17:09:51.81Z" },
+    { url = "https://files.pythonhosted.org/packages/c1/70/546f4c655614bb48fb9a7b4bc8a138f3c90c17f53797c9840d6a8bc57d7d/datamodel_code_generator-0.59.1-py3-none-any.whl", hash = "sha256:8b9391a14986a853c4b129ca3e3fd8b905fac26d1801f82f2f79a46e3e29d75f", size = 333504, upload-time = "2026-06-03T18:58:35.487Z" },
 ]
 
 [[package]]
@@ -682,7 +682,7 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "datamodel-code-generator", specifier = ">=0.56.1" }]
+dev = [{ name = "datamodel-code-generator", specifier = ">=0.59.1" }]
 
 [[package]]
 name = "urllib3"
