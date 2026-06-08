@@ -38,6 +38,7 @@ modules:
         - okular
         - papirus-icon-theme
         - podman
+        - steam
         - sublime-merge
         - sublime-text
         - tailscale
