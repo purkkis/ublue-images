@@ -22,7 +22,7 @@ done
 # If no versions were specified, show usage and exit
 if [ ${#FEDORA_VERSIONS[@]} -eq 0 ]; then
     echo "Usage: $0 <fedora_version> [fedora_version ...]"
-    echo "Example: $0 42 43"
+    echo "Example: $0 43 44"
     exit 1
 fi
 

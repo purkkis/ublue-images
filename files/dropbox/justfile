@@ -15,5 +15,5 @@ clean:
 
 # Build for multiple Fedora versions
 build-all:
-	just build 42
 	just build 43
+	just build 44
