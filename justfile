@@ -7,10 +7,10 @@ build-image-kinoite-nvidia:
 	bluebuild build ./recipes/kinoite-nvidia.yml
 
 build-iso-kinoite-from-ghcr-image:
-	bluebuild generate-iso --iso-name kinoite.iso image ghcr.io/purkkis/kinoite:daily
+	bluebuild generate-iso --iso-name kinoite.iso image ghcr.io/purkkis/kinoite:latest
 
 build-iso-kinoite-nvidia-from-ghcr-image:
-	bluebuild generate-iso --iso-name kinoite-nvidia.iso image ghcr.io/purkkis/kinoite-nvidia:daily
+	bluebuild generate-iso --iso-name kinoite-nvidia.iso image ghcr.io/purkkis/kinoite-nvidia:latest
 
 github-release-download:
 	wget -O /tmp/github.json https://api.github.com/repos/sst/opencode/releases/latest

@@ -18,9 +18,9 @@ jobs:
       matrix:
         include:
           - iso_name: kinoite.iso
-            image: ghcr.io/purkkis/kinoite:daily
+            image: ghcr.io/purkkis/kinoite:latest
           - iso_name: kinoite-nvidia.iso
-            image: ghcr.io/purkkis/kinoite-nvidia:daily
+            image: ghcr.io/purkkis/kinoite-nvidia:latest
     env:
       B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
       B2_BUCKET_NAME: ${{ secrets.B2_BUCKET_NAME }}

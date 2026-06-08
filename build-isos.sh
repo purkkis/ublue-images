@@ -49,7 +49,7 @@ build_and_upload() {
 # Require ISO name and image as parameters
 if [[ $# -ne 2 ]]; then
     echo "Usage: $0 <iso_name> <image>"
-    echo "Example: $0 kinoite.iso ghcr.io/purkkis/kinoite:daily"
+    echo "Example: $0 kinoite.iso ghcr.io/purkkis/kinoite:latest"
     exit 1
 fi
 
