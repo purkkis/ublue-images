@@ -2,14 +2,14 @@
   "items": [
     {
       "name": "positron.rpm",
-      "tag": "2026.04.0-269",
-      "url": "https://cdn.posit.co/positron/releases/rpm/x86_64/Positron-2026.04.0-269-x64.rpm",
+      "tag": "2026.06.0-211",
+      "url": "https://cdn.posit.co/positron/releases/rpm/x86_64/Positron-2026.06.0-211-x64.rpm",
       "enabled": false
     },
     {
       "name": "protonmail-bridge.rpm",
-      "tag": "3.23.1-1",
-      "url": "https://proton.me/download/bridge/protonmail-bridge-3.23.1-1.x86_64.rpm",
+      "tag": "3.24.2-1",
+      "url": "https://proton.me/download/bridge/protonmail-bridge-3.24.2-1.x86_64.rpm",
       "enabled": true
     }
   ]
