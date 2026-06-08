@@ -8,14 +8,14 @@ authors = [{ name = "Joona Purkamo", email = "joona@purkamo.me" }]
 dependencies = [
   "joblib>=1.5.3",
   "loguru>=0.7.3",
-  "pydantic>=2.12.5",
+  "pydantic>=2.13.3",
   "python-dotenv>=1.2.1",
   "requests>=2.32.5",
 ]
 
 [dependency-groups]
 dev = [
-  "datamodel-code-generator>=0.43.1",
+  "datamodel-code-generator>=0.56.1",
 ]
 
 [build-system]
