@@ -28,3 +28,6 @@ line-length = 100
 
 [tool.ruff.lint]
 fixable = ["ALL"]
+
+[tool.uv]
+exclude-newer = "3 days"
