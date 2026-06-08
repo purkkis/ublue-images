@@ -12,7 +12,6 @@ modules:
         - sublime-text.repo
         - vivaldi.repo
         - vscode.repo
-        - windsurf.repo
     install:
       packages:
         - 1password
@@ -44,7 +43,6 @@ modules:
         - tailscale
         - thunderbird
         - vivaldi-stable
-        - windsurf
         - zsh
     group-install:
       packages:
