@@ -1,13 +1,6 @@
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
 modules:
-  # - type: dnf
-  #   install:
-  #     packages:
-  #       # The ublue main kinoite image already has negativo17 multimedia repo enables.
-  #       # This will install RPMFusion repos the usual way without removing the negativo17 repo.
-  #       - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-%OS_VERSION%.noarch.rpm
-  #       - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-%OS_VERSION%.noarch.rpm
   - type: dnf
     install:
       packages:
@@ -16,14 +9,3 @@ modules:
         - mesa-vulkan-drivers
         - mesa-dri-drivers
         - mesa-libGL
-    # replace:
-    #   - from-repo: rpmfusion-free
-    #     packages:
-    #       - old: mesa-va-drivers
-    #         new: mesa-va-drivers-freeworld
-    #       - old: mesa-vdpau-drivers
-    #         new: mesa-vdpau-drivers-freeworld
-    #       - old: mesa-va-drivers.i686
-    #         new: mesa-va-drivers-freeworld.i686
-    #       - old: mesa-vdpau-drivers.i686
-    #         new: mesa-vdpau-drivers-freeworld.i686

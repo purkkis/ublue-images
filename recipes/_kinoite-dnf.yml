@@ -42,12 +42,14 @@ modules:
         - sublime-merge
         - sublime-text
         - tailscale
-        - thunderbird
         - vivaldi-stable
+        - vlc
         - zsh
     group-install:
+      with-optional: true
       packages:
         - development-tools
+        - c-development
   # Manually downloaded RPMs:
   - type: dnf
     install:
