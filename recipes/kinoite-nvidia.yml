@@ -5,7 +5,7 @@ description: Fedora Kinoite Nvidia
 base-image: ghcr.io/ublue-os/kinoite-main
 image-version: 44
 alt-tags:
-  - daily
+  - latest
 platforms:
   - linux/amd64
 modules:
