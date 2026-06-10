@@ -7,6 +7,10 @@ concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true
 
+env:
+  UV_LINK_MODE: "copy"
+  UV_LOCKED: true
+
 jobs:
   # Update tags.json, push new commit if there are changes.
   update-tags:
