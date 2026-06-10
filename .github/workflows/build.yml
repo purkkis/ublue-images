@@ -43,7 +43,8 @@ jobs:
   bluebuild:
     name: Build Custom Image
     needs: update-tags
-    runs-on: ubicloud-standard-4
+    # runs-on: ubicloud-standard-4
+    runs-on: avrea-ubuntu-latest-4-vcpu
     permissions:
       contents: read
       packages: write
