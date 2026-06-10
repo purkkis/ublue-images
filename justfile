@@ -17,7 +17,7 @@ github-release-download:
 	uv run datamodel-codegen \
 		--input /tmp/github.json \
 		--input-file-type json \
-		--output src/ublue_images/models/github.py \
+		--output src/ublue_images/models/github_raw.py \
 		--class-name GithubReleases
 
 update-github-release-tags:

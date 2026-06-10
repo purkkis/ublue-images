@@ -8,8 +8,8 @@
     },
     {
       "name": "protonmail-bridge.rpm",
-      "tag": "3.24.2-1",
-      "url": "https://proton.me/download/bridge/protonmail-bridge-3.24.2-1.x86_64.rpm",
+      "tag": "3.25.0-1",
+      "url": "https://proton.me/download/bridge/protonmail-bridge-3.25.0-1.x86_64.rpm",
       "enabled": true
     }
   ]
