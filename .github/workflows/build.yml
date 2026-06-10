@@ -26,7 +26,7 @@ jobs:
       # Update the tags.json file with up-to-date tags from GitHub releases
       - name: Update tags
         run: |
-          uv run src/ublue_images/tags.py --refresh
+          uv run ublue-images tags refresh
 
       # Commit the updated tags.json file if it has changed
       - name: Commit updated tags.json
@@ -85,13 +85,13 @@ jobs:
       - name: Download hardcoded RPMs
         if: steps.rpm-cache.outputs.cache-hit != 'true'
         run: |
-          uv run src/ublue_images/rpms.py
+          uv run ublue-images rpms download
 
       # Download tagged releases only if cache is not hit
       - name: Download tagged releases
         if: steps.tag-cache.outputs.cache-hit != 'true'
         run: |
-          uv run src/ublue_images/tags.py --download
+          uv run ublue-images tags download
 
       # Build the image
       - name: Build Custom Image

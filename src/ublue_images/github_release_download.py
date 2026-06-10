@@ -1,30 +1,16 @@
 import os
 import shutil
-
-# import tempfile
 from pathlib import Path
 from typing import TypeVar
 
-# import awswrangler as wr
 import requests
 from dotenv import load_dotenv
-
-# from joblib import Memory, expires_after
 from loguru import logger
 from pydantic import BaseModel, Field
 
 from ublue_images.models.github import GithubReleases
 
 load_dotenv()
-
-# MEMORY = Memory(Path("./tmp"), verbose=0)
-# B2_BUCKET = os.getenv("B2_BUCKET_NAME")
-# B2_ENDPOINT = os.getenv("B2_ENDPOINT")
-#
-# if not B2_ENDPOINT:
-#     raise ValueError("B2_ENDPOINT not set!")
-#
-# os.environ["AWS_ENDPOINT_URL"] = B2_ENDPOINT
 
 
 class ReleaseItem(BaseModel):
@@ -43,19 +29,22 @@ T = TypeVar("T", bound=BaseModel)
 
 
 class GitHubReleaseDownloader:
-    download_cache: ReleaseItems
-
-    def __init__(self):
-        self.download_cache = ReleaseItems()
-
     @staticmethod
     def load_config(path: Path, model: type[T]) -> T:
-        """Load and validate a JSON configuration file."""
+        """
+        Loads and validates a JSON configuration file.
+        Returns:
+            `TypeVar("T", bound=BaseModel)`
+        """
         return model.model_validate_json(path.read_text(encoding="utf-8"))
 
     @staticmethod
     def get_latest_release(repo: str) -> GithubReleases:
-        """Fetch the latest release information for a GitHub repository."""
+        """
+        Fetch the latest release information for a GitHub repository.
+        Returns:
+            GithubReleases model
+        """
         url = f"https://api.github.com/repos/{repo}/releases/latest"
         try:
             response = requests.get(url)
@@ -67,7 +56,9 @@ class GitHubReleaseDownloader:
 
     @staticmethod
     def get_rpm_download_url(release_data: GithubReleases) -> str:
-        """Extract the download URL for x86_64 RPM assets from release data."""
+        """
+        Extract the download URL for x86_64 RPM assets from release data.
+        """
         try:
             for asset in release_data.assets:
                 if asset.name.endswith("x86_64.rpm"):
@@ -78,54 +69,34 @@ class GitHubReleaseDownloader:
             raise e
 
     @staticmethod
-    # @MEMORY.cache(cache_validation_callback=expires_after(days=1))
-    def _download(url: str, file: str):
-        """Download a file's content from a URL.
+    def download(url: str, file_name: str) -> bytes:
+        """Downloads a file from a URL.
 
         Args:
-            url (str): The URL to download from.
-            file (str): A human-readable filename used for logging.
+            url: The URL to download.
+            file_name: A human-readable filename used for logging.
 
         Returns:
-            bytes: The downloaded file contents.
-
-        Raises:
-            requests.RequestException: If the request fails.
-            requests.HTTPError: If the server returns an HTTP error status.
+            The downloaded file content.
         """
-        logger.info(f"Downloading {file}...")
+        logger.info(f"Downloading {file_name}...")
         response = requests.get(url)
         response.raise_for_status()
         return response.content
 
-    # def download_file_to_tmp_dir(self, file_config: File):
-    #     """
-    #     Downloads a file into a tmp directory, and returns the file path
-    #
-    #     Args:
-    #         url (str): The URL of the file to download
-    #
-    #     Returns:
-    #         str: The path to the downloaded file
-    #     """
-    #     try:
-    #         with tempfile.NamedTemporaryFile() as tmp_file:
-    #             content = self._download(file_config.url, file_config.name)
-    #             tmp_file.write(content)
-    #             tmp_file_path = tmp_file.name
-    #             s3_path = f"s3://{B2_BUCKET}/bluebuild-files/{file_config.name}"
-    #             wr.s3.upload(local_file=tmp_file_path, path=s3_path)
-    #         self.download_cache.files.append(
-    #             File(name=file_config.name, url=s3_path, version=file_config.version)
-    #         )
-    #     except requests.RequestException as e:
-    #         logger.error(f"Error downloading file from {file_config.url}: {e}")
-    #         raise e
-    #     except Exception as e:
-    #         logger.error(f"Error creating temporary file for {file_config.url}: {e}")
-    #         raise e
+    def download_file_to_local_dir(
+        self, file_config: ReleaseItem, output: str = "files/dnf/rpms"
+    ) -> None:
+        local_path = os.path.join(output, file_config.name)
+        content = self.download(file_config.url, file_config.name)
+        with open(local_path, "wb") as file_handle:
+            file_handle.write(content)
+        logger.info(f"Wrote {len(content)} bytes for {file_config.name} to {local_path}")
 
-    def download_files(self, config: ReleaseItems, output: str = "files/dnf/rpms"):
+    def download_files(self, config: ReleaseItems, output: str = "files/dnf/rpms") -> None:
+        """
+        Downloads all enabled RPMs from the supplied configuration.
+        """
         logger.info(f"Starting download of {len(config.items)} files to {output}")
         if os.path.exists(output):
             logger.info(f"Removing output directory: {output}")
@@ -141,13 +112,6 @@ class GitHubReleaseDownloader:
                 continue
             self.download_file_to_local_dir(file_config, output=output)
 
-    def download_file_to_local_dir(self, file_config: ReleaseItem, output: str = "files/dnf/rpms"):
-        local_path = os.path.join(output, file_config.name)
-        content = self._download(file_config.url, file_config.name)
-        with open(local_path, "wb") as f:
-            f.write(content)
-            logger.info(f"Wrote {len(content)} bytes for {file_config.name} to {local_path}")
-
     def latest_tag(self, repo: str) -> str:
         tag: str = self.get_latest_release(repo).tag_name
         if not isinstance(tag, str):
@@ -155,12 +119,3 @@ class GitHubReleaseDownloader:
         if not tag.strip():
             raise ValueError("Tag is empty or whitespace only")
         return tag
-
-
-def rpms():
-    logger.info("Starting RPMs download process")
-    ghd = GitHubReleaseDownloader()
-    config_path = Path(__file__).with_name("files.json")
-    download_config = ghd.load_config(config_path, ReleaseItems)
-    ghd.download_files(download_config)
-    logger.info("RPMs download process completed")

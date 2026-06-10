@@ -1,4 +1,3 @@
-from argparse import ArgumentParser
 from pathlib import Path
 
 from loguru import logger
@@ -6,7 +5,10 @@ from loguru import logger
 from ublue_images.github_release_download import GitHubReleaseDownloader, ReleaseItems
 
 
-def refresh_tags():
+def refresh_tags() -> None:
+    """
+    Refreshes tagged release metadata from GitHub.
+    """
     logger.info("Starting tags refresh process")
     ghd = GitHubReleaseDownloader()
     config_path = Path(__file__).with_name("tags.json")
@@ -27,26 +29,13 @@ def refresh_tags():
     logger.info("Tags refresh process completed")
 
 
-def download_releases():
+def download_releases() -> None:
+    """
+    Downloads RPM assets from the tagged release configuration.
+    """
     logger.info("Starting releases download process")
     ghd = GitHubReleaseDownloader()
     config_path = Path(__file__).with_name("tags.json")
     download_config = ghd.load_config(config_path, ReleaseItems)
     ghd.download_files(download_config, output="files/dnf/tags")
     logger.info("Releases download process completed")
-
-
-if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument("--refresh", action="store_true", help="Refresh tags")
-    parser.add_argument("--download", action="store_true", help="Download releases")
-    args = parser.parse_args()
-
-    try:
-        if args.refresh:
-            refresh_tags()
-        elif args.download:
-            download_releases()
-    except Exception:
-        logger.exception("An error occurred during execution")
-        exit(1)

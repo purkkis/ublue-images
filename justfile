@@ -21,4 +21,4 @@ github-release-download:
 		--class-name GithubReleases
 
 update-github-release-tags:
-	uv run src/ublue_images/tags.py --refresh
+	uv run ublue-images tags refresh

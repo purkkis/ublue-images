@@ -69,7 +69,7 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` fixed · `[-]` wontfix /
 - **Suggested fix:**
   - Regenerate or hand-edit model with `str | None` (and optional nested types) aligned to current schema; or validate only fields used (`tag_name`, `assets[].name`, `assets[].browser_download_url`).
   - Re-run `just github-release-download` only if the input JSON is representative; prefer schema-driven generation or a minimal custom model.
-- **Verify:** `uv run src/ublue_images/tags.py --refresh` against all repos listed in `tags.json`.
+- **Verify:** `uv run ublue-images tags refresh` against all repos listed in `tags.json`.
 
 ---
 
@@ -77,13 +77,13 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` fixed · `[-]` wontfix /
 
 - [ ] **Status**
 - **Severity:** Medium
-- **Symptom:** Any invocation runs the download path immediately. Verified: `uv run src/ublue_images/rpms.py --help` and `uv run src/ublue_images/rpms.py --bogus` both start downloading (unknown args are ignored by Python when not parsed).
+- **Symptom:** Any invocation runs the download path immediately. Verified before the Typer migration: `uv run src/ublue_images/rpms.py --help` and `uv run src/ublue_images/rpms.py --bogus` both start downloading (unknown args are ignored by Python when not parsed).
 - **Location:** `src/ublue_images/rpms.py`
 - **Impact:** Accidental runs, no `--help`, inconsistent with `tags.py`.
 - **Suggested fix:**
-  - Add `argparse` with explicit subcommand or default `download` only after parsing; use `parser.parse_args()` so unknown flags error.
+  - Replace the script entrypoint with a Typer command such as `uv run ublue-images rpms download`.
   - Optional: expose `--config` / `--output` for local testing (defaults unchanged for CI).
-- **Verify:** `--help` prints usage and exits 0 without network I/O; unknown args exit non-zero.
+- **Verify:** `uv run ublue-images rpms --help` prints usage and exits 0 without network I/O; unknown args exit non-zero.
 
 ---
 
@@ -92,14 +92,14 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` fixed · `[-]` wontfix /
 - [ ] **Status**
 - **Severity:** Medium
 - **Symptom:**
-  - `uv run src/ublue_images/tags.py` (no args) exits **0** and performs **no work**.
+  - Before the Typer migration, `uv run src/ublue_images/tags.py` (no args) exited **0** and performed **no work**.
   - `--refresh` and `--download` are not mutually exclusive; `--refresh --download` runs only refresh (`elif` chain).
 - **Location:** `src/ublue_images/tags.py`
-- **References:** [argparse sub-commands](https://docs.python.org/3/library/argparse.html#sub-commands), [mutually exclusive groups](https://docs.python.org/3/howto/argparse.html#conflicting-options)
+- **References:** [Typer subcommands](https://typer.tiangolo.com/tutorial/subcommands/), [Typer packaging](https://typer.tiangolo.com/tutorial/package/)
 - **Suggested fix:**
-  - Subcommands: `tags refresh`, `tags download`; or `add_mutually_exclusive_group(required=True)` for `--refresh` / `--download`.
-  - If both operations are ever needed in one run, support explicit `tags sync` (refresh then download) instead of silent combination behavior.
-- **Verify:** No-args exits non-zero or prints help; documented behavior for combined flags.
+  - Replace flags with Typer subcommands: `uv run ublue-images tags refresh` and `uv run ublue-images tags download`.
+  - If both operations are ever needed in one run, support explicit `uv run ublue-images tags sync` instead of silent combination behavior.
+- **Verify:** `uv run ublue-images tags --help` prints help; documented behavior for supported subcommands is explicit.
 
 ---
 
@@ -178,14 +178,14 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` fixed · `[-]` wontfix /
 
 | Command | Documented args | Actual behavior |
 |---------|-----------------|-----------------|
-| `tags.py` | `--refresh`, `--download`, `-h` | No args → exit 0, no op |
-| `rpms.py` | *(none)* | Always downloads; extra argv ignored |
+| `ublue-images tags` | `refresh`, `download`, `--help` | Grouped Typer subcommands |
+| `ublue-images rpms` | `download`, `--help` | Grouped Typer subcommands |
 
 CI usage:
 
-- `uv run src/ublue_images/tags.py --refresh` (update-tags job)
-- `uv run src/ublue_images/rpms.py` (cache miss)
-- `uv run src/ublue_images/tags.py --download` (cache miss)
+- `uv run ublue-images tags refresh` (update-tags job)
+- `uv run ublue-images rpms download` (cache miss)
+- `uv run ublue-images tags download` (cache miss)
 
 ---
 
