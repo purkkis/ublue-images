@@ -27,6 +27,9 @@ class ReleaseItems(BaseModel):
 
 T = TypeVar("T", bound=BaseModel)
 
+REQUEST_TIMEOUT = (5, 60)
+DOWNLOAD_CHUNK_SIZE = 1024 * 1024
+
 
 class GitHubReleaseDownloader:
     @staticmethod
@@ -47,7 +50,9 @@ class GitHubReleaseDownloader:
         """
         url = f"https://api.github.com/repos/{repo}/releases/latest"
         try:
-            response = requests.get(url)
+            response = requests.get(
+                url, timeout=REQUEST_TIMEOUT
+            )  # timeout = (connect timeout, read timeout)
             response.raise_for_status()
             return GithubReleases.model_validate(response.json())
         except Exception as e:
@@ -69,29 +74,35 @@ class GitHubReleaseDownloader:
             raise e
 
     @staticmethod
-    def download(url: str, file_name: str) -> bytes:
-        """Downloads a file from a URL.
+    def download(url: str, file_name: str, destination: Path) -> int:
+        """Downloads a file from a URL to a local path.
 
         Args:
             url: The URL to download.
             file_name: A human-readable filename used for logging.
+            destination: The path to write the downloaded file to.
 
         Returns:
-            The downloaded file content.
+            The number of bytes written.
         """
         logger.info(f"Downloading {file_name}...")
-        response = requests.get(url)
-        response.raise_for_status()
-        return response.content
+        bytes_written = 0
+        with requests.get(url, stream=True, timeout=REQUEST_TIMEOUT) as response:
+            response.raise_for_status()
+            with destination.open("wb") as file_handle:
+                for chunk in response.iter_content(chunk_size=DOWNLOAD_CHUNK_SIZE):
+                    if not chunk:
+                        continue
+                    bytes_written += len(chunk)
+                    file_handle.write(chunk)
+        return bytes_written
 
     def download_file_to_local_dir(
         self, file_config: ReleaseItem, output: str = "files/dnf/rpms"
     ) -> None:
-        local_path = os.path.join(output, file_config.name)
-        content = self.download(file_config.url, file_config.name)
-        with open(local_path, "wb") as file_handle:
-            file_handle.write(content)
-        logger.info(f"Wrote {len(content)} bytes for {file_config.name} to {local_path}")
+        local_path = Path(output) / file_config.name
+        bytes_written = self.download(file_config.url, file_config.name, local_path)
+        logger.info(f"Wrote {bytes_written} bytes for {file_config.name} to {local_path}")
 
     def download_files(self, config: ReleaseItems, output: str = "files/dnf/rpms") -> None:
         """

@@ -7,7 +7,7 @@ Scope: Python helpers under `src/ublue_images/`, CLI arguments, download/update 
 Related files:
 
 | Area | Paths |
-|------|--------|
+| --- | --- |
 | Core downloader | `src/ublue_images/github_release_download.py` |
 | Tag refresh / download CLI | `src/ublue_images/tags.py` |
 | Hardcoded RPM CLI | `src/ublue_images/rpms.py` |
@@ -75,7 +75,7 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` fixed · `[-]` wontfix /
 
 ### F2 — `rpms.py` has no real CLI (Medium)
 
-- [ ] **Status**
+- [x] **Status**
 - **Severity:** Medium
 - **Symptom:** Any invocation runs the download path immediately. Verified before the Typer migration: `uv run src/ublue_images/rpms.py --help` and `uv run src/ublue_images/rpms.py --bogus` both start downloading (unknown args are ignored by Python when not parsed).
 - **Location:** `src/ublue_images/rpms.py`
@@ -118,7 +118,7 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` fixed · `[-]` wontfix /
 
 ### F5 — HTTP: no timeouts, full buffering in memory (Medium)
 
-- [ ] **Status**
+- [x] **Status**
 - **Severity:** Medium
 - **Symptom:** `requests.get(url)` with default `timeout=None` can hang indefinitely; `_download()` loads entire RPM into memory via `response.content`.
 - **Location:** `get_latest_release()`, `_download()`, `download_file_to_local_dir()` in `github_release_download.py`
@@ -177,7 +177,7 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` fixed · `[-]` wontfix /
 ## CLI reference (as reviewed)
 
 | Command | Documented args | Actual behavior |
-|---------|-----------------|-----------------|
+| --- | --- | --- |
 | `ublue-images tags` | `refresh`, `download`, `--help` | Grouped Typer subcommands |
 | `ublue-images rpms` | `download`, `--help` | Grouped Typer subcommands |
 
@@ -201,7 +201,8 @@ CI usage:
 ## Changelog (fixes)
 
 | Date | Finding | Notes |
-|------|---------|--------|
+| --- | --- | --- |
 | 2026-06-10 | F1 | Minimal `models/github.py`; full snapshot in `github_raw.py` via `just github-release-download`. |
+| 2026-06-10 | F5 | Added explicit request timeouts and streamed file downloads with `iter_content()`. |
 
 _Add a row when a finding is fixed (PR link optional)._
