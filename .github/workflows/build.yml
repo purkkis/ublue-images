@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      commit_hash: ${{ steps.auto-commit.outputs.commit_hash }}
     steps:
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
@@ -34,6 +36,7 @@ jobs:
 
       # Commit the updated tags.json file if it has changed
       - name: Commit updated tags.json
+        id: auto-commit
         uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
         with:
           commit_message: "Update tags.json"
@@ -57,6 +60,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          ref: ${{ needs.update-tags.outputs.commit_hash || github.sha }}
 
       - name: Install uv
         uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
@@ -71,8 +76,6 @@ jobs:
         with:
           path: files/dnf/rpms
           key: rpm-cache-${{ hashFiles('src/ublue_images/files.json') }}
-          restore-keys: |
-            rpm-cache-
 
       # Cache the tagged releases based on tags.json hash.
       # If the tags.json hasn't changed, we restore the files/dnf/tags folder from cache.
@@ -82,8 +85,6 @@ jobs:
         with:
           path: files/dnf/tags
           key: tag-cache-${{ hashFiles('src/ublue_images/tags.json') }}
-          restore-keys: |
-            tag-cache-
 
       # Download hardcoded RPMs only if cache is not hit
       - name: Download hardcoded RPMs
