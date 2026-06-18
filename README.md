@@ -16,7 +16,7 @@ This repository builds custom Fedora Atomic desktop images using [BlueBuild](htt
 
 The recommended way to install these images is to generate an ISO and perform a fresh installation.
 
-1. **Generate the ISO**:
+1. Generate the ISO:
 
    ```bash
    just build-iso-kinoite-from-ghcr-image
@@ -24,9 +24,9 @@ The recommended way to install these images is to generate an ISO and perform a 
    just build-iso-kinoite-nvidia-from-ghcr-image
    ```
 
-2. **Flash the ISO** to a USB drive (using e.g. [Fedora Media Writer](https://docs.fedoraproject.org/en-US/fedora/latest/preparing-boot-media/#_fedora_media_writer)).
+2. Flash the ISO to a USB drive (using e.g. [Fedora Media Writer](https://docs.fedoraproject.org/en-US/fedora/latest/preparing-boot-media/#_fedora_media_writer)).
 
-3. **Install** the OS, selecting your computed ISO as the source.
+3. Install the OS, selecting your computed ISO as the source.
 
 ## Local Build Commands
 

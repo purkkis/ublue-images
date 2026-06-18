@@ -6,7 +6,6 @@ readme = "README.md"
 requires-python = ">=3.11,<4.0"
 authors = [{ name = "Joona Purkamo", email = "joona@purkamo.me" }]
 dependencies = [
-  "joblib>=1.5.3",
   "loguru>=0.7.3",
   "pydantic>=2.13.3",
   "python-dotenv>=1.2.1",
