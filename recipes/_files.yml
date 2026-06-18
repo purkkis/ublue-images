@@ -3,8 +3,12 @@
 modules:
   - type: files
     files:
+      # Configure users for 1Password
       - source: usr_lib_sysusers_d
         destination: /usr/lib/sysusers.d
+      # Setup Brave management policies
+      - source: etc_brave_policies_managed
+        destination: /etc/brave/policies/managed
   - type: script
     snippets:
       - systemd-sysusers
