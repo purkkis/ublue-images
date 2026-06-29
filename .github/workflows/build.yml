@@ -37,7 +37,7 @@ jobs:
       # Commit the updated tags.json file if it has changed
       - name: Commit updated tags.json
         id: auto-commit
-        uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
+        uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
         with:
           commit_message: "Update tags.json"
           file_pattern: src/ublue_images/tags.json
