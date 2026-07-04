@@ -1,6 +1,0 @@
-[teejeetech-servo]
-name=servo repository - x86_64
-baseurl=https://packages.teejeetech.com/servo/xMYG2UzWHF/fedora/43/x86_64
-gpgkey=https://packages.teejeetech.com/archive.key
-enabled=1
-gpgcheck=1

@@ -12,7 +12,6 @@ modules:
         - sublime-text.repo
         - vivaldi.repo
         - vscode.repo
-        - teejee.repo
     install:
       packages:
         - 1password
@@ -42,9 +41,6 @@ modules:
         - papirus-icon-theme
         - podman
         - steam
-        - servo # from teejee.repo
-        - servo-gtk4 # from teejee.repo
-        - servo-assets # from teejee.repo
         - sublime-merge
         - sublime-text
         - tailscale
@@ -61,6 +57,8 @@ modules:
     install:
       packages:
         - rpms/protonmail-bridge.rpm
+        - rpms/chatwise.rpm
+        - rpms/positron.rpm
         - tags/dbeaver.rpm
   - type: systemd
     system:
