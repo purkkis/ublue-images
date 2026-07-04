@@ -23,4 +23,5 @@ modules:
           - org.gnome.Boxes
           - org.gnome.Calculator
           - org.libreoffice.LibreOffice
+          - org.mozilla.thunderbird
           - org.qbittorrent.qBittorrent
