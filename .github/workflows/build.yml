@@ -1,8 +1,10 @@
 name: bluebuild
+
 on:
   schedule:
-    - cron: "0 1 * * 1" # 01:00 UTC every Monday
+    - cron: "0 12 * * 5" # 12:00 UTC every Friday
   workflow_dispatch: # allow manually triggering builds
+
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true
