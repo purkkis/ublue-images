@@ -22,6 +22,8 @@ modules:
         - cursor
         - distrobox
         - firefox
+        - fuse
+        - fuse-libs
         - g++
         - gnome-common
         - gnome-system-monitor
