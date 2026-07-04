@@ -8,11 +8,10 @@ modules:
         install:
           - app.devsuite.Ptyxis
           - com.discordapp.Discord
-          - com.github.tchx84.Flatseal
           - com.heroicgameslauncher.hgl
-          - com.ranfdev.DistroShelf
           - com.seafile.Client
           - com.usebruno.Bruno
+          - dev.aunetx.deezer
           - io.github.cboxdoerfer.FSearch
           - io.github.kolunmi.Bazaar
           - io.missioncenter.MissionCenter
