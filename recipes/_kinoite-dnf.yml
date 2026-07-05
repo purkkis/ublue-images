@@ -25,6 +25,7 @@ modules:
         - fuse
         - fuse-libs
         - g++
+        - git
         - gnome-common
         - gnome-system-monitor
         - google-noto-emoji-color-fonts
@@ -47,11 +48,6 @@ modules:
         - vivaldi-stable
         - vlc
         - zsh
-    group-install:
-      with-optional: true
-      packages:
-        - development-tools
-        - c-development
   # Manually downloaded RPMs:
   - type: dnf
     install:
