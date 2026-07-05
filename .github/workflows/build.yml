@@ -69,6 +69,7 @@ jobs:
         uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
         with:
           enable-cache: true
+          cache-suffix: ${{ matrix.recipe }}
 
       # Cache the downloaded RPMs based on files.json hash.
       # If the files.json hasn't changed, we restore the files/dnf/rpms folder from cache.
