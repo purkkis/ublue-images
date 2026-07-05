@@ -77,7 +77,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: files/dnf/rpms
-          key: rpm-cache-${{ hashFiles('src/ublue_images/files.json') }}
+          key: rpm-cache-${{ matrix.recipe }}-${{ hashFiles('src/ublue_images/files.json') }}
 
       # Cache the tagged releases based on tags.json hash.
       # If the tags.json hasn't changed, we restore the files/dnf/tags folder from cache.
@@ -86,7 +86,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: files/dnf/tags
-          key: tag-cache-${{ hashFiles('src/ublue_images/tags.json') }}
+          key: tag-cache-${{ matrix.recipe }}-${{ hashFiles('src/ublue_images/tags.json') }}
 
       # Download hardcoded RPMs only if cache is not hit
       - name: Download hardcoded RPMs

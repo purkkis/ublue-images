@@ -13,6 +13,7 @@ Related files:
 | Hardcoded RPM CLI | `src/ublue_images/rpms.py` |
 | Config | `src/ublue_images/files.json`, `src/ublue_images/tags.json` |
 | GitHub API model | `src/ublue_images/models/github.py` |
+| CLI entrypoint | `src/ublue_images/cli.py` |
 | CI | `.github/workflows/build.yml` |
 | Image consumption | `recipes/_kinoite-dnf.yml` |
 | Local commands | `justfile` (`update-github-release-tags`) |
@@ -27,15 +28,19 @@ flowchart LR
   files_json[files.json]
   tags_py[tags.py]
   rpms_py[rpms.py]
+  cli_py[cli.py / Typer app]
   ghd[GitHubReleaseDownloader]
   gh_api[GitHub API /releases/latest]
   urls[Direct HTTP URLs]
   out_tags[files/dnf/tags]
   out_rpms[files/dnf/rpms]
 
-  tags_py -->|--refresh| gh_api
+  cli_py -->|tags refresh| tags_py
+  cli_py -->|tags download| tags_py
+  cli_py -->|rpms download| rpms_py
+  tags_py -->|refresh| gh_api
   tags_py --> tags_json
-  tags_py -->|--download| ghd
+  tags_py -->|download| ghd
   rpms_py --> ghd
   files_json --> ghd
   tags_json --> ghd
@@ -44,10 +49,10 @@ flowchart LR
   ghd --> out_rpms
 ```
 
-- **`tags.py --refresh`**: For each item in `tags.json` with `repo`, fetches latest release tag and RPM URL from GitHub; rewrites `tags.json`.
-- **`tags.py --download`**: Reads `tags.json`, downloads enabled items to `files/dnf/tags`.
-- **`rpms.py`**: No subcommands; always runs `rpms()` → reads `files.json`, downloads enabled items to `files/dnf/rpms`.
-- **CI** (`.github/workflows/build.yml`): Monday job refreshes `tags.json`; build job caches RPM dirs by config hash and runs download scripts on cache miss.
+- **`ublue-images tags refresh`**: For each item in `tags.json` with `repo`, fetches latest release tag and RPM URL from GitHub; rewrites `tags.json`.
+- **`ublue-images tags download`**: Reads `tags.json`, downloads enabled items to `files/dnf/tags`.
+- **`ublue-images rpms download`**: Reads `files.json`, downloads enabled items to `files/dnf/rpms`.
+- **CI** (`.github/workflows/build.yml`): Friday job refreshes `tags.json`; build job caches RPM dirs by config hash and runs download scripts on cache miss.
 
 ---
 
@@ -66,9 +71,7 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` fixed · `[-]` wontfix /
   - [REST API — releases](https://docs.github.com/v3/repos/releases)
   - [REST API — release assets](https://docs.github.com/en/rest/releases/assets)
   - Asset `digest` is documented as `string | null` ([changelog](https://github.blog/changelog/2025-06-03-releases-now-expose-digests-for-release-assets/))
-- **Suggested fix:**
-  - Regenerate or hand-edit model with `str | None` (and optional nested types) aligned to current schema; or validate only fields used (`tag_name`, `assets[].name`, `assets[].browser_download_url`).
-  - Re-run `just github-release-download` only if the input JSON is representative; prefer schema-driven generation or a minimal custom model.
+- **Fix applied:** `GithubReleases` now validates only the fields used by the downloader: `tag_name`, `assets[].name`, and `assets[].browser_download_url`.
 - **Verify:** `uv run ublue-images tags refresh` against all repos listed in `tags.json`.
 
 ---
@@ -78,27 +81,23 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` fixed · `[-]` wontfix /
 - [x] **Status**
 - **Severity:** Medium
 - **Symptom:** Any invocation runs the download path immediately. Verified before the Typer migration: `uv run src/ublue_images/rpms.py --help` and `uv run src/ublue_images/rpms.py --bogus` both start downloading (unknown args are ignored by Python when not parsed).
-- **Location:** `src/ublue_images/rpms.py`
+- **Location:** Fixed in `src/ublue_images/cli.py`; command implementation remains in `src/ublue_images/rpms.py`.
 - **Impact:** Accidental runs, no `--help`, inconsistent with `tags.py`.
-- **Suggested fix:**
-  - Replace the script entrypoint with a Typer command such as `uv run ublue-images rpms download`.
-  - Optional: expose `--config` / `--output` for local testing (defaults unchanged for CI).
+- **Fix applied:** `ublue-images rpms download` is a Typer subcommand; `ublue-images rpms` shows help instead of downloading.
 - **Verify:** `uv run ublue-images rpms --help` prints usage and exits 0 without network I/O; unknown args exit non-zero.
 
 ---
 
 ### F3 — `tags.py` CLI: no required action, non-exclusive flags (Medium)
 
-- [ ] **Status**
+- [x] **Status**
 - **Severity:** Medium
 - **Symptom:**
   - Before the Typer migration, `uv run src/ublue_images/tags.py` (no args) exited **0** and performed **no work**.
   - `--refresh` and `--download` are not mutually exclusive; `--refresh --download` runs only refresh (`elif` chain).
-- **Location:** `src/ublue_images/tags.py`
+- **Location:** Fixed in `src/ublue_images/cli.py`; command implementations remain in `src/ublue_images/tags.py`.
 - **References:** [Typer subcommands](https://typer.tiangolo.com/tutorial/subcommands/), [Typer packaging](https://typer.tiangolo.com/tutorial/package/)
-- **Suggested fix:**
-  - Replace flags with Typer subcommands: `uv run ublue-images tags refresh` and `uv run ublue-images tags download`.
-  - If both operations are ever needed in one run, support explicit `uv run ublue-images tags sync` instead of silent combination behavior.
+- **Fix applied:** `ublue-images tags refresh` and `ublue-images tags download` are explicit Typer subcommands; `ublue-images tags` shows help.
 - **Verify:** `uv run ublue-images tags --help` prints help; documented behavior for supported subcommands is explicit.
 
 ---
@@ -123,10 +122,8 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` fixed · `[-]` wontfix /
 - **Symptom:** `requests.get(url)` with default `timeout=None` can hang indefinitely; `_download()` loads entire RPM into memory via `response.content`.
 - **Location:** `get_latest_release()`, `_download()`, `download_file_to_local_dir()` in `github_release_download.py`
 - **References:** [Requests timeouts](https://requests.readthedocs.io/en/latest/user/quickstart/#timeouts), [streaming with `iter_content`](https://requests.readthedocs.io/en/latest/user/advanced/#body-content-workflow)
-- **Suggested fix:**
-  - Pass explicit timeouts (connect + read) on API and asset GETs.
-  - Use `stream=True` and `iter_content(chunk_size=...)` when writing files.
-  - Optional: shared `requests.Session` with retries for transient errors.
+- **Fix applied:** API and asset requests pass explicit connect/read timeouts; downloads use `stream=True` and `iter_content(chunk_size=...)`.
+- **Future option:** A shared `requests.Session` with retries could still improve transient failure handling.
 - **Verify:** Large RPM download uses bounded memory; hung server fails within timeout.
 
 ---
@@ -146,9 +143,9 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` fixed · `[-]` wontfix /
 
 - [ ] **Status**
 - **Severity:** Low
-- **Symptom:** `get_rpm_download_url()` picks the first asset whose name ends with `x86_64.rpm`. Multiple matching assets or different naming (e.g. `linux-x86_64.rpm` as in current `dbeaver` URL) may pick the wrong file or raise `ValueError`.
+- **Symptom:** `get_rpm_download_url()` picks the first asset whose name ends with `x86_64.rpm`. This matches the current DBeaver asset name (`...linux-x86_64.rpm`), but multiple matching assets could still pick the wrong file, and nonstandard RPM names could raise `ValueError`.
 - **Location:** `get_rpm_download_url()` in `github_release_download.py`
-- **Current data:** `tags.json` dbeaver asset name pattern: `dbeaver-ce-26.1.0-linux-x86_64.rpm` (does not end with `x86_64.rpm` only — actually it ends with `linux-x86_64.rpm`, not `x86_64.rpm`). **Worth re-checking:** the code checks `endswith("x86_64.rpm")` which `...linux-x86_64.rpm` satisfies.
+- **Current data:** `tags.json` DBeaver asset name pattern: `dbeaver-ce-26.1.1-linux-x86_64.rpm`.
 - **Suggested fix:** Prefer explicit `name` glob/regex per item in `tags.json`, or match `x86_64` + `.rpm` more deliberately; fail with asset list in error message.
 - **Verify:** Refresh for each configured repo resolves expected RPM URL.
 
@@ -158,19 +155,21 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` fixed · `[-]` wontfix /
 
 - [ ] **Status**
 - **Severity:** Low
-- **Symptom:** Large commented blocks (B2/S3, joblib cache) in `github_release_download.py`; `load_dotenv()` with no documented env vars for downloads; `pyproject.toml` lists `joblib` but it is unused in active code.
-- **Suggested fix:** Remove dead code or restore feature behind clear docs; drop unused dependencies if nothing references them.
+- **Symptom:** `github_release_download.py` still calls `load_dotenv()`, and `pyproject.toml` still depends on `python-dotenv`, but no download-specific environment variables are documented or used.
+- **Already cleaned up:** The previous `joblib` dependency is no longer present in `pyproject.toml`.
+- **Suggested fix:** Remove `load_dotenv()` and `python-dotenv`, unless F6 adds documented token loading from environment.
 - **Verify:** `uv run` / CI still pass; lockfile updated if deps removed.
 
 ---
 
-### F9 — `refresh_tags()` writes `tags.json` even when only some items update (Low)
+### F9 — `refresh_tags()` all-or-nothing behavior is implicit (Low)
 
-- [ ] **Status**
+- [-] **Status**
 - **Severity:** Low
-- **Symptom:** Loop may update one item then fail on a later repo; partial in-memory state is still written only at end — but a failure before `write_text` aborts without saving partial updates (good). If `get_rpm_download_url` fails after tag bump in memory, file on disk is unchanged (good). If write happens after mixed success without transactional semantics, document expected behavior.
-- **Suggested fix:** Clarify in code/logs; optional per-item try/except so one bad repo does not block others (product decision).
-- **Verify:** One broken repo in `tags.json` — desired CI behavior documented and tested.
+- **Current behavior:** `refresh_tags()` updates items in memory and writes `tags.json` only after the loop completes. A failure before `write_text()` leaves the on-disk file unchanged.
+- **Decision:** Defer per-item recovery for now. Failing the whole refresh is reasonable while there is only one tagged release item and CI should surface broken release metadata.
+- **Future option:** If more repos are added, decide whether one broken repo should block all tag updates or whether successful items should still be written.
+- **Verify if revisited:** One broken repo in `tags.json` behaves according to the documented CI policy.
 
 ---
 
@@ -191,10 +190,10 @@ CI usage:
 
 ## Suggested fix order
 
-1. **F1** — Unblocks scheduled tag updates.
-2. **F4** + **F5** — Safer downloads for CI and local builds.
-3. **F2** + **F3** — CLI ergonomics and foot-gun removal.
-4. **F6**, **F7**, **F8**, **F9** — Hardening and cleanup.
+1. **F4** — Prevent failed downloads from leaving partial RPM directories behind.
+2. **F6** — Add optional GitHub API auth headers before rate limits become noisy in CI.
+3. **F7** — Make RPM asset selection explicit before adding more tagged release repos.
+4. **F8** — Remove unused dotenv loading, unless F6 uses it intentionally.
 
 ---
 
@@ -204,5 +203,8 @@ CI usage:
 | --- | --- | --- |
 | 2026-06-10 | F1 | Minimal `models/github.py`; full snapshot in `github_raw.py` via `just github-release-download`. |
 | 2026-06-10 | F5 | Added explicit request timeouts and streamed file downloads with `iter_content()`. |
+| 2026-07-05 | F2 | Added Typer CLI entrypoint with `ublue-images rpms download`. |
+| 2026-07-05 | F3 | Added Typer subcommands for `ublue-images tags refresh` and `ublue-images tags download`. |
+| 2026-07-05 | F9 | Deferred per-item recovery; documented current all-or-nothing refresh behavior. |
 
 _Add a row when a finding is fixed (PR link optional)._

@@ -6,10 +6,12 @@ This document describes the design, configuration, and mechanics of the caching 
 
 ## Workflow Overview
 
-The build workflow consists of two main jobs:
+The cache-related jobs in the build workflow are:
 
 1. **`update-tags`**: Refreshes release tags from GitHub and commits any updates to `tags.json`.
-2. **`bluebuild`**: Checks out the correct repository state, restores cached RPMs and releases, downloads missing files (if any), and builds the custom Fedora Atomic images.
+2. **`bluebuild`**: Matrix job (one leg per recipe) that checks out the repository, restores cached RPMs, downloads on cache miss, and builds the custom Fedora Atomic images.
+
+A separate **`delete-package-versions`** job runs after `bluebuild` and is not part of the RPM cache design.
 
 ```mermaid
 graph TD
@@ -21,13 +23,13 @@ graph TD
     E --> G[Expose commit_hash output]
     F --> H[Expose empty output]
 
-    B --> I[Job: bluebuild]
+    B --> I[Job: bluebuild matrix]
     G -.-> I
     H -.-> I
 
     I --> J[Checkout using commit_hash or github.sha]
-    J --> K[Check Cache: Hardcoded RPMs]
-    J --> L[Check Cache: Tagged Releases]
+    J --> K[Restore hardcoded RPM cache per recipe]
+    J --> L[Restore tagged release cache per recipe]
 
     K -- Hit --> M[Skip Download RPMs]
     K -- Miss --> N[Download RPMs]
@@ -38,37 +40,43 @@ graph TD
     M & N & O & P --> Q[Build Custom Image]
 ```
 
+### Per-matrix cache keys
+
+`bluebuild` runs multiple recipes in parallel (for example `kinoite.yml` and `kinoite-nvidia.yml`). Each matrix leg uses its own cache keys, including `${{ matrix.recipe }}` in the key string. RPM contents are the same across recipes, but separate keys let each leg restore and save its own cache entry without two jobs competing to write under one identical key at the end of a run.
+
 ---
 
 ## Caching Strategy
 
-The workflow caches two distinct sets of files inside the `bluebuild` job to avoid downloading them on every run.
+The workflow caches two distinct sets of files inside each `bluebuild` matrix job.
 
 ### 1. Hardcoded RPMs
 
 * **Cache ID**: `rpm-cache`
 * **Path**: `files/dnf/rpms`
-* **Key**: `rpm-cache-${{ hashFiles('src/ublue_images/files.json') }}`
+* **Key**: `rpm-cache-${{ matrix.recipe }}-${{ hashFiles('src/ublue_images/files.json') }}`
 * **Skip Condition**: `if: steps.rpm-cache.outputs.cache-hit != 'true'`
 * **Download Command**: `uv run ublue-images rpms download`
 
-This step caches external RPM packages that are explicitly defined with fixed URLs in `src/ublue_images/files.json`. If the contents of `files.json` do not change, the hash remains identical, resulting in a cache hit. The `files/dnf/rpms` directory is restored, and the download step is skipped.
+This step caches external RPM packages that are explicitly defined with fixed URLs in `src/ublue_images/files.json`. If the contents of `files.json` do not change, the hash portion of the key remains identical for that recipe, resulting in a cache hit. The `files/dnf/rpms` directory is restored, and the download step is skipped.
 
 ### 2. Tagged Releases
 
 * **Cache ID**: `tag-cache`
 * **Path**: `files/dnf/tags`
-* **Key**: `tag-cache-${{ hashFiles('src/ublue_images/tags.json') }}`
+* **Key**: `tag-cache-${{ matrix.recipe }}-${{ hashFiles('src/ublue_images/tags.json') }}`
 * **Skip Condition**: `if: steps.tag-cache.outputs.cache-hit != 'true'`
 * **Download Command**: `uv run ublue-images tags download`
 
-This step caches RPM packages that are fetched based on the latest tagged releases of external repositories, defined in `src/ublue_images/tags.json`. When a new release is detected and `tags.json` is updated, the file hash changes, causing a cache miss. On a cache miss, the updated releases are downloaded and cached under the new key.
+This step caches RPM packages that are fetched based on the latest tagged releases of external repositories, defined in `src/ublue_images/tags.json`. When a new release is detected and `tags.json` is updated, the file hash changes, causing a cache miss. On a cache miss, the updated releases are downloaded and cached under the new key for that matrix recipe.
 
 ---
 
 ## Why `restore-keys` Is Omitted
 
 In standard GitHub Actions cache configurations, `restore-keys` is often used to provide a fallback key (e.g., prefix-based) to restore files from a previous build if an exact match is not found. However, in this repository, `restore-keys` has been intentionally omitted.
+
+GitHub only sets `cache-hit` to `true` when the primary `key` matches exactly; partial matches via `restore-keys` still count as a miss for download gating. That behavior is documented in [Dependency caching reference](https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching).
 
 ### The Downloader Behavior
 
@@ -129,11 +137,11 @@ To resolve this, the workflow passes the commit hash of the auto-committed chang
    needs: update-tags
    ```
 
-3. **Conditional Checkout**: In the `Checkout` step of the `bluebuild` job, the `ref` parameter is dynamically resolved:
+3. **Conditional Checkout**: In the `Checkout` step of the `bluebuild` job, the `ref` parameter is dynamically resolved (the workflow pins `actions/checkout` to a release SHA rather than a floating `@v` tag):
 
    ```yaml
    - name: Checkout
-     uses: actions/checkout@v6
+     uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
      with:
        ref: ${{ needs.update-tags.outputs.commit_hash || github.sha }}
    ```
