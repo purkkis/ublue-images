@@ -2,8 +2,8 @@
   "items": [
     {
       "name": "positron.rpm",
-      "tag": "2026.06.1-6",
-      "url": "https://cdn.posit.co/positron/releases/rpm/x86_64/Positron-2026.06.1-6-x64.rpm",
+      "tag": "2026.07.0-365",
+      "url": "https://cdn.posit.co/positron/releases/rpm/x86_64/Positron-2026.07.0-365-x64.rpm",
       "enabled": true
     },
     {
