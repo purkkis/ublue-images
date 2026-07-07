@@ -101,6 +101,9 @@ jobs:
         run: |
           uv run ublue-images tags download
 
+      - name: Install Podman
+        uses: redhat-actions/podman-install@main
+
       # Build the image
       - name: Build Custom Image
         uses: blue-build/github-action@836161eb076426a451e6a0054f722b1153b8b3ad # v1.12.0
