@@ -9,6 +9,7 @@ modules:
     group-install:
       packages:
         - development-tools
+      with-optional: false
   - type: brew
     nofile-limits: true
     auto-upgrade: false
