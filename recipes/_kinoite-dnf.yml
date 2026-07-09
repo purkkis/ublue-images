@@ -8,6 +8,7 @@ modules:
         - 1password.repo
         - brave-browser.repo
         - cursor.repo
+        - google-chrome.repo
         - tailscale.repo
         - sublime-text.repo
         - vivaldi.repo
@@ -19,6 +20,7 @@ modules:
         - blueprint-compiler
         - brave-browser
         - code
+        - google-chrome-stable
         - cursor
         - distrobox
         - firefox
@@ -35,6 +37,7 @@ modules:
         - google-noto-serif-fonts
         - gparted
         - gwenview
+        - gtk3-devel
         - gtk4-devel # for building Ghostty
         - gtk4-layer-shell-devel # for building Ghostty
         - hplip-gui
