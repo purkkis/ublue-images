@@ -39,6 +39,7 @@ modules:
         - gtk4-layer-shell-devel # for building Ghostty
         - hplip-gui
         - libadwaita-devel # for building Ghostty
+        - lxc
         - okular
         - papirus-icon-theme
         - podman
