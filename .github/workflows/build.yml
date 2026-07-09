@@ -17,7 +17,7 @@ jobs:
   # Update tags.json, push new commit if there are changes.
   update-tags:
     name: Update tags.json
-    runs-on: ubuntu-latest
+    runs-on: ubicloud-standard-2
     permissions:
       contents: write
     outputs:
@@ -123,7 +123,7 @@ jobs:
   delete-package-versions:
     name: Delete old packages
     needs: bluebuild
-    runs-on: ubuntu-latest
+    runs-on: ubicloud-standard-2
     steps:
       # Delete all packages older than 1 day
       - uses: snok/container-retention-policy@d3bdcf5ce9b05f685154e4a16c39233b245e3d53 # v3.1.0
