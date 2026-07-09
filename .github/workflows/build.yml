@@ -101,11 +101,6 @@ jobs:
         run: |
           uv run ublue-images tags download
 
-      - name: Add 'criu' PPA
-        run: |
-          sudo add-apt-repository ppa:criu/ppa
-          sudo apt update
-
       - name: Install Podman
         uses: redhat-actions/podman-install@aea6ff44f2a4a82da13d22061ce73443a125925d
         with:
