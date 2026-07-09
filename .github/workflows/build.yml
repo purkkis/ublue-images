@@ -102,9 +102,7 @@ jobs:
           uv run ublue-images tags download
 
       - name: Install Podman
-        run: |
-          sudo apt update
-          sudo apt install -y podman buildah
+        uses: redhat-actions/podman-install@aea6ff44f2a4a82da13d22061ce73443a125925d
 
       # Build the image
       - name: Build Custom Image
