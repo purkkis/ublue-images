@@ -1,6 +1,14 @@
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+
 modules:
+  - type: dnf
+    install:
+      packages:
+        - bubblewrap
+    group-install:
+      packages:
+        - development-tools
   - type: brew
     nofile-limits: true
     auto-upgrade: false
