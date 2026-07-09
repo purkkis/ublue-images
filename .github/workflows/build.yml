@@ -48,7 +48,7 @@ jobs:
   bluebuild:
     name: Build Custom Image
     needs: update-tags
-    runs-on: ubicloud-standard-4
+    runs-on: ubicloud-standard-4-ubuntu-2404
     permissions:
       contents: read
       packages: write
@@ -103,6 +103,8 @@ jobs:
 
       - name: Install Podman
         uses: redhat-actions/podman-install@aea6ff44f2a4a82da13d22061ce73443a125925d
+        with:
+          ubuntu-repository: noble
 
       # Build the image
       - name: Build Custom Image
