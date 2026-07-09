@@ -48,7 +48,7 @@ jobs:
   bluebuild:
     name: Build Custom Image
     needs: update-tags
-    runs-on: ubicloud-standard-4-ubuntu-2604
+    runs-on: ubicloud-standard-4-ubuntu-2404
     permissions:
       contents: read
       packages: write
