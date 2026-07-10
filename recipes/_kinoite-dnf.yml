@@ -17,6 +17,7 @@ modules:
       packages:
         - 1password
         - 1password-cli
+        - akregator
         - blueprint-compiler
         - brave-browser
         - code

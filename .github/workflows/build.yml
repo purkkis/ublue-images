@@ -2,7 +2,7 @@ name: bluebuild
 
 on:
   schedule:
-    - cron: "0 09 * * 5" # 09:00 UTC every Friday
+    - cron: "0 9 */2 * *" # Every 2 days at 09:00 UTC (odd numbered calendar days)
   workflow_dispatch: # allow manually triggering builds
 
 concurrency:
