@@ -31,7 +31,9 @@ class ReleasesConfig(BaseModel):
 
 
 def releases_config_path() -> Path:
-    """Path to the repository-root releases configuration file."""
+    """
+    Path to the repository-root releases configuration file.
+    """
     return Path(__file__).resolve().parents[2] / "releases.json"
 
 
@@ -95,7 +97,8 @@ class GitHubReleaseDownloader:
 
     @staticmethod
     def download(url: str, file_name: str, destination: Path) -> int:
-        """Downloads a file from a URL to a local path.
+        """
+        Downloads a file from a URL to a local path.
 
         Args:
             url: The URL to download.
@@ -118,13 +121,15 @@ class GitHubReleaseDownloader:
         return bytes_written
 
     def download_file_to_local_dir(
-        self, file_config: ReleaseItem, output: str = "files/dnf/rpms"
+        self, file_config: ReleaseItem, output: str = "files/dnf/direct_downloads"
     ) -> None:
         local_path = Path(output) / file_config.name
         bytes_written = self.download(file_config.url, file_config.name, local_path)
         logger.info(f"Wrote {bytes_written} bytes for {file_config.name} to {local_path}")
 
-    def download_files(self, config: ReleaseItems, output: str = "files/dnf/rpms") -> None:
+    def download_files(
+        self, config: ReleaseItems, output: str = "files/dnf/direct_downloads"
+    ) -> None:
         """
         Downloads all enabled RPMs from the supplied configuration.
         """
