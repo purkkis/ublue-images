@@ -27,7 +27,7 @@ build-backend = "uv_build"
 
 [tool.ruff]
 indent-width = 4
-line-length = 100
+line-length = 120
 
 [tool.uv]
 exclude-newer = "3 days"

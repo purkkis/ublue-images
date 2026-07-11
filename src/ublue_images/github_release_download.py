@@ -63,9 +63,7 @@ class GitHubReleaseDownloader:
         """
         url = f"https://api.github.com/repos/{repo}/releases/latest"
         try:
-            response = requests.get(
-                url, timeout=REQUEST_TIMEOUT
-            )  # timeout = (connect timeout, read timeout)
+            response = requests.get(url, timeout=REQUEST_TIMEOUT)  # timeout = (connect timeout, read timeout)
             response.raise_for_status()
             return GithubReleases.model_validate(response.json())
         except Exception as e:
@@ -129,9 +127,7 @@ class GitHubReleaseDownloader:
 
         for file_config in config.items:
             if not file_config.enabled:
-                logger.info(
-                    f"Skipping download of disabled file: {file_config.name} (tag: {file_config.tag})"
-                )
+                logger.info(f"Skipping download of disabled file: {file_config.name} (tag: {file_config.tag})")
                 continue
             self.download_file_to_local_dir(file_config, output=output)
 
