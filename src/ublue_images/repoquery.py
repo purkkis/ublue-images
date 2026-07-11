@@ -1,5 +1,5 @@
-import subprocess as sp
 import json
+import subprocess as sp
 
 
 def latest_installed_versions(packages: list[str]):

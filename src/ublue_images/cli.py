@@ -3,31 +3,32 @@ from collections.abc import Callable
 import typer
 from loguru import logger
 
-from ublue_images.rpms import rpms as download_rpms
-from ublue_images.tags import download_releases, refresh_tags
+from ublue_images.direct_downloads import download_direct_downloads
+from ublue_images.github_releases import download_github_releases, refresh_github_releases
 
 app = typer.Typer(
     help="Helper commands for refreshing release metadata and downloading RPMs.",
     no_args_is_help=True,
     rich_markup_mode=None,
 )
-rpms_app = typer.Typer(
-    help="Download fixed RPM artifacts.",
+direct_downloads_app = typer.Typer(
+    help="Download RPMs from direct_download URLs in releases.json.",
     no_args_is_help=True,
     rich_markup_mode=None,
 )
-tags_app = typer.Typer(
-    help="Manage tagged GitHub release downloads.",
+github_releases_app = typer.Typer(
+    help="Refresh and download github_releases entries in releases.json.",
     no_args_is_help=True,
     rich_markup_mode=None,
 )
 
-app.add_typer(tags_app, name="tags")
-app.add_typer(rpms_app, name="rpms")
+app.add_typer(github_releases_app, name="github-releases")
+app.add_typer(direct_downloads_app, name="direct-downloads")
 
 
 def _run_command(command: Callable[[], None], error_message: str) -> None:
-    """Runs a command handler and converts exceptions into CLI exit codes.
+    """
+    Runs a command handler and converts exceptions into CLI exit codes.
 
     Args:
         command: The no-argument function that performs the command work.
@@ -43,23 +44,25 @@ def _run_command(command: Callable[[], None], error_message: str) -> None:
         raise typer.Exit(code=1) from None
 
 
-@tags_app.command("refresh")
-def refresh_tags_command() -> None:
-    _run_command(refresh_tags, "Tag refresh failed")
+@github_releases_app.command("refresh")
+def refresh_github_releases_command() -> None:
+    _run_command(refresh_github_releases, "github_releases refresh failed")
 
 
-@tags_app.command("download")
-def download_tags_command() -> None:
-    _run_command(download_releases, "Tagged release download failed")
+@github_releases_app.command("download")
+def download_github_releases_command() -> None:
+    _run_command(download_github_releases, "github_releases download failed")
 
 
-@rpms_app.command("download")
-def download_rpms_command() -> None:
-    _run_command(download_rpms, "RPM download failed")
+@direct_downloads_app.command("download")
+def download_direct_downloads_command() -> None:
+    _run_command(download_direct_downloads, "direct_downloads download failed")
 
 
 def main() -> None:
-    """Runs the Typer application."""
+    """
+    Runs the Typer application.
+    """
     app()
 
 

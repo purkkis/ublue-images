@@ -58,10 +58,10 @@ modules:
   - type: dnf
     install:
       packages:
-        - rpms/protonmail-bridge.rpm
-        - rpms/chatwise.rpm
-        - rpms/positron.rpm
-        - tags/dbeaver.rpm
+        - direct_downloads/protonmail-bridge.rpm
+        - direct_downloads/chatwise.rpm
+        - direct_downloads/positron.rpm
+        - github_releases/dbeaver.rpm
   - type: systemd
     system:
       enabled:

@@ -20,5 +20,5 @@ github-release-download:
 		--output src/ublue_images/models/github_raw.py \
 		--class-name GithubReleases
 
-update-github-release-tags:
-	uv run ublue-images tags refresh
+update-github-releases:
+	uv run ublue-images github-releases refresh

@@ -14,9 +14,9 @@ env:
   UV_LOCKED: true
 
 jobs:
-  # Update tags.json, push new commit if there are changes.
+  # Update releases.json, push new commit if there are changes.
   update-tags:
-    name: Update tags.json
+    name: Update releases.json
     runs-on: ubicloud-standard-2
     permissions:
       contents: write
@@ -31,20 +31,20 @@ jobs:
         with:
           enable-cache: true
 
-      # Update the tags.json file with up-to-date tags from GitHub releases
+      # Update the releases.json file with up-to-date tags from GitHub releases
       - name: Update tags
         run: |
-          uv run ublue-images tags refresh
+          uv run ublue-images github-releases refresh
 
-      # Commit the updated tags.json file if it has changed
-      - name: Commit updated tags.json
+      # Commit the updated releases.json file if it has changed
+      - name: Commit updated releases.json
         id: auto-commit
         uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
         with:
-          commit_message: "Update tags.json"
-          file_pattern: src/ublue_images/tags.json
+          commit_message: "Update releases.json"
+          file_pattern: releases.json
 
-  # Build the images, this checkouts the main branch again in order to get the latest tags.json.
+  # Build the images, this checkouts the main branch again in order to get the latest releases.json.
   bluebuild:
     name: Build Custom Image
     needs: update-tags
@@ -71,35 +71,42 @@ jobs:
           enable-cache: true
           cache-suffix: ${{ matrix.recipe }}
 
-      # Cache the downloaded RPMs based on files.json hash.
-      # If the files.json hasn't changed, we restore the files/dnf/rpms folder from cache.
-      - name: Cache hardcoded RPMs
+      # hashFiles() hashes whole files; derive section-specific keys from releases.json.
+      - name: Create release cache keys
+        run: |
+          # -c: compact output, -S: sort keys
+          jq -cS '.direct_downloads' releases.json > .cache-direct-downloads.json
+          jq -cS '.github_releases' releases.json > .cache-github-releases.json
+
+      # Cache downloaded RPMs based on the direct_downloads section hash.
+      # If it hasn't changed, restore files/dnf/direct_downloads from cache.
+      - name: Cache direct downloads
         id: rpm-cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: files/dnf/rpms
-          key: rpm-cache-${{ matrix.recipe }}-${{ hashFiles('src/ublue_images/files.json') }}
+          path: files/dnf/direct_downloads
+          key: rpm-cache-${{ matrix.recipe }}-${{ hashFiles('.cache-direct-downloads.json') }}
 
-      # Cache the tagged releases based on tags.json hash.
-      # If the tags.json hasn't changed, we restore the files/dnf/tags folder from cache.
-      - name: Cache tagged releases
+      # Cache GitHub release RPMs based on the github_releases section hash.
+      # If it hasn't changed, restore files/dnf/github_releases from cache.
+      - name: Cache GitHub releases
         id: tag-cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: files/dnf/tags
-          key: tag-cache-${{ matrix.recipe }}-${{ hashFiles('src/ublue_images/tags.json') }}
+          path: files/dnf/github_releases
+          key: tag-cache-${{ matrix.recipe }}-${{ hashFiles('.cache-github-releases.json') }}
 
-      # Download hardcoded RPMs only if cache is not hit
-      - name: Download hardcoded RPMs
+      # Download direct-download RPMs only if cache is not hit
+      - name: Download direct downloads
         if: steps.rpm-cache.outputs.cache-hit != 'true'
         run: |
-          uv run ublue-images rpms download
+          uv run ublue-images direct-downloads download
 
-      # Download tagged releases only if cache is not hit
-      - name: Download tagged releases
+      # Download GitHub release RPMs only if cache is not hit
+      - name: Download GitHub releases
         if: steps.tag-cache.outputs.cache-hit != 'true'
         run: |
-          uv run ublue-images tags download
+          uv run ublue-images github-releases download
 
       - name: Install Podman
         uses: redhat-actions/podman-install@aea6ff44f2a4a82da13d22061ce73443a125925d
