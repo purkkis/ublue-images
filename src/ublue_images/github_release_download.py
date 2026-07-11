@@ -30,21 +30,12 @@ class ReleasesConfig(BaseModel):
     direct_downloads: ReleaseItems = Field(default_factory=ReleaseItems)
 
 
-def releases_config_path() -> Path:
-    """
-    Path to the repository-root releases configuration file.
-    """
-    return Path(__file__).resolve().parents[2] / "releases.json"
-
-
 def load_releases_config() -> ReleasesConfig:
-    path = releases_config_path()
-    return ReleasesConfig.model_validate_json(path.read_text(encoding="utf-8"))
+    return ReleasesConfig.model_validate_json(Path("releases.json").read_text(encoding="utf-8"))
 
 
 def save_releases_config(config: ReleasesConfig) -> None:
-    path = releases_config_path()
-    path.write_text(f"{config.model_dump_json(indent=2)}\n", encoding="utf-8")
+    Path("releases.json").write_text(f"{config.model_dump_json(indent=2)}\n", encoding="utf-8")
 
 
 T = TypeVar("T", bound=BaseModel)
@@ -120,16 +111,12 @@ class GitHubReleaseDownloader:
                     file_handle.write(chunk)
         return bytes_written
 
-    def download_file_to_local_dir(
-        self, file_config: ReleaseItem, output: str = "files/dnf/direct_downloads"
-    ) -> None:
+    def download_file_to_local_dir(self, file_config: ReleaseItem, output: str) -> None:
         local_path = Path(output) / file_config.name
         bytes_written = self.download(file_config.url, file_config.name, local_path)
         logger.info(f"Wrote {bytes_written} bytes for {file_config.name} to {local_path}")
 
-    def download_files(
-        self, config: ReleaseItems, output: str = "files/dnf/direct_downloads"
-    ) -> None:
+    def download_files(self, config: ReleaseItems, output: str) -> None:
         """
         Downloads all enabled RPMs from the supplied configuration.
         """
@@ -150,8 +137,6 @@ class GitHubReleaseDownloader:
 
     def latest_tag(self, repo: str) -> str:
         tag: str = self.get_latest_release(repo).tag_name
-        if not isinstance(tag, str):
-            raise ValueError(f"Expected string tag, got {type(tag)}")
         if not tag.strip():
             raise ValueError("Tag is empty or whitespace only")
         return tag

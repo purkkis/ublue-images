@@ -10,5 +10,5 @@ def download_direct_downloads() -> None:
     logger.info("Starting direct_downloads download")
     ghd = GitHubReleaseDownloader()
     download_config = load_releases_config().direct_downloads
-    ghd.download_files(download_config)
+    ghd.download_files(download_config, output="files/dnf/direct_downloads")
     logger.info("direct_downloads download completed")
