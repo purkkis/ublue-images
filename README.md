@@ -26,7 +26,7 @@ The recommended way to install these images is to generate an ISO and perform a 
 
 2. Flash the ISO to a USB drive (using e.g. [Fedora Media Writer](https://docs.fedoraproject.org/en-US/fedora/latest/preparing-boot-media/#_fedora_media_writer)).
 
-3. Install the OS, selecting your computed ISO as the source.
+3. Boot from the USB drive and complete a fresh installation from the generated ISO.
 
 ## Local Build Commands
 

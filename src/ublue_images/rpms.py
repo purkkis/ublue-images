@@ -1,8 +1,6 @@
-from pathlib import Path
-
 from loguru import logger
 
-from ublue_images.github_release_download import GitHubReleaseDownloader, ReleaseItems
+from ublue_images.github_release_download import GitHubReleaseDownloader, load_releases_config
 
 
 def rpms() -> None:
@@ -11,7 +9,6 @@ def rpms() -> None:
     """
     logger.info("Starting RPMs download process")
     ghd = GitHubReleaseDownloader()
-    config_path = Path(__file__).with_name("files.json")
-    download_config = ghd.load_config(config_path, ReleaseItems)
+    download_config = load_releases_config().direct_downloads
     ghd.download_files(download_config)
     logger.info("RPMs download process completed")

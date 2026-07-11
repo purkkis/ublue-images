@@ -1,8 +1,10 @@
-from pathlib import Path
-
 from loguru import logger
 
-from ublue_images.github_release_download import GitHubReleaseDownloader, ReleaseItems
+from ublue_images.github_release_download import (
+    GitHubReleaseDownloader,
+    load_releases_config,
+    save_releases_config,
+)
 
 
 def refresh_tags() -> None:
@@ -11,8 +13,8 @@ def refresh_tags() -> None:
     """
     logger.info("Starting tags refresh process")
     ghd = GitHubReleaseDownloader()
-    config_path = Path(__file__).with_name("tags.json")
-    tags_data = ghd.load_config(config_path, ReleaseItems)
+    releases_config = load_releases_config()
+    tags_data = releases_config.github_releases
     for t in tags_data.items:
         if not t.repo:
             logger.warning(f"Skipping item without repo: {t.name}")
@@ -25,7 +27,7 @@ def refresh_tags() -> None:
         t.tag = latest_tag
         release_data = ghd.get_latest_release(t.repo)
         t.url = ghd.get_rpm_download_url(release_data)
-    config_path.write_text(tags_data.model_dump_json(indent=2))
+    save_releases_config(releases_config)
     logger.info("Tags refresh process completed")
 
 
@@ -35,7 +37,6 @@ def download_releases() -> None:
     """
     logger.info("Starting releases download process")
     ghd = GitHubReleaseDownloader()
-    config_path = Path(__file__).with_name("tags.json")
-    download_config = ghd.load_config(config_path, ReleaseItems)
+    download_config = load_releases_config().github_releases
     ghd.download_files(download_config, output="files/dnf/tags")
     logger.info("Releases download process completed")

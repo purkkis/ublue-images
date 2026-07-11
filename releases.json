@@ -1,0 +1,35 @@
+{
+  "github_releases": {
+    "items": [
+      {
+        "name": "dbeaver.rpm",
+        "tag": "26.1.2",
+        "url": "https://github.com/dbeaver/dbeaver/releases/download/26.1.2/dbeaver-ce-26.1.2-linux-x86_64.rpm",
+        "repo": "dbeaver/dbeaver",
+        "enabled": true
+      }
+    ]
+  },
+  "direct_downloads": {
+    "items": [
+      {
+        "name": "positron.rpm",
+        "tag": "2026.07.0-365",
+        "url": "https://cdn.posit.co/positron/releases/rpm/x86_64/Positron-2026.07.0-365-x64.rpm",
+        "enabled": true
+      },
+      {
+        "name": "protonmail-bridge.rpm",
+        "tag": "3.25.0-1",
+        "url": "https://proton.me/download/bridge/protonmail-bridge-3.25.0-1.x86_64.rpm",
+        "enabled": true
+      },
+      {
+        "name": "chatwise.rpm",
+        "tag": "26.7.2",
+        "url": "https://releases.r2.chatwise.app/26.7.2/ChatWise-26.7.2.rpm",
+        "enabled": true
+      }
+    ]
+  }
+}

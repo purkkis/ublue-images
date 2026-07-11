@@ -25,6 +25,26 @@ class ReleaseItems(BaseModel):
     items: list[ReleaseItem] = Field(default_factory=list)
 
 
+class ReleasesConfig(BaseModel):
+    github_releases: ReleaseItems = Field(default_factory=ReleaseItems)
+    direct_downloads: ReleaseItems = Field(default_factory=ReleaseItems)
+
+
+def releases_config_path() -> Path:
+    """Path to the repository-root releases configuration file."""
+    return Path(__file__).resolve().parents[2] / "releases.json"
+
+
+def load_releases_config() -> ReleasesConfig:
+    path = releases_config_path()
+    return ReleasesConfig.model_validate_json(path.read_text(encoding="utf-8"))
+
+
+def save_releases_config(config: ReleasesConfig) -> None:
+    path = releases_config_path()
+    path.write_text(f"{config.model_dump_json(indent=2)}\n", encoding="utf-8")
+
+
 T = TypeVar("T", bound=BaseModel)
 
 REQUEST_TIMEOUT = (5, 60)
