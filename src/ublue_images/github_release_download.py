@@ -13,6 +13,7 @@ from ublue_images.models.github import GithubReleases
 load_dotenv()
 
 
+# Common fields for all release items
 class DownloadableReleaseItem(BaseModel):
     name: str
     tag: str
@@ -20,11 +21,14 @@ class DownloadableReleaseItem(BaseModel):
     enabled: bool = True
 
 
+# Specific fields for GitHub releases
 class GithubReleaseItem(DownloadableReleaseItem):
     repo: str | None = None
     rpm_suffix: str = "x86_64.rpm"
 
 
+# Specific fields for direct downloads
+# (no additional fields)
 class DirectDownloadItem(DownloadableReleaseItem):
     pass
 
