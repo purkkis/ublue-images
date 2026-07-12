@@ -13,21 +13,33 @@ from ublue_images.models.github import GithubReleases
 load_dotenv()
 
 
-class ReleaseItem(BaseModel):
+class DownloadableReleaseItem(BaseModel):
     name: str
     tag: str
     url: str
-    repo: str | None = None
     enabled: bool = True
 
 
-class ReleaseItems(BaseModel):
-    items: list[ReleaseItem] = Field(default_factory=list)
+class GithubReleaseItem(DownloadableReleaseItem):
+    repo: str | None = None
+    rpm_suffix: str = "x86_64.rpm"
+
+
+class DirectDownloadItem(DownloadableReleaseItem):
+    pass
+
+
+class GithubReleaseItems(BaseModel):
+    items: list[GithubReleaseItem] = Field(default_factory=list)
+
+
+class DirectDownloadItems(BaseModel):
+    items: list[DirectDownloadItem] = Field(default_factory=list)
 
 
 class ReleasesConfig(BaseModel):
-    github_releases: ReleaseItems = Field(default_factory=ReleaseItems)
-    direct_downloads: ReleaseItems = Field(default_factory=ReleaseItems)
+    github_releases: GithubReleaseItems = Field(default_factory=GithubReleaseItems)
+    direct_downloads: DirectDownloadItems = Field(default_factory=DirectDownloadItems)
 
 
 def load_releases_config() -> ReleasesConfig:
@@ -71,15 +83,15 @@ class GitHubReleaseDownloader:
             raise e
 
     @staticmethod
-    def get_rpm_download_url(release_data: GithubReleases) -> str:
+    def get_rpm_download_url(release_data: GithubReleases, rpm_suffix: str) -> str:
         """
-        Extract the download URL for x86_64 RPM assets from release data.
+        Extract the download URL for an RPM asset whose name ends with with the given 'rpm_suffix'.
         """
         try:
             for asset in release_data.assets:
-                if asset.name.endswith("x86_64.rpm"):
+                if asset.name.endswith(rpm_suffix) and asset.content_type == "application/x-rpm":
                     return asset.browser_download_url
-            raise ValueError("No x86_64 RPM asset found")
+            raise ValueError(f"No RPM asset found with suffix {rpm_suffix!r}")
         except Exception as e:
             logger.error(f"Error extracting RPM download URL: {e}")
             raise e
@@ -109,12 +121,12 @@ class GitHubReleaseDownloader:
                     file_handle.write(chunk)
         return bytes_written
 
-    def download_file_to_local_dir(self, file_config: ReleaseItem, output: str) -> None:
+    def download_file_to_local_dir(self, file_config: DownloadableReleaseItem, output: str) -> None:
         local_path = Path(output) / file_config.name
         bytes_written = self.download(file_config.url, file_config.name, local_path)
         logger.info(f"Wrote {bytes_written} bytes for {file_config.name} to {local_path}")
 
-    def download_files(self, config: ReleaseItems, output: str) -> None:
+    def download_files(self, config: GithubReleaseItems | DirectDownloadItems, output: str) -> None:
         """
         Downloads all enabled RPMs from the supplied configuration.
         """
@@ -136,3 +148,13 @@ class GitHubReleaseDownloader:
         if not tag.strip():
             raise ValueError("Tag is empty or whitespace only")
         return tag
+
+
+if __name__ == "__main__":
+    ghd = GitHubReleaseDownloader()
+    r: GithubReleases = ghd.get_latest_release("dbeaver/dbeaver")
+    print(r.tag_name)
+    for asset in r.assets:
+        print(asset.name)
+        print(asset.content_type)
+        print("-" * 50)
