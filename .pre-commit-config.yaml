@@ -1,6 +1,6 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
-exclude: uv.lock|releases.json
+exclude: uv.lock|releases.json|releases_schema.json
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c # frozen: v6.0.0
@@ -23,6 +23,6 @@ repos:
     hooks:
       - id: gitleaks
   - repo: https://github.com/astral-sh/ty-pre-commit
-    rev: eae6718df64ccb8f2bf764300cd24acccba5c43c  # frozen: v0.0.58
+    rev: eae6718df64ccb8f2bf764300cd24acccba5c43c # frozen: v0.0.58
     hooks:
       - id: ty
