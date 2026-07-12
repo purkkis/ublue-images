@@ -1,0 +1,113 @@
+{
+  "$defs": {
+    "DirectDownloadItem": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "tag": {
+          "title": "Tag",
+          "type": "string"
+        },
+        "url": {
+          "title": "Url",
+          "type": "string"
+        },
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "tag",
+        "url"
+      ],
+      "title": "DirectDownloadItem",
+      "type": "object"
+    },
+    "DirectDownloadItems": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/$defs/DirectDownloadItem"
+          },
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "title": "DirectDownloadItems",
+      "type": "object"
+    },
+    "GithubReleaseItem": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "tag": {
+          "title": "Tag",
+          "type": "string"
+        },
+        "url": {
+          "title": "Url",
+          "type": "string"
+        },
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "repo": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Repo"
+        },
+        "rpm_suffix": {
+          "default": "x86_64.rpm",
+          "title": "Rpm Suffix",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "tag",
+        "url"
+      ],
+      "title": "GithubReleaseItem",
+      "type": "object"
+    },
+    "GithubReleaseItems": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/$defs/GithubReleaseItem"
+          },
+          "title": "Items",
+          "type": "array"
+        }
+      },
+      "title": "GithubReleaseItems",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "github_releases": {
+      "$ref": "#/$defs/GithubReleaseItems"
+    },
+    "direct_downloads": {
+      "$ref": "#/$defs/DirectDownloadItems"
+    }
+  },
+  "title": "ReleasesConfig",
+  "type": "object"
+}
