@@ -2,6 +2,8 @@ from loguru import logger
 
 from ublue_images.github_release_download import (
     GitHubReleaseDownloader,
+    GithubReleaseItems,
+    ReleasesConfig,
     load_releases_config,
     save_releases_config,
 )
@@ -13,8 +15,8 @@ def refresh_github_releases() -> None:
     """
     logger.info("Starting github_releases refresh")
     ghd = GitHubReleaseDownloader()
-    releases_config = load_releases_config()
-    github_releases = releases_config.github_releases
+    releases_config: ReleasesConfig = load_releases_config()
+    github_releases: GithubReleaseItems = releases_config.github_releases
     for item in github_releases.items:
         if not item.repo:
             logger.warning(f"Skipping item without repo: {item.name}")
@@ -26,7 +28,7 @@ def refresh_github_releases() -> None:
         logger.info(f"New tag for {item.repo}: {latest_tag}, old tag: {item.tag}")
         item.tag = latest_tag
         release_data = ghd.get_latest_release(item.repo)
-        item.url = ghd.get_rpm_download_url(release_data)
+        item.url = ghd.get_rpm_download_url(release_data, rpm_suffix=item.rpm_suffix)
     save_releases_config(releases_config)
     logger.info("github_releases refresh completed")
 
