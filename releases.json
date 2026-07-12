@@ -1,4 +1,5 @@
 {
+  "$schema": "releases_schema.json",
   "github_releases": {
     "items": [
       {

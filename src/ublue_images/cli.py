@@ -3,8 +3,12 @@ from collections.abc import Callable
 import typer
 from loguru import logger
 
-from ublue_images.direct_downloads import download_direct_downloads
-from ublue_images.github_releases import download_github_releases, refresh_github_releases
+from ublue_images.downloader import (
+    download_direct_downloads,
+    download_github_releases,
+    refresh_github_releases,
+    release_config_json_schema,
+)
 
 app = typer.Typer(
     help="Helper commands for refreshing release metadata and downloading RPMs.",
@@ -59,12 +63,6 @@ def download_direct_downloads_command() -> None:
     _run_command(download_direct_downloads, "direct_downloads download failed")
 
 
-def main() -> None:
-    """
-    Runs the Typer application.
-    """
-    app()
-
-
-if __name__ == "__main__":
-    main()
+@app.command("schema")
+def release_config_json_schema_command() -> None:
+    _run_command(release_config_json_schema, "release config JSON schema failed")
