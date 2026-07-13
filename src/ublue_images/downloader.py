@@ -12,6 +12,8 @@ from ublue_images.models.github import GithubReleases
 
 load_dotenv()
 
+RELEASES_JSON_SCHEMA = "releases_schema.json"
+
 
 # Common fields for all release items
 class DownloadableReleaseItem(BaseModel):
@@ -42,12 +44,13 @@ class DirectDownloadItems(BaseModel):
 
 
 class ReleasesConfig(BaseModel):
+    schema_ref: str = Field(default=RELEASES_JSON_SCHEMA, alias="$schema")
     github_releases: GithubReleaseItems = Field(default_factory=GithubReleaseItems)
     direct_downloads: DirectDownloadItems = Field(default_factory=DirectDownloadItems)
 
 
 def release_config_json_schema():
-    with open("releases_schema.json", "w") as file:
+    with open(RELEASES_JSON_SCHEMA, "w") as file:
         import json
 
         file.write(json.dumps(ReleasesConfig.model_json_schema(), indent=2))
@@ -58,7 +61,7 @@ def load_releases_config() -> ReleasesConfig:
 
 
 def save_releases_config(config: ReleasesConfig) -> None:
-    Path("releases.json").write_text(f"{config.model_dump_json(indent=2)}\n", encoding="utf-8")
+    Path("releases.json").write_text(f"{config.model_dump_json(indent=2, by_alias=True)}\n", encoding="utf-8")
 
 
 T = TypeVar("T", bound=BaseModel)
@@ -85,6 +88,7 @@ class GitHubReleaseDownloader:
             GithubReleases model
         """
         url = f"https://api.github.com/repos/{repo}/releases/latest"
+        logger.info(f"Fetching latest release for {repo} from {url}")
         try:
             response = requests.get(url, timeout=REQUEST_TIMEOUT)  # timeout = (connect timeout, read timeout)
             response.raise_for_status()
@@ -100,7 +104,7 @@ class GitHubReleaseDownloader:
         """
         try:
             for asset in release_data.assets:
-                if asset.name.endswith(rpm_suffix) and asset.content_type == "application/x-rpm":
+                if asset.name.endswith(rpm_suffix):
                     return asset.browser_download_url
             raise ValueError(f"No RPM asset found with suffix {rpm_suffix!r}")
         except Exception as e:
