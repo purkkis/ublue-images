@@ -12,7 +12,7 @@ concurrency:
 jobs:
   build-and-upload-isos:
     name: Build and upload ${{ matrix.iso_name }} to B2
-    runs-on: avrea-ubuntu-24.04-4-vcpu
+    runs-on: ubicloud-standard-4-ubuntu-2404 # avrea-ubuntu-24.04-4-vcpu
     permissions:
       contents: read
     strategy:

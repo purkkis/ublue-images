@@ -13,7 +13,7 @@ env:
 
 jobs:
   regenerate-schema:
-    runs-on: avrea-ubuntu-24.04-1-vcpu
+    runs-on: ubicloud-standard-2-ubuntu-2404 # avrea-ubuntu-24.04-1-vcpu
     permissions:
       contents: write
     steps:
