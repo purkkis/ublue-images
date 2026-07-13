@@ -17,7 +17,7 @@ jobs:
   # Update releases.json, push new commit if there are changes.
   update-tags:
     name: Update releases.json
-    runs-on: avrea-ubuntu-24.04-4-vcpu
+    runs-on: avrea-ubuntu-24.04-1-vcpu
     permissions:
       contents: write
     outputs:
@@ -48,7 +48,7 @@ jobs:
   bluebuild:
     name: Build Custom Image
     needs: update-tags
-    runs-on: avrea-ubuntu-24.04-1-vcpu
+    runs-on: avrea-ubuntu-24.04-4-vcpu
     permissions:
       contents: read
       packages: write
