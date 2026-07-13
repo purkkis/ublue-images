@@ -62,6 +62,7 @@ modules:
         - direct_downloads/chatwise.rpm
         - direct_downloads/positron.rpm
         - github_releases/dbeaver.rpm
+        - github_releases/rowboat.rpm
   - type: systemd
     system:
       enabled:
