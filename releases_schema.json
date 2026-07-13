@@ -101,6 +101,11 @@
     }
   },
   "properties": {
+    "$schema": {
+      "default": "releases_schema.json",
+      "title": "$Schema",
+      "type": "string"
+    },
     "github_releases": {
       "$ref": "#/$defs/GithubReleaseItems"
     },
