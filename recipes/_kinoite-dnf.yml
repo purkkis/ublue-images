@@ -17,6 +17,7 @@ modules:
       packages:
         - 1password
         - 1password-cli
+        - akonadiconsole
         - akregator
         - blueprint-compiler
         - brave-browser
@@ -38,6 +39,7 @@ modules:
         - gtk4-devel # for building Ghostty
         - gtk4-layer-shell-devel # for building Ghostty
         - hplip-gui
+        - korganizer
         - libadwaita-devel # for building Ghostty
         - merkuro
         - okular
