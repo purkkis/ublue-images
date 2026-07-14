@@ -30,7 +30,6 @@ modules:
         - g++
         - gettext # for building Ghostty
         - git
-        - gnome-calendar
         - gnome-system-monitor
         - google-noto-fonts-all-static
         - gparted
