@@ -30,12 +30,9 @@ modules:
         - g++
         - gettext # for building Ghostty
         - git
-        - gnome-common
+        - gnome-calendar
         - gnome-system-monitor
-        - google-noto-emoji-color-fonts
-        - google-noto-sans-cjk-fonts
-        - google-noto-sans-fonts
-        - google-noto-serif-fonts
+        - google-noto-fonts-all-static
         - gparted
         - gwenview
         - gtk3-devel
@@ -43,7 +40,7 @@ modules:
         - gtk4-layer-shell-devel # for building Ghostty
         - hplip-gui
         - libadwaita-devel # for building Ghostty
-        - lxc
+        - merkuro
         - okular
         - papirus-icon-theme
         - podman
