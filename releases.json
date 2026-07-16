@@ -11,11 +11,19 @@
         "rpm_suffix": "x86_64.rpm"
       },
       {
-        "name": "rowboat.rpm",
-        "tag": "v0.7.1",
-        "url": "https://github.com/rowboatlabs/rowboat/releases/download/v0.7.1/Rowboat-linux-0.7.1-1.x86_64.rpm",
+        "name": "dbvr.rpm",
+        "tag": "26.1.2",
+        "url": "https://github.com/dbeaver/dbvr/releases/download/26.1.2/dbvr-ce-26.1.2-linux-x86_64.rpm",
         "enabled": true,
-        "repo": "rowboatlabs/rowboat",
+        "repo": "dbeaver/dbvr",
+        "rpm_suffix": "x86_64.rpm"
+      },
+      {
+        "name": "opencode.rpm",
+        "tag": "v1.18.2",
+        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.2/opencode-desktop-linux-x86_64.rpm",
+        "enabled": true,
+        "repo": "anomalyco/opencode",
         "rpm_suffix": "x86_64.rpm"
       }
     ]

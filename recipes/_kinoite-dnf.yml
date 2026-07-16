@@ -60,7 +60,8 @@ modules:
         - direct_downloads/chatwise.rpm
         - direct_downloads/positron.rpm
         - github_releases/dbeaver.rpm
-        - github_releases/rowboat.rpm
+        - github_releases/opencode.rpm
+        - github_releases/dbvr.rpm
   - type: systemd
     system:
       enabled:
