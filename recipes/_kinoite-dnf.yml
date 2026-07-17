@@ -48,6 +48,7 @@ modules:
         - papirus-icon-theme
         - podman
         - R-core
+        - R-devel
         - steam
         - sublime-merge
         - sublime-text
