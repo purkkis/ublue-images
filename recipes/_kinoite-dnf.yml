@@ -47,8 +47,7 @@ modules:
         - okular
         - papirus-icon-theme
         - podman
-        - R-core
-        - R-devel
+        - R
         - steam
         - sublime-merge
         - sublime-text
