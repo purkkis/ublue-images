@@ -41,6 +41,14 @@
         "enabled": true,
         "repo": "quarto-dev/quarto-cli",
         "rpm_suffix": "x86_64.rpm"
+      },
+      {
+        "name": "protonmail-bridge.rpm",
+        "tag": "v3.25.0",
+        "url": "https://github.com/ProtonMail/proton-bridge/releases/download/v3.25.0/protonmail-bridge-3.25.0-1.x86_64.rpm",
+        "enabled": true,
+        "repo": "ProtonMail/proton-bridge",
+        "rpm_suffix": "x86_64.rpm"
       }
     ]
   },
@@ -50,12 +58,6 @@
         "name": "positron.rpm",
         "tag": "2026.07.1-5",
         "url": "https://cdn.posit.co/positron/releases/rpm/x86_64/Positron-2026.07.1-5-x64.rpm",
-        "enabled": true
-      },
-      {
-        "name": "protonmail-bridge.rpm",
-        "tag": "3.25.0-1",
-        "url": "https://proton.me/download/bridge/protonmail-bridge-3.25.0-1.x86_64.rpm",
         "enabled": true
       },
       {
