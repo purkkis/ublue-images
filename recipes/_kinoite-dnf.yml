@@ -63,6 +63,7 @@ modules:
         - github_releases/opencode.rpm
         - github_releases/dbvr.rpm
         - github_releases/drawio.rpm
+        - github_releases/quarto.rpm
   - type: systemd
     system:
       enabled:
