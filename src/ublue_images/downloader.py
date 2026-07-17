@@ -1,3 +1,4 @@
+import fnmatch
 import os
 import shutil
 from pathlib import Path
@@ -100,13 +101,17 @@ class GitHubReleaseDownloader:
     @staticmethod
     def get_rpm_download_url(release_data: GithubReleases, rpm_suffix: str) -> str:
         """
-        Extract the download URL for an RPM asset whose name ends with with the given 'rpm_suffix'.
+        Extract the download URL for an RPM asset whose name matches the glob in rpm_suffix.
+
+        If rpm_suffix does not start with '*', a leading '*' is prepended so values like
+        x86_64.rpm match asset names ending with that suffix.
         """
+        pattern = rpm_suffix if rpm_suffix.startswith("*") else f"*{rpm_suffix}"
         try:
             for asset in release_data.assets:
-                if asset.name.endswith(rpm_suffix):
+                if fnmatch.fnmatch(asset.name, pattern):
                     return asset.browser_download_url
-            raise ValueError(f"No RPM asset found with suffix {rpm_suffix!r}")
+            raise ValueError(f"No RPM asset found matching pattern {pattern!r}")
         except Exception as e:
             logger.error(f"Error extracting RPM download URL: {e}")
             raise e

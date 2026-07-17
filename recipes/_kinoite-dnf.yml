@@ -62,6 +62,7 @@ modules:
         - github_releases/dbeaver.rpm
         - github_releases/opencode.rpm
         - github_releases/dbvr.rpm
+        - github_releases/drawio.rpm
   - type: systemd
     system:
       enabled:
