@@ -21,6 +21,7 @@ modules:
         - akregator
         - blueprint-compiler
         - brave-browser
+        - clang
         - code
         - google-chrome-stable
         - cursor
@@ -29,6 +30,7 @@ modules:
         - fuse
         - fuse-libs
         - g++
+        - gcc-gfortran
         - gettext # for building Ghostty
         - git
         - gnome-system-monitor
@@ -45,6 +47,7 @@ modules:
         - okular
         - papirus-icon-theme
         - podman
+        - R-core
         - steam
         - sublime-merge
         - sublime-text
