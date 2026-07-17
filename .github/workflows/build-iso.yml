@@ -1,8 +1,8 @@
 name: Build and Upload ISOs
 
 on:
-  schedule:
-    - cron: "0 1 * * 1" # 01:00 UTC every Monday night
+  # schedule:
+  #   - cron: "0 1 * * 1" # 01:00 UTC every Monday night
   workflow_dispatch:
 
 concurrency:
