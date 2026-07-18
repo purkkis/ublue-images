@@ -14,7 +14,7 @@
         "name": "dbvr.rpm",
         "tag": "26.1.2",
         "url": "https://github.com/dbeaver/dbvr/releases/download/26.1.2/dbvr-ce-26.1.2-linux-x86_64.rpm",
-        "enabled": true,
+        "enabled": false,
         "repo": "dbeaver/dbvr",
         "rpm_suffix": "x86_64.rpm"
       },
