@@ -19,7 +19,6 @@ modules:
           - it.mijorus.gearlever
           - net.nokyan.Resources
           - org.fedoraproject.MediaWriter
-          - org.fkoehler.KTailctl
           - org.gnome.Boxes
           - org.gnome.Calculator
           - org.libreoffice.LibreOffice

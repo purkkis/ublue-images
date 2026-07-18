@@ -15,15 +15,21 @@ modules:
         - vscode.repo
     install:
       packages:
+        # 3rd party repos
         - 1password
         - 1password-cli
-        - akonadiconsole
-        - akregator
-        - brave-browser
-        - clang
         - code
         - google-chrome-stable
         - cursor
+        - brave-browser
+        - sublime-merge
+        - sublime-text
+        - tailscale
+        - vivaldi-stable
+        # Fedora repos
+        - akonadiconsole
+        - akregator
+        - clang
         - distrobox
         - firefox
         - fuse
@@ -43,10 +49,6 @@ modules:
         - papirus-icon-theme
         - podman
         - steam
-        - sublime-merge
-        - sublime-text
-        - tailscale
-        - vivaldi-stable
         - vlc
         - zsh
         # Ghostty:
@@ -55,19 +57,7 @@ modules:
         - gtk4-layer-shell-devel
         - gettext
         - blueprint-compiler
-        # R:
-        # - R
-        # - libcurl-devel
-        # - libuv-devel
-        # - freetype-devel
-        # - libpng-devel
-        # - libtiff-devel
-        # - libjpeg-devel
-        # - libwebp-devel
-  # Manually downloaded RPMs:
-  - type: dnf
-    install:
-      packages:
+        # RPMs
         - direct_downloads/chatwise.rpm
         - github_releases/protonmail-bridge.rpm
         - github_releases/dbeaver.rpm
