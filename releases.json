@@ -38,7 +38,7 @@
         "name": "quarto.rpm",
         "tag": "v1.9.38",
         "url": "https://github.com/quarto-dev/quarto-cli/releases/download/v1.9.38/quarto-1.9.38-linux-x86_64.rpm",
-        "enabled": true,
+        "enabled": false,
         "repo": "quarto-dev/quarto-cli",
         "rpm_suffix": "x86_64.rpm"
       },
