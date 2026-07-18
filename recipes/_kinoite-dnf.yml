@@ -69,7 +69,7 @@ modules:
     install:
       packages:
         - direct_downloads/chatwise.rpm
-        - direct_downloads/positron.rpm
+        # - direct_downloads/positron.rpm
         - github_releases/protonmail-bridge.rpm
         - github_releases/dbeaver.rpm
         - github_releases/opencode.rpm
