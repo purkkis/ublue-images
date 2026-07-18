@@ -56,14 +56,14 @@ modules:
         - gettext # for building Ghostty
         - blueprint-compiler
         # R:
-        - R
-        - libcurl-devel
-        - libuv-devel
-        - freetype-devel
-        - libpng-devel
-        - libtiff-devel
-        - libjpeg-devel
-        - libwebp-devel
+        # - R
+        # - libcurl-devel
+        # - libuv-devel
+        # - freetype-devel
+        # - libpng-devel
+        # - libtiff-devel
+        # - libjpeg-devel
+        # - libwebp-devel
   # Manually downloaded RPMs:
   - type: dnf
     install:
