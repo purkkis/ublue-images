@@ -19,7 +19,6 @@ modules:
         - 1password-cli
         - akonadiconsole
         - akregator
-        - blueprint-compiler
         - brave-browser
         - clang
         - code
@@ -31,23 +30,18 @@ modules:
         - fuse-libs
         - g++
         - gcc-gfortran
-        - gettext # for building Ghostty
         - git
         - gnome-system-monitor
         - google-noto-fonts-all-static
         - gparted
         - gwenview
         - gtk3-devel
-        - gtk4-devel # for building Ghostty
-        - gtk4-layer-shell-devel # for building Ghostty
         - hplip-gui
         - korganizer
-        - libadwaita-devel # for building Ghostty
         - merkuro
         - okular
         - papirus-icon-theme
         - podman
-        - R
         - steam
         - sublime-merge
         - sublime-text
@@ -55,7 +49,14 @@ modules:
         - vivaldi-stable
         - vlc
         - zsh
-        # Required for R:
+        # Ghostty:
+        - libadwaita-devel # for building Ghostty
+        - gtk4-devel # for building Ghostty
+        - gtk4-layer-shell-devel # for building Ghostty
+        - gettext # for building Ghostty
+        - blueprint-compiler
+        # R:
+        - R
         - libcurl-devel
         - libuv-devel
         - freetype-devel
