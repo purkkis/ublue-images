@@ -62,8 +62,8 @@
       },
       {
         "name": "chatwise.rpm",
-        "tag": "26.7.2",
-        "url": "https://releases.r2.chatwise.app/26.7.2/ChatWise-26.7.2.rpm",
+        "tag": "26.7.3",
+        "url": "https://releases.r2.chatwise.app/26.7.3/ChatWise-26.7.3.rpm",
         "enabled": true
       }
     ]
