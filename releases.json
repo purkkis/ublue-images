@@ -4,32 +4,32 @@
     "items": [
       {
         "name": "dbeaver.rpm",
-        "tag": "26.1.2",
-        "url": "https://github.com/dbeaver/dbeaver/releases/download/26.1.2/dbeaver-ce-26.1.2-linux-x86_64.rpm",
+        "tag": "26.1.3",
+        "url": "https://github.com/dbeaver/dbeaver/releases/download/26.1.3/dbeaver-ce-26.1.3-linux-x86_64.rpm",
         "enabled": true,
         "repo": "dbeaver/dbeaver",
         "rpm_suffix": "x86_64.rpm"
       },
       {
         "name": "dbvr.rpm",
-        "tag": "26.1.2",
-        "url": "https://github.com/dbeaver/dbvr/releases/download/26.1.2/dbvr-ce-26.1.2-linux-x86_64.rpm",
+        "tag": "26.1.3",
+        "url": "https://github.com/dbeaver/dbvr/releases/download/26.1.3/dbvr-ce-26.1.3-linux-x86_64.rpm",
         "enabled": false,
         "repo": "dbeaver/dbvr",
         "rpm_suffix": "x86_64.rpm"
       },
       {
         "name": "opencode.rpm",
-        "tag": "v1.18.3",
-        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.3/opencode-desktop-linux-x86_64.rpm",
+        "tag": "v1.18.4",
+        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.4/opencode-desktop-linux-x86_64.rpm",
         "enabled": true,
         "repo": "anomalyco/opencode",
         "rpm_suffix": "x86_64.rpm"
       },
       {
         "name": "drawio.rpm",
-        "tag": "v30.3.14",
-        "url": "https://github.com/jgraph/drawio-desktop/releases/download/v30.3.14/drawio-x86_64-30.3.14.rpm",
+        "tag": "v30.4.1",
+        "url": "https://github.com/jgraph/drawio-desktop/releases/download/v30.4.1/drawio-x86_64-30.4.1.rpm",
         "enabled": true,
         "repo": "jgraph/drawio-desktop",
         "rpm_suffix": "x86_64-*.rpm"
