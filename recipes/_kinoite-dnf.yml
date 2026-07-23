@@ -26,6 +26,7 @@ modules:
         - sublime-text
         - tailscale
         - vivaldi-stable
+
         # Fedora repos
         - akonadiconsole
         - akregator
@@ -38,7 +39,6 @@ modules:
         - gcc-gfortran
         - git
         - gnome-system-monitor
-        - google-noto-fonts-all-static
         - gparted
         - gwenview
         - gtk3-devel
@@ -51,12 +51,14 @@ modules:
         - steam
         - vlc
         - zsh
-        # Ghostty:
+
+        # Ghostty
         - libadwaita-devel
         - gtk4-devel
         - gtk4-layer-shell-devel
         - gettext
         - blueprint-compiler
+
         # RPMs
         - direct_downloads/chatwise.rpm
         - github_releases/protonmail-bridge.rpm
