@@ -39,6 +39,10 @@ modules:
         - gcc-gfortran
         - git
         - gnome-system-monitor
+        - google-noto-sans-fonts
+        - google-noto-serif-fonts
+        - google-noto-sans-cjk-fonts
+        - google-noto-emoji-color-fonts
         - gparted
         - gwenview
         - gtk3-devel
