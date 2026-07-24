@@ -31,6 +31,8 @@ modules:
         - akonadiconsole
         - akregator
         - clang
+        - default-fonts-cjk
+        - default-fonts-core
         - distrobox
         - firefox
         - fuse
@@ -39,10 +41,6 @@ modules:
         - gcc-gfortran
         - git
         - gnome-system-monitor
-        - google-noto-sans-fonts
-        - google-noto-serif-fonts
-        - google-noto-sans-cjk-fonts
-        - google-noto-color-emoji-fonts
         - gparted
         - gwenview
         - gtk3-devel
