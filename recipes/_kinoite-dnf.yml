@@ -42,7 +42,7 @@ modules:
         - google-noto-sans-fonts
         - google-noto-serif-fonts
         - google-noto-sans-cjk-fonts
-        - google-noto-emoji-color-fonts
+        - google-noto-color-emoji-fonts
         - gparted
         - gwenview
         - gtk3-devel
