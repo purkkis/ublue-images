@@ -20,16 +20,16 @@
       },
       {
         "name": "opencode.rpm",
-        "tag": "v1.18.8",
-        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.8/opencode-desktop-linux-x86_64.rpm",
+        "tag": "v1.18.10",
+        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.10/opencode-desktop-linux-x86_64.rpm",
         "enabled": true,
         "repo": "anomalyco/opencode",
         "rpm_suffix": "x86_64.rpm"
       },
       {
         "name": "drawio.rpm",
-        "tag": "v31.0.2",
-        "url": "https://github.com/jgraph/drawio-desktop/releases/download/v31.0.2/drawio-x86_64-31.0.2.rpm",
+        "tag": "v31.1.5",
+        "url": "https://github.com/jgraph/drawio-desktop/releases/download/v31.1.5/drawio-x86_64-31.1.5.rpm",
         "enabled": true,
         "repo": "jgraph/drawio-desktop",
         "rpm_suffix": "x86_64-*.rpm"
