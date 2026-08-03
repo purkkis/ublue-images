@@ -20,24 +20,24 @@
       },
       {
         "name": "opencode.rpm",
-        "tag": "v1.18.4",
-        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.4/opencode-desktop-linux-x86_64.rpm",
+        "tag": "v1.18.10",
+        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.10/opencode-desktop-linux-x86_64.rpm",
         "enabled": true,
         "repo": "anomalyco/opencode",
         "rpm_suffix": "x86_64.rpm"
       },
       {
         "name": "drawio.rpm",
-        "tag": "v30.4.1",
-        "url": "https://github.com/jgraph/drawio-desktop/releases/download/v30.4.1/drawio-x86_64-30.4.1.rpm",
+        "tag": "v31.1.5",
+        "url": "https://github.com/jgraph/drawio-desktop/releases/download/v31.1.5/drawio-x86_64-31.1.5.rpm",
         "enabled": true,
         "repo": "jgraph/drawio-desktop",
         "rpm_suffix": "x86_64-*.rpm"
       },
       {
         "name": "quarto.rpm",
-        "tag": "v1.9.38",
-        "url": "https://github.com/quarto-dev/quarto-cli/releases/download/v1.9.38/quarto-1.9.38-linux-x86_64.rpm",
+        "tag": "v1.10.18",
+        "url": "https://github.com/quarto-dev/quarto-cli/releases/download/v1.10.18/quarto-1.10.18-linux-x86_64.rpm",
         "enabled": false,
         "repo": "quarto-dev/quarto-cli",
         "rpm_suffix": "x86_64.rpm"
