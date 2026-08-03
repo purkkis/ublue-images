@@ -46,7 +46,9 @@ modules:
         - gtk3-devel
         - hplip-gui
         - korganizer
+        - lm_sensors
         - merkuro
+        - nethogs
         - okular
         - papirus-icon-theme
         - podman
