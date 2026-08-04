@@ -10,8 +10,7 @@ modules:
         - Terminus
         - JetBrainsMono
         - Monaspace
-      google-fonts:
-        - Google Sans Code
+        - GoogleSansCode
   - type: script
     snippets:
       - wget -O /usr/share/fonts/google-noto-color-emoji-fonts/NotoColorEmoji-CBDT.ttf
