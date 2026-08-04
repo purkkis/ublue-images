@@ -53,6 +53,7 @@ modules:
         - papirus-icon-theme
         - podman
         - steam
+        - twitter-twemoji-fonts
         - vlc
         - zsh
 
