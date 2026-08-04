@@ -22,7 +22,3 @@ github-release-download:
 
 update-github-releases:
 	uv run ublue-images github-releases refresh
-
-download-noto-emoji-cbdt-font:
-	wget https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf \
-		-O files/usr_share_fonts_google_noto_emoji_CBDT/NotoColorEmoji-CBDT.ttf
