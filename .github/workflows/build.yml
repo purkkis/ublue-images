@@ -116,6 +116,11 @@ jobs:
         with:
           ubuntu-version: 24.04
 
+      - name: Download Noto Emoji CBDT font
+        run: |
+          wget https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf \
+            -O files/usr_share_fonts_google_noto_emoji_CBDT/NotoColorEmoji-CBDT.ttf
+
       # Build the image
       - name: Build Custom Image
         uses: blue-build/github-action@836161eb076426a451e6a0054f722b1153b8b3ad # v1.12.0

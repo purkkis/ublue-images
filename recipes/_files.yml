@@ -6,9 +6,16 @@ modules:
       # Configure users for 1Password
       - source: usr_lib_sysusers_d
         destination: /usr/lib/sysusers.d
+
       # Setup Brave management policies
       - source: etc_brave_policies_managed
         destination: /etc/brave/policies/managed
+
+      # Noto emoji CBDT font
+      # https://github.com/googlefonts/noto-emoji/blob/main/fonts/NotoColorEmoji.ttf
+      - source: usr_share_fonts_google_noto_emoji_CBDT
+        destination: /usr/share/fonts/google-noto-color-emoji-fonts
+
   - type: script
     snippets:
       - systemd-sysusers
