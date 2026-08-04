@@ -4,24 +4,24 @@
     "items": [
       {
         "name": "dbeaver.rpm",
-        "tag": "26.1.3",
-        "url": "https://github.com/dbeaver/dbeaver/releases/download/26.1.3/dbeaver-ce-26.1.3-linux-x86_64.rpm",
+        "tag": "26.1.4",
+        "url": "https://github.com/dbeaver/dbeaver/releases/download/26.1.4/dbeaver-ce-26.1.4-linux-x86_64.rpm",
         "enabled": true,
         "repo": "dbeaver/dbeaver",
         "rpm_suffix": "x86_64.rpm"
       },
       {
         "name": "dbvr.rpm",
-        "tag": "26.1.3",
-        "url": "https://github.com/dbeaver/dbvr/releases/download/26.1.3/dbvr-ce-26.1.3-linux-x86_64.rpm",
+        "tag": "26.1.4",
+        "url": "https://github.com/dbeaver/dbvr/releases/download/26.1.4/dbvr-ce-26.1.4-linux-x86_64.rpm",
         "enabled": false,
         "repo": "dbeaver/dbvr",
         "rpm_suffix": "x86_64.rpm"
       },
       {
         "name": "opencode.rpm",
-        "tag": "v1.18.10",
-        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.10/opencode-desktop-linux-x86_64.rpm",
+        "tag": "v1.18.12",
+        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.12/opencode-desktop-linux-x86_64.rpm",
         "enabled": true,
         "repo": "anomalyco/opencode",
         "rpm_suffix": "x86_64.rpm"
