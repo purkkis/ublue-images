@@ -12,8 +12,8 @@ modules:
         - Monaspace
       google-fonts:
         - Google Sans Code
-        - Noto Color Emoji
-        - Noto Emoji
   - type: script
     snippets:
+      - wget -O /usr/share/fonts/google-noto-color-emoji-fonts/NotoColorEmoji-CBDT.ttf
+        https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf
       - fc-cache -f -v
