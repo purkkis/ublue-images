@@ -14,3 +14,5 @@ files/dropbox/build
 files/dnf/direct_downloads
 files/dnf/github_releases
 files/dnf/dropbox*
+
+files/usr_share_fonts_google_noto_emoji_CBDT/NotoColorEmoji-CBDT.ttf
