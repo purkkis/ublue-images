@@ -20,12 +20,12 @@ jobs:
         include:
           - iso_name: kinoite.iso
             image: ghcr.io/purkkis/kinoite:latest
-          - iso_name: kinoite-nvidia.iso
-            image: ghcr.io/purkkis/kinoite-nvidia:latest
-          - iso_name: silverblue.iso
-            image: ghcr.io/purkkis/silverblue:latest
-          - iso_name: silverblue-nvidia.iso
-            image: ghcr.io/purkkis/silverblue-nvidia:latest
+          # - iso_name: kinoite-nvidia.iso
+          #   image: ghcr.io/purkkis/kinoite-nvidia:latest
+          # - iso_name: silverblue.iso
+          #   image: ghcr.io/purkkis/silverblue:latest
+          # - iso_name: silverblue-nvidia.iso
+          #   image: ghcr.io/purkkis/silverblue-nvidia:latest
     env:
       B2_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
       B2_BUCKET_NAME: ${{ secrets.B2_BUCKET_NAME }}
