@@ -12,6 +12,12 @@ This repository builds custom Fedora Atomic desktop images using [BlueBuild](htt
 - **Image**: `ghcr.io/purkkis/kinoite`
 - **NVIDIA Variant**: `ghcr.io/purkkis/kinoite-nvidia`
 
+### Silverblue (GNOME)
+
+- **Base**: `ghcr.io/ublue-os/silverblue-main`
+- **Image**: `ghcr.io/purkkis/silverblue`
+- **NVIDIA Variant**: `ghcr.io/purkkis/silverblue-nvidia`
+
 ## Installation
 
 The recommended way to install these images is to generate an ISO and perform a fresh installation.
@@ -22,6 +28,10 @@ The recommended way to install these images is to generate an ISO and perform a 
    just build-iso-kinoite-from-ghcr-image
    # or
    just build-iso-kinoite-nvidia-from-ghcr-image
+   # or
+   just build-iso-silverblue-from-ghcr-image
+   # or
+   just build-iso-silverblue-nvidia-from-ghcr-image
    ```
 
 2. Flash the ISO to a USB drive (using e.g. [Fedora Media Writer](https://docs.fedoraproject.org/en-US/fedora/latest/preparing-boot-media/#_fedora_media_writer)).
@@ -34,10 +44,14 @@ The recommended way to install these images is to generate an ISO and perform a 
 # Build images
 just build-image-kinoite
 just build-image-kinoite-nvidia
+just build-image-silverblue
+just build-image-silverblue-nvidia
 
 # Generate ISOs
 just build-iso-kinoite-from-ghcr-image
 just build-iso-kinoite-nvidia-from-ghcr-image
+just build-iso-silverblue-from-ghcr-image
+just build-iso-silverblue-nvidia-from-ghcr-image
 ```
 
 ## Verification
@@ -46,6 +60,8 @@ Images are signed with Sigstore's cosign.
 
 ```bash
 cosign verify --key cosign.pub ghcr.io/purkkis/kinoite
+# or
+cosign verify --key cosign.pub ghcr.io/purkkis/silverblue
 ```
 
 ## 1Password Groups

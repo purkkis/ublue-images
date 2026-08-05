@@ -15,8 +15,9 @@ modules:
     nvidia-driver: nvidia-open
   - from-file: _files.yml
   - from-file: _common-brew.yml
-  - from-file: _kinoite-docker.yml
+  - from-file: _desktop-docker.yml
   - from-file: _common-flatpaks.yml
-  - from-file: _kinoite-dnf.yml
-  - from-file: _kinoite-fonts.yaml
+  - from-file: _desktop-dnf.yml
+  - from-file: _kde-edition.yml
+  - from-file: _desktop-fonts.yaml
   - type: signing

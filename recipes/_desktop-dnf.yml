@@ -28,7 +28,6 @@ modules:
         - vivaldi-stable
 
         # Fedora repos
-        - akonadiconsole
         - akregator
         - clang
         - default-fonts-cjk
@@ -45,9 +44,7 @@ modules:
         - gwenview
         - gtk3-devel
         - hplip-gui
-        - korganizer
         - lm_sensors
-        - merkuro
         - nethogs
         - okular
         - papirus-icon-theme

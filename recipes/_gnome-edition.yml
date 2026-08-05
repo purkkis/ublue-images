@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+modules:
+  - type: dnf
+    install:
+      packages:
+        - gnome-shell-extension-appindicator
+        - gnome-shell-extension-blur-my-shell
+        - gnome-shell-extension-dash-to-dock
+  - type: default-flatpaks
+    configurations:
+      - scope: system
+        notify: false
+        install:
+          - com.mattjakeman.ExtensionManager
