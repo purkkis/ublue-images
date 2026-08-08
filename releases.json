@@ -28,8 +28,8 @@
       },
       {
         "name": "drawio.rpm",
-        "tag": "v31.1.5",
-        "url": "https://github.com/jgraph/drawio-desktop/releases/download/v31.1.5/drawio-x86_64-31.1.5.rpm",
+        "tag": "v31.1.8",
+        "url": "https://github.com/jgraph/drawio-desktop/releases/download/v31.1.8/drawio-x86_64-31.1.8.rpm",
         "enabled": true,
         "repo": "jgraph/drawio-desktop",
         "rpm_suffix": "x86_64-*.rpm"
