@@ -21,6 +21,7 @@ modules:
           - org.fedoraproject.MediaWriter
           - org.gnome.Boxes
           - org.gnome.Calculator
+          - org.gnome.Maps
           - org.libreoffice.LibreOffice
           - org.mozilla.thunderbird
           - org.qbittorrent.qBittorrent
