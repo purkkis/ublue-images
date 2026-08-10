@@ -44,6 +44,7 @@ modules:
         - gwenview
         - gtk3-devel
         - hplip-gui
+        - iotop
         - lm_sensors
         - nethogs
         - okular
