@@ -59,7 +59,7 @@ jobs:
         recipe:
           - kinoite.yml
           # - kinoite-nvidia.yml
-          - silverblue.yml
+          # - silverblue.yml
           # - silverblue-nvidia.yml
     steps:
       - name: Checkout
