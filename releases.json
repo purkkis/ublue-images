@@ -49,6 +49,14 @@
         "enabled": true,
         "repo": "ProtonMail/proton-bridge",
         "rpm_suffix": "x86_64.rpm"
+      },
+      {
+        "name": "termy.rpm",
+        "tag": "v0.2.37",
+        "url": "https://github.com/lassejlv/termy/releases/download/v0.2.37/Termy-v0.2.37-linux-x86_64.rpm",
+        "enabled": true,
+        "repo": "lassejlv/termy",
+        "rpm_suffix": "x86_64.rpm"
       }
     ]
   },

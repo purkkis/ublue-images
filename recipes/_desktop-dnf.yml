@@ -66,6 +66,7 @@ modules:
         - github_releases/dbeaver.rpm
         - github_releases/opencode.rpm
         - github_releases/drawio.rpm
+        - github_releases/termy.rpm
   - type: systemd
     system:
       enabled:
