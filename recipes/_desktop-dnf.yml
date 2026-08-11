@@ -36,6 +36,7 @@ modules:
         - default-fonts-core
         - distrobox
         - firefox
+        - flatpak-builder
         - fuse
         - fuse-libs
         - g++
