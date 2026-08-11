@@ -47,6 +47,7 @@ modules:
         - gtk3-devel
         - hplip-gui
         - iotop
+        - javascriptcoregtk4.1
         - lm_sensors
         - nethogs
         - okular
@@ -54,6 +55,7 @@ modules:
         - podman
         - steam
         - vlc
+        - webkit2gtk4.1
         - zsh
 
         # Ghostty
