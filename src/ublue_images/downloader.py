@@ -96,7 +96,7 @@ class GitHubReleaseDownloader:
             return GithubReleases.model_validate(response.json())
         except Exception as e:
             logger.error(f"Error fetching latest release for {repo}: {e}")
-            raise e
+            raise
 
     @staticmethod
     def get_rpm_download_url(release_data: GithubReleases, rpm_suffix: str) -> str:
@@ -114,7 +114,7 @@ class GitHubReleaseDownloader:
             raise ValueError(f"No RPM asset found matching pattern {pattern!r}")
         except Exception as e:
             logger.error(f"Error extracting RPM download URL: {e}")
-            raise e
+            raise
 
     @staticmethod
     def download(url: str, file_name: str, destination: Path) -> int:
