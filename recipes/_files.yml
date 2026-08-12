@@ -12,8 +12,8 @@ modules:
       # ChatGPT RPM repo signing key (gpgkey=file:///etc/pki/rpm-gpg/...)
       # Extracted from Docker container after the chatgpt.rpm was installed:
       # 'docker cp <container-id>:/etc/pki/rpm-gpg/RPM-GPG-KEY-chatgpt ./files/dnf/RPM-GPG-KEY-chatgpt'
-      # - source: etc_pki_rpm_gpg
-      #   destination: /etc/pki/rpm-gpg
+      - source: etc_pki_rpm_gpg
+        destination: /etc/pki/rpm-gpg
   - type: script
     snippets:
       - systemd-sysusers

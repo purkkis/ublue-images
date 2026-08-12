@@ -7,7 +7,7 @@ modules:
       files:
         - 1password.repo
         - brave-browser.repo
-        # - chatgpt.repo
+        - chatgpt.repo
         - cursor.repo
         - google-chrome.repo
         - tailscale.repo
@@ -19,7 +19,7 @@ modules:
         # 3rd party repos
         - 1password
         - 1password-cli
-        # - chatgpt
+        - chatgpt
         - code
         - google-chrome-stable
         - cursor
