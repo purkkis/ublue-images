@@ -9,7 +9,6 @@ modules:
           - app.devsuite.Ptyxis
           - com.discordapp.Discord
           - com.heroicgameslauncher.hgl
-          - com.seafile.Client
           - com.usebruno.Bruno
           - dev.aunetx.deezer
           - io.github.cboxdoerfer.FSearch
