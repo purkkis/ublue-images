@@ -20,8 +20,8 @@
       },
       {
         "name": "opencode.rpm",
-        "tag": "v1.18.16",
-        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.16/opencode-desktop-linux-x86_64.rpm",
+        "tag": "v1.18.18",
+        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.18/opencode-desktop-linux-x86_64.rpm",
         "enabled": false,
         "repo": "anomalyco/opencode",
         "rpm_suffix": "x86_64.rpm"
