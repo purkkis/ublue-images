@@ -72,6 +72,7 @@ modules:
         - github_releases/dbeaver.rpm
         - github_releases/drawio.rpm
         - github_releases/termy.rpm
+        - github_releases/vscodium.rpm
   - type: systemd
     system:
       enabled:

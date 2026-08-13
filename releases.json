@@ -20,8 +20,8 @@
       },
       {
         "name": "opencode.rpm",
-        "tag": "v1.18.16",
-        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.16/opencode-desktop-linux-x86_64.rpm",
+        "tag": "v1.18.18",
+        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.18/opencode-desktop-linux-x86_64.rpm",
         "enabled": false,
         "repo": "anomalyco/opencode",
         "rpm_suffix": "x86_64.rpm"
@@ -56,6 +56,14 @@
         "url": "https://github.com/lassejlv/termy/releases/download/v0.2.37/Termy-v0.2.37-linux-x86_64.rpm",
         "enabled": true,
         "repo": "lassejlv/termy",
+        "rpm_suffix": "x86_64.rpm"
+      },
+      {
+        "name": "vscodium.rpm",
+        "tag": "1.126.04524",
+        "url": "https://github.com/VSCodium/vscodium/releases/download/1.126.04524/codium-1.126.04524-el8.x86_64.rpm",
+        "enabled": true,
+        "repo": "VSCodium/vscodium",
         "rpm_suffix": "x86_64.rpm"
       }
     ]
