@@ -8,6 +8,7 @@ modules:
         - 1password.repo
         - brave-browser.repo
         - chatgpt.repo
+        - devin-desktop.repo
         - cursor.repo
         - google-chrome.repo
         - tailscale.repo
@@ -21,6 +22,7 @@ modules:
         - 1password-cli
         - chatgpt
         - code
+        - devin-desktop
         - google-chrome-stable
         - cursor
         - brave-browser
