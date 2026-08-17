@@ -9,8 +9,9 @@ from dotenv import load_dotenv
 from loguru import logger
 from pydantic import BaseModel, Field
 
-from ublue_images.chatwise import ChatWiseReleaseItem
+from ublue_images.chatwise import ChatWiseReleaseItem, download_rpm
 from ublue_images.models.github import GithubReleases
+from ublue_images.utils import REQUEST_TIMEOUT, download_file
 
 load_dotenv()
 
@@ -69,9 +70,6 @@ def save_releases_config(config: ReleasesConfig) -> None:
 
 T = TypeVar("T", bound=BaseModel)
 
-REQUEST_TIMEOUT = (5, 60)
-DOWNLOAD_CHUNK_SIZE = 1024 * 1024
-
 
 class GitHubReleaseDownloader:
     @staticmethod
@@ -120,33 +118,12 @@ class GitHubReleaseDownloader:
 
     @staticmethod
     def download(url: str, file_name: str, destination: Path) -> int:
-        """
-        Downloads a file from a URL to a local path.
-
-        Args:
-            url: The URL to download.
-            file_name: A human-readable filename used for logging.
-            destination: The path to write the downloaded file to.
-
-        Returns:
-            The number of bytes written.
-        """
         logger.info(f"Downloading {file_name}...")
-        bytes_written = 0
-        with requests.get(url, stream=True, timeout=REQUEST_TIMEOUT) as response:
-            response.raise_for_status()
-            with destination.open("wb") as file_handle:
-                for chunk in response.iter_content(chunk_size=DOWNLOAD_CHUNK_SIZE):
-                    if not chunk:
-                        continue
-                    bytes_written += len(chunk)
-                    file_handle.write(chunk)
-        return bytes_written
+        return download_file(url, destination)
 
     def download_file_to_local_dir(self, file_config: DownloadableReleaseItem, output: str) -> None:
         local_path = Path(output) / file_config.name
-        bytes_written = self.download(file_config.url, file_config.name, local_path)
-        logger.info(f"Wrote {bytes_written} bytes for {file_config.name} to {local_path}")
+        self.download(file_config.url, file_config.name, local_path)
 
     def download_files(self, config: GithubReleaseItems | DirectDownloadItems, output: str) -> None:
         """
@@ -216,6 +193,15 @@ def download_direct_downloads() -> None:
     download_config = load_releases_config().direct_downloads
     ghd.download_files(download_config, output="files/dnf/direct_downloads")
     logger.info("direct_downloads download completed")
+
+
+def download_chatwise() -> None:
+    """
+    Downloads the latest ChatWise RPM without caching its release metadata.
+    """
+    logger.info("Starting ChatWise download")
+    download_rpm(load_releases_config().chatwise, Path("files/dnf/direct_downloads/chatwise.rpm"))
+    logger.info("ChatWise download completed")
 
 
 if __name__ == "__main__":

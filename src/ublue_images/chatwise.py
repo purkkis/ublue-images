@@ -1,6 +1,10 @@
+from pathlib import Path
+
 import requests
 from pydantic import BaseModel
 from yaml import safe_load
+
+from ublue_images.utils import REQUEST_TIMEOUT, download_file
 
 
 class File(BaseModel):
@@ -17,7 +21,7 @@ class ChatWiseReleaseItem(BaseModel):
 
 
 def get_rpm_download_url(release: ChatWiseReleaseItem):
-    response = requests.get(release.latest_yaml_url)
+    response = requests.get(release.latest_yaml_url, timeout=REQUEST_TIMEOUT)
     response.raise_for_status()
     latest = ChatWiseLatestYAML.model_validate(safe_load(response.text))
     base: str = "https://releases.chatwise.app"
@@ -25,6 +29,11 @@ def get_rpm_download_url(release: ChatWiseReleaseItem):
         if file.url.endswith(".rpm"):
             return f"{base}/{file.url}"
     raise ValueError("No .rpm file found in the Chatwise Release")
+
+
+def download_rpm(release: ChatWiseReleaseItem, destination: Path) -> None:
+    url = get_rpm_download_url(release)
+    download_file(url, destination)
 
 
 if __name__ == "__main__":

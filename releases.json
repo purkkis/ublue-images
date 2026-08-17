@@ -78,12 +78,6 @@
         "tag": "2026.07.1-5",
         "url": "https://cdn.posit.co/positron/releases/rpm/x86_64/Positron-2026.07.1-5-x64.rpm",
         "enabled": false
-      },
-      {
-        "name": "chatwise.rpm",
-        "tag": "26.7.8",
-        "url": "https://releases.r2.chatwise.app/26.7.8/ChatWise-26.7.8.rpm",
-        "enabled": true
       }
     ]
   }
