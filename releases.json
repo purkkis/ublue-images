@@ -4,16 +4,16 @@
     "items": [
       {
         "name": "dbeaver.rpm",
-        "tag": "26.1.4",
-        "url": "https://github.com/dbeaver/dbeaver/releases/download/26.1.4/dbeaver-ce-26.1.4-linux-x86_64.rpm",
+        "tag": "26.1.5",
+        "url": "https://github.com/dbeaver/dbeaver/releases/download/26.1.5/dbeaver-ce-26.1.5-linux-x86_64.rpm",
         "enabled": true,
         "repo": "dbeaver/dbeaver",
         "rpm_suffix": "x86_64.rpm"
       },
       {
         "name": "dbvr.rpm",
-        "tag": "26.1.4",
-        "url": "https://github.com/dbeaver/dbvr/releases/download/26.1.4/dbvr-ce-26.1.4-linux-x86_64.rpm",
+        "tag": "26.1.5",
+        "url": "https://github.com/dbeaver/dbvr/releases/download/26.1.5/dbvr-ce-26.1.5-linux-x86_64.rpm",
         "enabled": false,
         "repo": "dbeaver/dbvr",
         "rpm_suffix": "x86_64.rpm"
