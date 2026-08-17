@@ -50,7 +50,7 @@ def _run_command(command: Callable[[], None], error_message: str) -> None:
     """
     try:
         command()
-    except Exception:
+    except Exception:  # noqa
         logger.exception(error_message)
         raise typer.Exit(code=1) from None
 
