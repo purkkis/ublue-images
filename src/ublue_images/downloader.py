@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from loguru import logger
 from pydantic import BaseModel, Field
 
+from ublue_images.chatwise import ChatWiseReleaseItem
 from ublue_images.models.github import GithubReleases
 
 load_dotenv()
@@ -48,6 +49,7 @@ class ReleasesConfig(BaseModel):
     schema_ref: str = Field(default=RELEASES_JSON_SCHEMA, alias="$schema")
     github_releases: GithubReleaseItems = Field(default_factory=GithubReleaseItems)
     direct_downloads: DirectDownloadItems = Field(default_factory=DirectDownloadItems)
+    chatwise: ChatWiseReleaseItem = Field(default_factory=ChatWiseReleaseItem)
 
 
 def release_config_json_schema():

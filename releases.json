@@ -68,6 +68,9 @@
       }
     ]
   },
+  "chatwise": {
+    "latest_yaml_url": "https://releases.chatwise.app/latest-linux.yml"
+  },
   "direct_downloads": {
     "items": [
       {
