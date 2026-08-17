@@ -107,6 +107,11 @@ jobs:
         run: |
           uv run ublue-images direct-downloads download
 
+      # Download latest Chatwise rpm
+      - name: Download ChatWise
+        run: |
+          uv run ublue-images chatwise download
+
       # Download GitHub release RPMs only if cache is not hit
       - name: Download GitHub releases
         if: steps.tag-cache.outputs.cache-hit != 'true'

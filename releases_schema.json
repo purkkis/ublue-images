@@ -1,5 +1,18 @@
 {
   "$defs": {
+    "ChatWiseReleaseItem": {
+      "properties": {
+        "latest_yaml_url": {
+          "title": "Latest Yaml Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "latest_yaml_url"
+      ],
+      "title": "ChatWiseReleaseItem",
+      "type": "object"
+    },
     "DirectDownloadItem": {
       "properties": {
         "name": {
@@ -111,6 +124,9 @@
     },
     "direct_downloads": {
       "$ref": "#/$defs/DirectDownloadItems"
+    },
+    "chatwise": {
+      "$ref": "#/$defs/ChatWiseReleaseItem"
     }
   },
   "title": "ReleasesConfig",

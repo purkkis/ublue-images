@@ -4,6 +4,7 @@ import typer
 from loguru import logger
 
 from ublue_images.downloader import (
+    download_chatwise,
     download_direct_downloads,
     download_github_releases,
     refresh_github_releases,
@@ -20,6 +21,11 @@ direct_downloads_app = typer.Typer(
     no_args_is_help=True,
     rich_markup_mode=None,
 )
+chatwise_app = typer.Typer(
+    help="Download the latest ChatWise RPM.",
+    no_args_is_help=True,
+    rich_markup_mode=None,
+)
 github_releases_app = typer.Typer(
     help="Refresh and download github_releases entries in releases.json.",
     no_args_is_help=True,
@@ -28,6 +34,7 @@ github_releases_app = typer.Typer(
 
 app.add_typer(github_releases_app, name="github-releases")
 app.add_typer(direct_downloads_app, name="direct-downloads")
+app.add_typer(chatwise_app, name="chatwise")
 
 
 def _run_command(command: Callable[[], None], error_message: str) -> None:
@@ -43,7 +50,7 @@ def _run_command(command: Callable[[], None], error_message: str) -> None:
     """
     try:
         command()
-    except Exception:
+    except Exception:  # noqa
         logger.exception(error_message)
         raise typer.Exit(code=1) from None
 
@@ -61,6 +68,11 @@ def download_github_releases_command() -> None:
 @direct_downloads_app.command("download")
 def download_direct_downloads_command() -> None:
     _run_command(download_direct_downloads, "direct_downloads download failed")
+
+
+@chatwise_app.command("download")
+def download_chatwise_command() -> None:
+    _run_command(download_chatwise, "ChatWise download failed")
 
 
 @app.command("schema")
