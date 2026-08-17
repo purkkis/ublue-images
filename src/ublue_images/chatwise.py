@@ -1,3 +1,4 @@
+import requests
 from pydantic import BaseModel
 from yaml import safe_load
 
@@ -15,15 +16,15 @@ class ChatWiseReleaseItem(BaseModel):
     latest_yaml_url: str
 
 
-def get_rpm_download_url(release: ChatWiseLatestYAML):
+def get_rpm_download_url(release: ChatWiseReleaseItem):
+    response = requests.get(release.latest_yaml_url)
+    response.raise_for_status()
+    latest = ChatWiseLatestYAML.model_validate(safe_load(response.text))
     base: str = "https://releases.chatwise.app"
-    for file in release.files:
+    for file in latest.files:
         if file.url.endswith(".rpm"):
             return f"{base}/{file.url}"
-    raise ValueError(
-        "No .rpm file found in the Chatwise Release, available files: "
-        + ", ".join([file.url for file in release.files])
-    )
+    raise ValueError("No .rpm file found in the Chatwise Release")
 
 
 if __name__ == "__main__":
@@ -54,4 +55,7 @@ releaseDate: '2026-08-13T23:29:26.917Z'
 """
     json_as_yaml = safe_load(latest_yaml)
     latest = ChatWiseLatestYAML.model_validate(json_as_yaml)
-    print(get_rpm_download_url(latest))
+    print(latest)
+
+    chatwise = ChatWiseReleaseItem(latest_yaml_url="https://releases.chatwise.app/latest-linux.yml")
+    print(get_rpm_download_url(chatwise))
