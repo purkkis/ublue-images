@@ -20,7 +20,7 @@ modules:
         - cboxdoerfer/fsearch
     install:
       packages:
-        # COPR
+        # Copr
         - fsearch
         - helium
 
