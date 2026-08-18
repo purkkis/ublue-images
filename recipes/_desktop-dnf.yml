@@ -15,8 +15,15 @@ modules:
         - sublime-text.repo
         - vivaldi.repo
         - vscode.repo
+      copr:
+        - imput/helium
+        - cboxdoerfer/fsearch
     install:
       packages:
+        # COPR
+        - fsearch
+        - helium
+
         # 3rd party repos
         - 1password
         - 1password-cli
