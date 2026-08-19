@@ -88,9 +88,13 @@ class GitHubReleaseDownloader:
         Returns:
             GithubReleases model
         """
+        token = os.getenv("GH_TOKEN") or os.getenv("GITHUB_TOKEN")
+        if not token or not token.strip():
+            raise RuntimeError("GH_TOKEN or GITHUB_TOKEN must be set to access the GitHub API")
+
         url = f"https://api.github.com/repos/{repo}/releases/latest"
         headers = {
-            "Authorization": f"Bearer {os.getenv('GITHUB_TOKEN')}",
+            "Authorization": f"Bearer {token}",
             "X-GitHub-Api-Version": "2026-03-10",
             "Accept": "application/vnd.github+json",
         }
