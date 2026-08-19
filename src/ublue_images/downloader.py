@@ -89,9 +89,16 @@ class GitHubReleaseDownloader:
             GithubReleases model
         """
         url = f"https://api.github.com/repos/{repo}/releases/latest"
+        headers = {
+            "Authorization": f"Bearer {os.getenv('GITHUB_TOKEN')}",
+            "X-GitHub-Api-Version": "2026-03-10",
+            "Accept": "application/vnd.github+json",
+        }
         logger.info(f"Fetching latest release for {repo} from {url}")
         try:
-            response = requests.get(url, timeout=REQUEST_TIMEOUT)  # timeout = (connect timeout, read timeout)
+            response = requests.get(
+                url, headers=headers, timeout=REQUEST_TIMEOUT
+            )  # timeout = (connect timeout, read timeout)
             response.raise_for_status()
             return GithubReleases.model_validate(response.json())
         except Exception as e:
