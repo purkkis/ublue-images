@@ -37,6 +37,9 @@ github-release-download:
 update-github-releases:
 	uv run ublue-images github-releases refresh
 
+refresh-all:
+	uv run ublue-images github-releases refresh
+
 download-all:
 	rm -rf files/dnf/direct_downloads files/dnf/github_releases
 	uv run ublue-images direct-downloads download

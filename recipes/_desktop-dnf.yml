@@ -81,6 +81,7 @@ modules:
         - github_releases/dbeaver.rpm
         - github_releases/termy.rpm
         - github_releases/vscodium.rpm
+        - github_releases/firefoxpwa.rpm
   - type: systemd
     system:
       enabled:

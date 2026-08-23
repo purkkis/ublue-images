@@ -28,8 +28,8 @@
       },
       {
         "name": "drawio.rpm",
-        "tag": "v31.3.1",
-        "url": "https://github.com/jgraph/drawio-desktop/releases/download/v31.3.1/drawio-x86_64-31.3.1.rpm",
+        "tag": "v31.3.2",
+        "url": "https://github.com/jgraph/drawio-desktop/releases/download/v31.3.2/drawio-x86_64-31.3.2.rpm",
         "enabled": false,
         "repo": "jgraph/drawio-desktop",
         "rpm_suffix": "x86_64-*.rpm"
@@ -73,6 +73,14 @@
         "enabled": false,
         "repo": "AprilNEA/OpenLogi",
         "rpm_suffix": "linux-amd64.rpm"
+      },
+      {
+        "name": "firefoxpwa.rpm",
+        "tag": "v2.19.0",
+        "url": "https://github.com/filips123/PWAsForFirefox/releases/download/v2.19.0/firefoxpwa-2.19.0-1.x86_64.rpm",
+        "enabled": true,
+        "repo": "filips123/PWAsForFirefox",
+        "rpm_suffix": "x86_64.rpm"
       }
     ]
   },
