@@ -56,6 +56,7 @@ modules:
         - gwenview
         - gtk3-devel
         - hplip-gui
+        - ImageMagick-heic
         - iotop
         - javascriptcoregtk4.1
         - lm_sensors
