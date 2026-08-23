@@ -52,8 +52,8 @@
       },
       {
         "name": "termy.rpm",
-        "tag": "v0.2.41",
-        "url": "https://github.com/lassejlv/termy/releases/download/v0.2.41/Termy-v0.2.41-linux-x86_64.rpm",
+        "tag": "v0.2.42",
+        "url": "https://github.com/lassejlv/termy/releases/download/v0.2.42/Termy-v0.2.42-linux-x86_64.rpm",
         "enabled": true,
         "repo": "lassejlv/termy",
         "rpm_suffix": "x86_64.rpm"
@@ -68,8 +68,8 @@
       },
       {
         "name": "openlogi.rpm",
-        "tag": "v0.7.4",
-        "url": "https://github.com/AprilNEA/OpenLogi/releases/download/v0.7.4/openlogi-v0.7.4-linux-amd64.rpm",
+        "tag": "v0.7.7",
+        "url": "https://github.com/AprilNEA/OpenLogi/releases/download/v0.7.7/openlogi-v0.7.7-linux-amd64.rpm",
         "enabled": false,
         "repo": "AprilNEA/OpenLogi",
         "rpm_suffix": "linux-amd64.rpm"
