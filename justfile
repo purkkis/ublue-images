@@ -34,9 +34,6 @@ github-release-download:
 		--output src/ublue_images/models/github_raw.py \
 		--class-name GithubReleases
 
-update-github-releases:
-	uv run ublue-images github-releases refresh
-
 refresh-all:
 	uv run ublue-images github-releases refresh
 

@@ -4,16 +4,16 @@
     "items": [
       {
         "name": "dbeaver.rpm",
-        "tag": "26.1.5",
-        "url": "https://github.com/dbeaver/dbeaver/releases/download/26.1.5/dbeaver-ce-26.1.5-linux-x86_64.rpm",
+        "tag": "26.2.0",
+        "url": "https://github.com/dbeaver/dbeaver/releases/download/26.2.0/dbeaver-ce-26.2.0-linux-x86_64.rpm",
         "enabled": true,
         "repo": "dbeaver/dbeaver",
         "rpm_suffix": "x86_64.rpm"
       },
       {
         "name": "dbvr.rpm",
-        "tag": "26.1.5",
-        "url": "https://github.com/dbeaver/dbvr/releases/download/26.1.5/dbvr-ce-26.1.5-linux-x86_64.rpm",
+        "tag": "26.2.0",
+        "url": "https://github.com/dbeaver/dbvr/releases/download/26.2.0/dbvr-ce-26.2.0-linux-x86_64.rpm",
         "enabled": false,
         "repo": "dbeaver/dbvr",
         "rpm_suffix": "x86_64.rpm"
@@ -52,8 +52,8 @@
       },
       {
         "name": "termy.rpm",
-        "tag": "v0.2.42",
-        "url": "https://github.com/lassejlv/termy/releases/download/v0.2.42/Termy-v0.2.42-linux-x86_64.rpm",
+        "tag": "v0.2.43",
+        "url": "https://github.com/lassejlv/termy/releases/download/v0.2.43/Termy-v0.2.43-linux-x86_64.rpm",
         "enabled": true,
         "repo": "lassejlv/termy",
         "rpm_suffix": "x86_64.rpm"
@@ -68,8 +68,8 @@
       },
       {
         "name": "openlogi.rpm",
-        "tag": "v0.8.1",
-        "url": "https://github.com/AprilNEA/OpenLogi/releases/download/v0.8.1/openlogi-v0.8.1-linux-amd64.rpm",
+        "tag": "v0.8.3",
+        "url": "https://github.com/AprilNEA/OpenLogi/releases/download/v0.8.3/openlogi-v0.8.3-linux-amd64.rpm",
         "enabled": false,
         "repo": "AprilNEA/OpenLogi",
         "rpm_suffix": "linux-amd64.rpm"
@@ -80,6 +80,14 @@
         "url": "https://github.com/filips123/PWAsForFirefox/releases/download/v2.19.0/firefoxpwa-2.19.0-1.x86_64.rpm",
         "enabled": true,
         "repo": "filips123/PWAsForFirefox",
+        "rpm_suffix": "x86_64.rpm"
+      },
+      {
+        "name": "openknowledge.rpm",
+        "tag": "v0.66.2",
+        "url": "https://github.com/inkeep/open-knowledge/releases/download/v0.66.2/OpenKnowledge-x86_64.rpm",
+        "enabled": true,
+        "repo": "inkeep/open-knowledge",
         "rpm_suffix": "x86_64.rpm"
       }
     ]
