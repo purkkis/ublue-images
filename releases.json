@@ -84,8 +84,8 @@
       },
       {
         "name": "openknowledge.rpm",
-        "tag": "v0.67.0",
-        "url": "https://github.com/inkeep/open-knowledge/releases/download/v0.67.0/OpenKnowledge-x86_64.rpm",
+        "tag": "v0.67.2",
+        "url": "https://github.com/inkeep/open-knowledge/releases/download/v0.67.2/OpenKnowledge-x86_64.rpm",
         "enabled": true,
         "repo": "inkeep/open-knowledge",
         "rpm_suffix": "x86_64.rpm"
