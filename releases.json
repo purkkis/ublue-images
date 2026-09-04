@@ -20,16 +20,16 @@
       },
       {
         "name": "opencode.rpm",
-        "tag": "v1.18.25",
-        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.25/opencode-desktop-linux-x86_64.rpm",
+        "tag": "v1.18.27",
+        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.27/opencode-desktop-linux-x86_64.rpm",
         "enabled": false,
         "repo": "anomalyco/opencode",
         "rpm_suffix": "x86_64.rpm"
       },
       {
         "name": "drawio.rpm",
-        "tag": "v31.3.2",
-        "url": "https://github.com/jgraph/drawio-desktop/releases/download/v31.3.2/drawio-x86_64-31.3.2.rpm",
+        "tag": "v31.4.2",
+        "url": "https://github.com/jgraph/drawio-desktop/releases/download/v31.4.2/drawio-x86_64-31.4.2.rpm",
         "enabled": false,
         "repo": "jgraph/drawio-desktop",
         "rpm_suffix": "x86_64-*.rpm"
@@ -84,8 +84,8 @@
       },
       {
         "name": "openknowledge.rpm",
-        "tag": "v0.67.2",
-        "url": "https://github.com/inkeep/open-knowledge/releases/download/v0.67.2/OpenKnowledge-x86_64.rpm",
+        "tag": "v0.68.12",
+        "url": "https://github.com/inkeep/open-knowledge/releases/download/v0.68.12/OpenKnowledge-x86_64.rpm",
         "enabled": true,
         "repo": "inkeep/open-knowledge",
         "rpm_suffix": "x86_64.rpm"
