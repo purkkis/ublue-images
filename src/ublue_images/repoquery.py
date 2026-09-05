@@ -7,7 +7,7 @@ def latest_installed_versions(packages: list[str]):
     for package in packages:
         qf = '{"%{name}": "%{version}"}\n'  # return '{"name": "version"}'
         cmd = f"dnf repoquery --installed --queryformat '{qf}' {package}"
-        result = sp.run(cmd, shell=True, capture_output=True, text=True)
+        result = sp.run(cmd, shell=True, capture_output=True, text=True, check=False)
         if not result.stdout.strip():
             versions[package] = None
         else:
