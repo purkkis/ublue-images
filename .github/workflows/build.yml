@@ -35,7 +35,7 @@ jobs:
       # Update the releases.json file with up-to-date tags from GitHub releases
       - name: Update tags
         run: |
-           uv run --no-dev ublue-images github-releases refresh
+          uv run --no-dev ublue-images github-releases refresh
 
       # Commit the updated releases.json file if it has changed
       - name: Commit updated releases.json
@@ -106,18 +106,18 @@ jobs:
       - name: Download direct downloads
         if: steps.rpm-cache.outputs.cache-hit != 'true'
         run: |
-           uv run --no-dev ublue-images direct-downloads download
+          uv run --no-dev ublue-images direct-downloads download
 
       # Download latest Chatwise rpm
       - name: Download ChatWise
         run: |
-           uv run --no-dev ublue-images chatwise download
+          uv run --no-dev ublue-images chatwise download
 
       # Download GitHub release RPMs only if cache is not hit
       - name: Download GitHub releases
         if: steps.tag-cache.outputs.cache-hit != 'true'
         run: |
-           uv run --no-dev ublue-images github-releases download
+          uv run --no-dev ublue-images github-releases download
 
       # - name: Install Podman
       #   uses: redhat-actions/podman-install@aea6ff44f2a4a82da13d22061ce73443a125925d
