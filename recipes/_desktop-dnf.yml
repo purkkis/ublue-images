@@ -53,12 +53,12 @@ modules:
         - git
         - gnome-system-monitor
         - gparted
-        - gwenview
         - gtk3-devel
         - hplip-gui
         - ImageMagick-heic
         - iotop
         - javascriptcoregtk4.1
+        - koko
         - lm_sensors
         - nethogs
         - okular
