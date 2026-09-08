@@ -28,8 +28,8 @@
       },
       {
         "name": "drawio.rpm",
-        "tag": "v31.4.4",
-        "url": "https://github.com/jgraph/drawio-desktop/releases/download/v31.4.4/drawio-x86_64-31.4.4.rpm",
+        "tag": "v31.4.5",
+        "url": "https://github.com/jgraph/drawio-desktop/releases/download/v31.4.5/drawio-x86_64-31.4.5.rpm",
         "enabled": false,
         "repo": "jgraph/drawio-desktop",
         "rpm_suffix": "x86_64-*.rpm"
@@ -84,8 +84,8 @@
       },
       {
         "name": "openknowledge.rpm",
-        "tag": "v0.68.24",
-        "url": "https://github.com/inkeep/open-knowledge/releases/download/v0.68.24/OpenKnowledge-x86_64.rpm",
+        "tag": "v0.68.26",
+        "url": "https://github.com/inkeep/open-knowledge/releases/download/v0.68.26/OpenKnowledge-x86_64.rpm",
         "enabled": false,
         "repo": "inkeep/open-knowledge",
         "rpm_suffix": "x86_64.rpm"
