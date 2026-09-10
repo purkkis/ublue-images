@@ -52,8 +52,8 @@
       },
       {
         "name": "termy.rpm",
-        "tag": "v0.2.43",
-        "url": "https://github.com/lassejlv/termy/releases/download/v0.2.43/Termy-v0.2.43-linux-x86_64.rpm",
+        "tag": "v0.2.50",
+        "url": "https://github.com/lassejlv/termy/releases/download/v0.2.50/Termy-v0.2.50-linux-x86_64.rpm",
         "enabled": true,
         "repo": "lassejlv/termy",
         "rpm_suffix": "x86_64.rpm"
@@ -84,8 +84,8 @@
       },
       {
         "name": "openknowledge.rpm",
-        "tag": "v0.70.0",
-        "url": "https://github.com/inkeep/open-knowledge/releases/download/v0.70.0/OpenKnowledge-x86_64.rpm",
+        "tag": "v0.70.4",
+        "url": "https://github.com/inkeep/open-knowledge/releases/download/v0.70.4/OpenKnowledge-x86_64.rpm",
         "enabled": false,
         "repo": "inkeep/open-knowledge",
         "rpm_suffix": "x86_64.rpm"
