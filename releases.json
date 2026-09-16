@@ -20,8 +20,8 @@
       },
       {
         "name": "opencode.rpm",
-        "tag": "v1.18.30",
-        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.30/opencode-desktop-linux-x86_64.rpm",
+        "tag": "v1.18.31",
+        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.31/opencode-desktop-linux-x86_64.rpm",
         "enabled": false,
         "repo": "anomalyco/opencode",
         "rpm_suffix": "x86_64.rpm"
@@ -52,8 +52,8 @@
       },
       {
         "name": "termy.rpm",
-        "tag": "v0.2.50",
-        "url": "https://github.com/lassejlv/termy/releases/download/v0.2.50/Termy-v0.2.50-linux-x86_64.rpm",
+        "tag": "v0.2.62",
+        "url": "https://github.com/lassejlv/termy/releases/download/v0.2.62/Termy-v0.2.62-linux-x86_64.rpm",
         "enabled": true,
         "repo": "lassejlv/termy",
         "rpm_suffix": "x86_64.rpm"
@@ -68,8 +68,8 @@
       },
       {
         "name": "openlogi.rpm",
-        "tag": "v0.8.3",
-        "url": "https://github.com/AprilNEA/OpenLogi/releases/download/v0.8.3/openlogi-v0.8.3-linux-amd64.rpm",
+        "tag": "v0.8.5",
+        "url": "https://github.com/AprilNEA/OpenLogi/releases/download/v0.8.5/openlogi-v0.8.5-linux-amd64.rpm",
         "enabled": false,
         "repo": "AprilNEA/OpenLogi",
         "rpm_suffix": "linux-amd64.rpm"
@@ -84,8 +84,8 @@
       },
       {
         "name": "openknowledge.rpm",
-        "tag": "v0.71.13",
-        "url": "https://github.com/inkeep/open-knowledge/releases/download/v0.71.13/OpenKnowledge-x86_64.rpm",
+        "tag": "v0.74.1",
+        "url": "https://github.com/inkeep/open-knowledge/releases/download/v0.74.1/OpenKnowledge-x86_64.rpm",
         "enabled": false,
         "repo": "inkeep/open-knowledge",
         "rpm_suffix": "x86_64.rpm"
