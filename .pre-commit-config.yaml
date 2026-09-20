@@ -13,7 +13,7 @@ repos:
       - id: mixed-line-ending
         args: [--fix=lf]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 321478e58f4938179c6b86e4ddfa923d1547a49b # frozen: v0.16.6
+    rev: 2eeb5678de71a00c0902cbda7105d328432f72cb # frozen: v0.16.8
     hooks:
       - id: ruff-check
         args: [--select, I, --fix]
@@ -23,6 +23,6 @@ repos:
     hooks:
       - id: gitleaks
   - repo: https://github.com/astral-sh/ty-pre-commit
-    rev: 743d21e292f7a36ed70cc2318aa3c8711b1e0437 # frozen: v0.0.78
+    rev: e7729e08f9d338183032340a067053ca5e16e6a8 # frozen: v0.0.82
     hooks:
       - id: ty
