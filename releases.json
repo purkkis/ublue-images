@@ -4,24 +4,24 @@
     "items": [
       {
         "name": "dbeaver.rpm",
-        "tag": "26.2.0",
-        "url": "https://github.com/dbeaver/dbeaver/releases/download/26.2.0/dbeaver-ce-26.2.0-linux-x86_64.rpm",
+        "tag": "26.2.1",
+        "url": "https://github.com/dbeaver/dbeaver/releases/download/26.2.1/dbeaver-ce-26.2.1-linux-x86_64.rpm",
         "enabled": true,
         "repo": "dbeaver/dbeaver",
         "rpm_suffix": "x86_64.rpm"
       },
       {
         "name": "dbvr.rpm",
-        "tag": "26.2.0",
-        "url": "https://github.com/dbeaver/dbvr/releases/download/26.2.0/dbvr-ce-26.2.0-linux-x86_64.rpm",
+        "tag": "26.2.1",
+        "url": "https://github.com/dbeaver/dbvr/releases/download/26.2.1/dbvr-ce-26.2.1-linux-x86_64.rpm",
         "enabled": false,
         "repo": "dbeaver/dbvr",
         "rpm_suffix": "x86_64.rpm"
       },
       {
         "name": "opencode.rpm",
-        "tag": "v1.18.31",
-        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.31/opencode-desktop-linux-x86_64.rpm",
+        "tag": "v1.18.32",
+        "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.32/opencode-desktop-linux-x86_64.rpm",
         "enabled": false,
         "repo": "anomalyco/opencode",
         "rpm_suffix": "x86_64.rpm"
@@ -44,16 +44,16 @@
       },
       {
         "name": "protonmail-bridge.rpm",
-        "tag": "v3.26.0",
-        "url": "https://github.com/ProtonMail/proton-bridge/releases/download/v3.26.0/protonmail-bridge-3.26.0-1.x86_64.rpm",
+        "tag": "v3.27.0",
+        "url": "https://github.com/ProtonMail/proton-bridge/releases/download/v3.27.0/protonmail-bridge-3.27.0-1.x86_64.rpm",
         "enabled": true,
         "repo": "ProtonMail/proton-bridge",
         "rpm_suffix": "x86_64.rpm"
       },
       {
         "name": "termy.rpm",
-        "tag": "v0.2.73",
-        "url": "https://github.com/lassejlv/termy/releases/download/v0.2.73/Termy-v0.2.73-linux-x86_64.rpm",
+        "tag": "v0.2.74",
+        "url": "https://github.com/lassejlv/termy/releases/download/v0.2.74/Termy-v0.2.74-linux-x86_64.rpm",
         "enabled": true,
         "repo": "lassejlv/termy",
         "rpm_suffix": "x86_64.rpm"
@@ -68,24 +68,24 @@
       },
       {
         "name": "openlogi.rpm",
-        "tag": "v0.8.5",
-        "url": "https://github.com/AprilNEA/OpenLogi/releases/download/v0.8.5/openlogi-v0.8.5-linux-amd64.rpm",
+        "tag": "v0.8.6",
+        "url": "https://github.com/AprilNEA/OpenLogi/releases/download/v0.8.6/openlogi-v0.8.6-linux-amd64.rpm",
         "enabled": false,
         "repo": "AprilNEA/OpenLogi",
         "rpm_suffix": "linux-amd64.rpm"
       },
       {
         "name": "firefoxpwa.rpm",
-        "tag": "v2.19.0",
-        "url": "https://github.com/filips123/PWAsForFirefox/releases/download/v2.19.0/firefoxpwa-2.19.0-1.x86_64.rpm",
+        "tag": "v2.20.0",
+        "url": "https://github.com/filips123/PWAsForFirefox/releases/download/v2.20.0/firefoxpwa-2.20.0-1.x86_64.rpm",
         "enabled": true,
         "repo": "filips123/PWAsForFirefox",
         "rpm_suffix": "x86_64.rpm"
       },
       {
         "name": "openknowledge.rpm",
-        "tag": "v0.76.1",
-        "url": "https://github.com/inkeep/open-knowledge/releases/download/v0.76.1/OpenKnowledge-x86_64.rpm",
+        "tag": "v0.77.1",
+        "url": "https://github.com/inkeep/open-knowledge/releases/download/v0.77.1/OpenKnowledge-x86_64.rpm",
         "enabled": false,
         "repo": "inkeep/open-knowledge",
         "rpm_suffix": "x86_64.rpm"
